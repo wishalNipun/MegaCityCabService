@@ -1,0 +1,104 @@
+#UserLoginAccount > div:nth-child(1) {
+    background: url("../img/creatAccountImg2.png");
+    background-size: cover;
+    background-position: center;
+
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 500px;
+    height: 500px;
+}
+
+#UserLoginAccount > div:nth-child(2) {
+    background: url("../img/creatAccountImg1.png");
+    background-size: cover;
+    background-position: center;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 400px;
+    height: 430px;
+}
+
+#UserLoginAccount > div:nth-child(3), #UserLoginAccount > div:nth-child(4) {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    inset: 0;
+    justify-content: center;
+}
+
+#UserLoginAccount > div > h1, #UserLoginAccount > div > form > div > h1 {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.1rem;
+    line-height: 60px;
+}
+
+#UserLoginAccount > div > form {
+    width: 35%;
+}
+
+#UserLoginAccount > div > form > input:nth-child(1) {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+#UserLoginAccount > div > form > input:nth-child(2) {
+    margin-bottom: 20px;
+}
+
+#UserLoginAccount > div > form > p {
+    margin: 0;
+}
+
+#btnSignnUp {
+
+    background-color: #FEBE29;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    width: 100%;
+}
+
+#bar {
+    border: 1px solid black;
+}
+
+#orr {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#or > h1 {
+    margin: 0;
+}
+
+#btnSignnIn {
+
+    background-color: #2572E6;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#linee1 {
+    border: 1px solid;
+    width: 14rem;
+}
+
+#linee2 {
+    border: 1px solid;
+    width: 14rem;
+}
+
+#googlee {
+    height: 1.5rem;
+}

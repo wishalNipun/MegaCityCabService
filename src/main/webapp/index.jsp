@@ -1,4 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+response.sendRedirect("pages/login.jsp");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,8 +11,8 @@
 <h1><%= "Hello Wod!" %>
 </h1>
 <br/>
-<%--<a href="hello-servlet">Hello Servlet</a>--%>
-<button type="button" class="btn">Base class</button>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.
 </body>
 </html>
