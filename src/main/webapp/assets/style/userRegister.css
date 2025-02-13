@@ -1,0 +1,75 @@
+#UserAccount>div:nth-child(1){
+    background:url("../img/creatAccountImg2.png");
+    background-size:cover;
+    background-position:center;
+
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 500px;
+    height: 500px;
+}
+#UserAccount>div:nth-child(2){
+    background:url("../img/creatAccountImg1.png");
+    background-size:cover;
+    background-position:center;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 400px;
+    height: 430px;
+}
+#UserAccount>div:nth-child(3),#UserAccount>div:nth-child(4){
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 70px;
+}
+#UserAccount>div>h1,#UserAccount>div>form>div>h1{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.1rem;
+    line-height: 60px;
+}
+#UserAccount>div>form{
+    width: 50%;
+}
+#UserAccount>div>form>div{
+    display: flex;
+    gap: 2%;
+    flex-direction: row;
+    margin: 2%;
+}
+#UserAccount>div>form>div>img{
+    height: 3rem;
+}
+#UserAccount>div>form>div>div>p{
+    margin-bottom: 0;
+}
+#UserAccount>div>form>div>div>input{
+    font-size: 9px;
+}
+#btnSignUp{
+    width: 100%;
+    background-color: #FEBE29;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+
+}
+
+#bar{
+    border:1px solid black;
+}
+
+#btnSignIn{
+    width: 100%;
+    background-color: #2572E6;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+
+}
