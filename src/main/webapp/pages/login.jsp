@@ -22,7 +22,7 @@
     <div></div>
     <div>
         <h1>Login Your Account.</h1>
-        <form action="/MegaCityCabService_war_exploded/login" method="post">
+        <form action="${pageContext.request.contextPath}/login" method="post">
             <input type="text" class="form-control" name="username" placeholder="User Name">
             <input type="password" class="form-control" name="password" placeholder="Password">
             <button id="btnSignnUp" type="submit" class="btn btn-primary">Sign In</button>
@@ -34,7 +34,7 @@
                 <div id="linee2"></div>
             </div>
             <button id="btnSignnIn" type="button" class="btn btn-primary">
-                Sign Up
+                <a href="register.jsp" style="color: white; text-decoration: none;">Sign Up</a>
             </button>
         </form>
     </div>
