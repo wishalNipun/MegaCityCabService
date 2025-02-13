@@ -13,6 +13,15 @@ public class Customer {
     public Customer() {
     }
 
+    public Customer(String name, String nic, String address, String contactNumber, String username, String password) {
+        this.name = name;
+        this.nic = nic;
+        this.address = address;
+        this.contactNumber = contactNumber;
+        this.username = username;
+        this.password = password;
+    }
+
     public Customer(String customerId, int userId, String name, String nic, String address, String contactNumber, String username, String password) {
         this.customerId = customerId;
         this.userId = userId;

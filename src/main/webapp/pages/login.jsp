@@ -33,9 +33,12 @@
                 <h1>OR</h1>
                 <div id="linee2"></div>
             </div>
-            <button id="btnSignnIn" type="button" class="btn btn-primary">
-                <a href="register.jsp" style="color: white; text-decoration: none;">Sign Up</a>
-            </button>
+            <a href="register.jsp" style="color: white; text-decoration: none;">
+                <button id="btnSignnIn" type="button" class="btn btn-primary">
+                    Sign Up
+                </button>
+            </a>
+
         </form>
     </div>
 

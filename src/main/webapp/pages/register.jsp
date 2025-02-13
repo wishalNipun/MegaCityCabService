@@ -15,7 +15,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-
 </head>
 <body>
 <main id="UserAccount" class="container-fluid">
@@ -25,27 +24,27 @@
         <h1>Create Your Account.</h1>
         <p>Since this your first trip. You’ll need to provide us
             with some information for Sign Up.</p>
-        <form action="${pageContext.request.contextPath}/customer/register" >
+        <form action="${pageContext.request.contextPath}/customers" method="post">
             <div>
-                <input type="text" class="form-control" placeholder="Enter Name">
-                <input type="text" class="form-control" placeholder="Enter NIC Number">
+                <input type="text" class="form-control" name="name"  placeholder="Enter Name">
+                <input type="text" class="form-control" name="nic"  placeholder="Enter NIC Number">
 
             </div>
             <div>
-                <input type="text" class="form-control" placeholder="Enter Address">
-                <input type="text" class="form-control" placeholder="Enter Contact Number">
+                <input type="text" class="form-control" name="address"  placeholder="Enter Address">
+                <input type="text" class="form-control" name="contactNumber" placeholder="Enter Contact Number">
             </div>
             <div>
-                <input type="text" class="form-control" placeholder="Enter New User Name">
-                <input type="text" class="form-control" placeholder="Enter New Password">
+                <input type="text" class="form-control" name="username" placeholder="Enter New User Name">
+                <input type="text" class="form-control" name="password" placeholder="Enter New Password">
             </div>
             <div>
-                <button id="btnSignUp" type="button" class="btn btn-primary">Sign Up</button>
+                <button id="btnSignUp" type="submit" class="btn btn-primary">Sign Up</button>
             </div>
         </form>
     </div>
     <div>
-        <p>Already have an account sign in <a href="#">here</a></p>
+        <p>Already have an account sign in <a href="login.jsp">here</a></p>
     </div>
 </main>
 </body>
