@@ -31,7 +31,7 @@
             <div><h1><a href="adminDashboard.jsp"><i class="fas fa-th-large"></i> DashBoard</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-user"></i> Customer</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-car"></i> Cars</a></h1></div>
-            <div><h1><a href="login.jsp"><i class="fas fa-male"></i> Drivers</a></h1></div>
+            <div><h1><a href="DriverManagement.jsp"><i class="fas fa-male"></i> Drivers</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-calendar-days"></i> Bookings</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-money-bill"></i> Payment</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-chart-area"></i> Bills</a></h1></div>
