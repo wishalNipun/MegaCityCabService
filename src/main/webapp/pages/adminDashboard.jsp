@@ -24,19 +24,19 @@
         <div>Mega City Cab Service</div>
         <div>
             <h2>Admin</h2>
-            <img src="../assets/img/adminfaceUser.png">
+            <img src="<%= request.getContextPath() %>/assets/img/adminfaceUser.png">
             <h1>Wishal Nipun Siriwardana</h1>
         </div>
         <div>
-            <div><h1><a href="adminDashboard.jsp"><i class="fas fa-th-large"></i> DashBoard</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/pages/adminDashboard.jsp"><i class="fas fa-th-large"></i> DashBoard</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-user"></i> Customer</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-car"></i> Cars</a></h1></div>
-            <div><h1><a href="DriverManagement.jsp"><i class="fas fa-male"></i> Drivers</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/drivers"><i class="fas fa-male"></i> Drivers</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-calendar-days"></i> Bookings</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-money-bill"></i> Payment</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-chart-area"></i> Bills</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-male"></i>User</a></h1></div>
-            <div><h1 style=" color: darkred;"><a href="login.jsp"><i class="fas fa-sign-out-alt"></i> log Out</a></h1>
+            <div><h1 style=" color: darkred;"><a href="${pageContext.request.contextPath}/pages/login.jsp"><i class="fas fa-sign-out-alt"></i> log Out</a></h1>
             </div>
         </div>
 

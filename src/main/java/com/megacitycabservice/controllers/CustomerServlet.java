@@ -1,6 +1,4 @@
 package com.megacitycabservice.controllers;
-
-import com.megacitycabservice.model.Customer;
 import com.megacitycabservice.service.CustomerService;
 import com.megacitycabservice.service.impl.CustomerServiceImpl;
 import jakarta.servlet.ServletException;
