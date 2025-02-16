@@ -7,7 +7,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ page import="jakarta.servlet.http.HttpSession" %>
+<%
+    HttpSession sessionObj = request.getSession(false);
+    if (sessionObj == null || sessionObj.getAttribute("user") == null) {
+        response.sendRedirect(request.getContextPath() + "/pages/login.jsp");
+        return;
+    }
+%>
 
 <html>
 <head>

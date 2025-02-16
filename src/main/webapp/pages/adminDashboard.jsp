@@ -6,6 +6,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="jakarta.servlet.http.HttpSession" %>
+<%
+    HttpSession sessionObj = request.getSession(false);
+    if (sessionObj == null || sessionObj.getAttribute("user") == null) {
+        response.sendRedirect(request.getContextPath() + "/pages/login.jsp");
+        return;
+    }
+%>
 <html>
 <head>
     <title>admin DashBoard</title>
@@ -36,7 +44,7 @@
             <div><h1><a href="login.jsp"><i class="fas fa-money-bill"></i> Payment</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-chart-area"></i> Bills</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-male"></i>User</a></h1></div>
-            <div><h1 style=" color: darkred;"><a href="${pageContext.request.contextPath}/pages/login.jsp"><i class="fas fa-sign-out-alt"></i> log Out</a></h1>
+            <div><h1 style=" color: darkred;"><a href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt"></i> log Out</a></h1>
             </div>
         </div>
 
