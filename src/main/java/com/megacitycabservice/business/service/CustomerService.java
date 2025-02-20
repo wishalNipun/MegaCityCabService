@@ -1,4 +1,4 @@
-package com.megacitycabservice.service;
+package com.megacitycabservice.business.service;
 
 import com.megacitycabservice.model.Customer;
 

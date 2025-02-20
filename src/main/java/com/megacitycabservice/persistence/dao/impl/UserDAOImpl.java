@@ -1,6 +1,6 @@
-package com.megacitycabservice.dao.impl;
+package com.megacitycabservice.persistence.dao.impl;
 
-import com.megacitycabservice.dao.UserDAO;
+import com.megacitycabservice.persistence.dao.UserDAO;
 import com.megacitycabservice.model.User;
 import com.megacitycabservice.util.DBConnection;
 

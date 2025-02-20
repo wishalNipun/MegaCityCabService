@@ -1,8 +1,8 @@
-package com.megacitycabservice.controllers;
+package com.megacitycabservice.presentation.controllers;
 
 import com.megacitycabservice.model.Driver;
-import com.megacitycabservice.service.DriverService;
-import com.megacitycabservice.service.impl.DriverServiceImpl;
+import com.megacitycabservice.business.service.DriverService;
+import com.megacitycabservice.business.service.impl.DriverServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

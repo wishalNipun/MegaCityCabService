@@ -1,4 +1,4 @@
-package com.megacitycabservice.dao;
+package com.megacitycabservice.persistence.dao;
 
 import com.megacitycabservice.model.Driver;
 

@@ -1,4 +1,4 @@
-package com.megacitycabservice.controllers;
+package com.megacitycabservice.presentation.controllers;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

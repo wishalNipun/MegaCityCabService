@@ -1,9 +1,9 @@
-package com.megacitycabservice.service.impl;
+package com.megacitycabservice.business.service.impl;
 
-import com.megacitycabservice.dao.DriverDAO;
-import com.megacitycabservice.dao.impl.DriverDAOImpl;
+import com.megacitycabservice.persistence.dao.DriverDAO;
+import com.megacitycabservice.persistence.dao.impl.DriverDAOImpl;
 import com.megacitycabservice.model.Driver;
-import com.megacitycabservice.service.DriverService;
+import com.megacitycabservice.business.service.DriverService;
 
 import java.sql.SQLException;
 import java.util.List;
