@@ -1,6 +1,9 @@
 package com.megacitycabservice.model;
 
+import com.megacitycabservice.util.DateUtil;
+
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Driver {
     private int id;
@@ -11,16 +14,13 @@ public class Driver {
     private String licenseNumber;
     private String contactNumber;
     private String status;
-    private Date createdDate;
-    private Date updatedDate;
+    private Timestamp createdDate;
+    private Timestamp updatedDate;
 
     public Driver() {
     }
 
-
-    public Driver(int id, String name, String nic, Date dateOfBirth, String address,
-                  String licenseNumber, String contactNumber, String status,
-                  Date createdDate, Date updatedDate) {
+    public Driver(int id, String name, String nic, Date dateOfBirth, String address, String licenseNumber, String contactNumber, String status, Timestamp createdDate, Timestamp updatedDate) {
         this.id = id;
         this.name = name;
         this.nic = nic;
@@ -33,7 +33,6 @@ public class Driver {
         this.updatedDate = updatedDate;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -98,19 +97,27 @@ public class Driver {
         this.status = status;
     }
 
-    public Date getCreatedDate() {
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getUpdatedDate() {
+    public Timestamp getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
+    public void setUpdatedDate(Timestamp updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public String getFormattedCreatedDate() {
+        return DateUtil.formatDate(createdDate);
+    }
+
+    public String getFormattedUpdatedDate() {
+        return DateUtil.formatDate(updatedDate);
     }
 }

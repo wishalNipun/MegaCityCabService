@@ -28,11 +28,11 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public String updateDriver(Driver driver) {
-        return null;
+        return driverDAO.updateDriver(driver);
     }
 
     @Override
     public Boolean deleteDriver(int id) {
-        return null;
+        return driverDAO.deleteDriver(id);
     }
 }

@@ -26,7 +26,6 @@
             <input type="text" class="form-control" name="username" placeholder="User Name">
             <input type="password" class="form-control" name="password" placeholder="Password">
             <button id="btnSignnUp" type="submit" class="btn btn-primary">Sign In</button>
-            <p>Forget Password <a href="#">here</a></p>
 
             <div id="orr">
                 <div id="linee1"></div>
