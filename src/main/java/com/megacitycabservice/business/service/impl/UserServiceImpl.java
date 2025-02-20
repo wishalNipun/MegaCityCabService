@@ -1,9 +1,9 @@
-package com.megacitycabservice.service.impl;
+package com.megacitycabservice.business.service.impl;
 
-import com.megacitycabservice.dao.UserDAO;
-import com.megacitycabservice.dao.impl.UserDAOImpl;
+import com.megacitycabservice.persistence.dao.UserDAO;
+import com.megacitycabservice.persistence.dao.impl.UserDAOImpl;
 import com.megacitycabservice.model.User;
-import com.megacitycabservice.service.UserService;
+import com.megacitycabservice.business.service.UserService;
 
 import java.sql.SQLException;
 

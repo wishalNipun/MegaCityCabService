@@ -1,6 +1,6 @@
-package com.megacitycabservice.dao.impl;
+package com.megacitycabservice.persistence.dao.impl;
 
-import com.megacitycabservice.dao.CustomerDAO;
+import com.megacitycabservice.persistence.dao.CustomerDAO;
 import com.megacitycabservice.util.DBConnection;
 
 import java.sql.*;
