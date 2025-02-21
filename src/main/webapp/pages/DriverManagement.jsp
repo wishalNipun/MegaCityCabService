@@ -48,6 +48,7 @@
                 let address = $(this).data("address");
                 let license = $(this).data("license");
                 let dob = $(this).data("dob");
+                let contactNumber = $(this).data("contactNumber");
                 let status = $(this).data("status");
 
                 $("#editDriverId").val(driverId);
@@ -56,6 +57,7 @@
                 $("#editAddress").val(address);
                 $("#editLicense").val(license);
                 $("#editDateOfBirth").val(dob);
+                $("#editContactNumber").val(contactNumber);
                 $("#editStatus").val(status);
 
 
@@ -123,7 +125,7 @@
             <div><h1><a href="${pageContext.request.contextPath}/pages/adminDashboard.jsp"><i
                     class="fas fa-th-large"></i> DashBoard</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-user"></i> Customer</a></h1></div>
-            <div><h1><a href="${pageContext.request.contextPath}/pages/VehicleManagement.jsp"><i class="fa-solid fa-car"></i> Vehicles</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/vehicles"><i class="fa-solid fa-car"></i> Vehicles</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/drivers"><i class="fas fa-male"></i> Drivers</a></h1>
             </div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-calendar-days"></i> Bookings</a></h1></div>
@@ -201,6 +203,7 @@
                     <th scope="col">Address</th>
                     <th scope="col">Driving License</th>
                     <th scope="col">Date Of Birth</th>
+                    <th scope="col">Contact Number</th>
                     <th scope="col">Status</th>
                     <th scope="col">Created Date</th>
                     <th scope="col">Last Updated Date</th>
@@ -216,6 +219,7 @@
                         <td>${driver.address}</td>
                         <td>${driver.licenseNumber}</td>
                         <td>${driver.dateOfBirth}</td>
+                        <td>${driver.contactNumber}</td>
                         <td>${driver.status}</td>
                         <td>${driver.formattedCreatedDate}</td>
                         <td>${driver.formattedUpdatedDate}</td>
@@ -227,6 +231,7 @@
                                     data-address="${driver.address}"
                                     data-license="${driver.licenseNumber}"
                                     data-dob="${driver.dateOfBirth}"
+                                    data-contactNumber="${driver.dateOfBirth}"
                                     data-status="${driver.status}">
                                 Edit
                             </button>
@@ -282,6 +287,11 @@
                             <div class="mb-3">
                                 <label for="editDateOfBirth" class="form-label">Date of Birth</label>
                                 <input type="date" class="form-control" id="editDateOfBirth" name="dateOfBirth">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="editContactNumber" class="form-label">Contact Number</label>
+                                <input type="text" class="form-control" id="editContactNumber" name="contactNumber">
                             </div>
 
                             <div class="mb-3">

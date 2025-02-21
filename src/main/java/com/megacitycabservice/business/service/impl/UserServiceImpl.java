@@ -11,7 +11,7 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     public UserServiceImpl() throws SQLException, ClassNotFoundException {
-        this.userDAO = new UserDAOImpl();
+        userDAO = new UserDAOImpl();
     }
 
     @Override

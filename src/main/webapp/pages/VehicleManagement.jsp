@@ -62,19 +62,16 @@
 
                 $("#editVehicleModal").modal("show");
             });
+
+            <% if (alertType != null && message != null) { %>
+            Swal.fire({
+                icon: '<%= alertType.equals("success") ? "success" : "error" %>',
+                title: '<%= alertType.equals("success") ? "Success!" : "Error!" %>',
+                text: '<%= message %>',
+                showConfirmButton: true
+            });
+            <% } %>
         });
-
-
-        <% if (alertType != null && message != null) { %>
-        Swal.fire({
-            icon: '<%= alertType.equals("success") ? "success" : "error" %>',
-            title: '<%= alertType.equals("success") ? "Success!" : "Error!" %>',
-            text: '<%= message %>',
-            showConfirmButton: true
-        });
-        <% } %>
-        })
-
 
         function confirmDelete(driverId) {
             Swal.fire({
@@ -112,6 +109,13 @@
                 }
             });
         }
+
+        function previewImage(imagePath) {
+           let imgsrc = "data:image/jpeg;base64,"+imagePath
+            document.getElementById("previewImage").src = imgsrc;
+
+            $('#imagePreviewModal').modal('show');
+        }
     </script>
 </head>
 <body style="background-color: #ededede0">
@@ -127,7 +131,7 @@
             <div><h1><a href="${pageContext.request.contextPath}/pages/adminDashboard.jsp"><i
                     class="fas fa-th-large"></i> DashBoard</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-user"></i> Customer</a></h1></div>
-            <div><h1><a href="${pageContext.request.contextPath}/pages/VehicleManagement.jsp"><i
+            <div><h1><a href="${pageContext.request.contextPath}/vehicles"><i
                     class="fa-solid fa-car"></i> Vehicles</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/drivers"><i class="fas fa-male"></i> Drivers</a></h1>
             </div>
@@ -146,7 +150,7 @@
             <h1>Vehicle Management</h1>
         </div>
         <div>
-            <form action="${pageContext.request.contextPath}/vehicles" method="post">
+            <form action="${pageContext.request.contextPath}/vehicles" method="post" enctype="multipart/form-data">
                 <div>
                     <div>
                         <h3>Vehicle Type</h3>
@@ -159,17 +163,17 @@
                     </div>
                     <div>
                         <h3>Model</h3>
-                        <input type="text" name="nic" class="form-control" placeholder="Enter Model">
+                        <input type="text" name="model" class="form-control" placeholder="Enter Model">
                     </div>
                     <div>
                         <h3>Plate Number</h3>
-                        <input type="text" name="address" class="form-control" placeholder="Enter Plate Number">
+                        <input type="text" name="plateNumber" class="form-control" placeholder="Enter Plate Number">
                     </div>
                 </div>
                 <div>
                     <div>
                         <h3>Number Of Passenger</h3>
-                        <input type="number" name="numberOfPassenger" class="form-control"
+                        <input type="number" name="numberOfPassengers" class="form-control"
                                placeholder="Enter Number Of Passenger">
                     </div>
                     <div>
@@ -186,16 +190,20 @@
                         </select>
                     </div>
 
-
                 </div>
                 <div>
                     <div>
                         <h3>Assign Driver</h3>
                         <select class="form-control" name="driverId">
                             <c:forEach var="driver" items="${driverList}">
-                                <option value="${driver.id}">${driver.name} (ID: ${driver.id})</option>
+                                <option value="${driver.id}">${driver.id } - ${ driver.name}</option>
                             </c:forEach>
                         </select>
+                    </div>
+                    <div>
+                        <h3>Image Upload</h3>
+                        <input type="file" name="img" accept="image/*" class="form-control"
+                               placeholder="Upload Image">
                     </div>
                     <div id="buttonField">
                         <%--                        <button type="submit" class="btn btn-primary">Search</button>--%>
@@ -212,8 +220,8 @@
                     <th scope="col">Vehicle ID</th>
                     <th scope="col">Type</th>
                     <th scope="col">Model</th>
-                    <th scope="col">Plate Number</th>
-                    <th scope="col">Number Of Passengers</th>
+                    <th scope="col">Plate No</th>
+                    <th scope="col">Passengers</th>
                     <th scope="col">Price Per Km</th>
                     <th scope="col">Driver</th>
                     <th scope="col">Status</th>
@@ -229,19 +237,21 @@
                         <td>${vehicle.vehicleType}</td>
                         <td>${vehicle.model}</td>
                         <td>${vehicle.plateNumber}</td>
-                        <td>${vehicle.numberOfPassenger}</td>
+                        <td>${vehicle.numberOfPassengers}</td>
                         <td>${vehicle.pricePerKm}</td>
-                        <td>${vehicle.driverName}</td>
+                        <td>${vehicle.driverId}</td>
                         <td>${vehicle.status}</td>
                         <td>${vehicle.formattedCreatedDate}</td>
                         <td>${vehicle.formattedUpdatedDate}</td>
                         <td>
+                            <button class="btn btn-primary btn-sm" onclick="previewImage('${vehicle.base64Img}')">Preview Image</button>
+
                             <button class="btn btn-warning btn-sm edit-btn"
                                     data-id="${vehicle.id}"
                                     data-type="${vehicle.vehicleType}"
                                     data-model="${vehicle.model}"
                                     data-plate="${vehicle.plateNumber}"
-                                    data-passenger="${vehicle.numberOfPassenger}"
+                                    data-passenger="${vehicle.numberOfPassengers}"
                                     data-price="${vehicle.pricePerKm}"
                                     data-driver="${vehicle.driverId}"
                                     data-status="${vehicle.status}">
@@ -261,6 +271,20 @@
 
                 </tbody>
             </table>
+        </div>
+
+        <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imagePreviewModalLabel">Vehicle Image Preview</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img id="previewImage" class="img-fluid" alt="Vehicle Image" />
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="modal fade" id="editVehicleModal" tabindex="-1" aria-labelledby="editVehicleModalLabel"
@@ -329,6 +353,8 @@
                 </div>
             </div>
         </div>
+
+
     </section>
 </main>
 </body>
