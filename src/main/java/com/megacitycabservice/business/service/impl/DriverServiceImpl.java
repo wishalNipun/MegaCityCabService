@@ -13,7 +13,7 @@ public class DriverServiceImpl implements DriverService {
     private final DriverDAO driverDAO;
 
     public DriverServiceImpl() throws SQLException, ClassNotFoundException {
-        this.driverDAO = new DriverDAOImpl();
+        driverDAO = new DriverDAOImpl();
     }
 
     @Override
@@ -34,5 +34,10 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public Boolean deleteDriver(int id) {
         return driverDAO.deleteDriver(id);
+    }
+
+    @Override
+    public List<Driver> getAllAvailableDrivers() {
+        return driverDAO.getAllAvailableDrivers();
     }
 }

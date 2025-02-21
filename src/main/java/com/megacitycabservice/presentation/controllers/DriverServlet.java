@@ -84,6 +84,7 @@ public class DriverServlet extends HttpServlet {
         String address = request.getParameter("address");
         String licenseNumber = request.getParameter("licenseNumber");
         String dateOfBirth = request.getParameter("dateOfBirth");
+        String contactNumber = request.getParameter("contactNumber");
         String status = request.getParameter("status");
 
         java.sql.Date sqlDateOfBirth = java.sql.Date.valueOf(dateOfBirth);
@@ -94,6 +95,7 @@ public class DriverServlet extends HttpServlet {
         driver.setAddress(address);
         driver.setLicenseNumber(licenseNumber);
         driver.setDateOfBirth(sqlDateOfBirth);
+        driver.setContactNumber(contactNumber);
         driver.setStatus(status);
 
         try {
@@ -120,6 +122,7 @@ public class DriverServlet extends HttpServlet {
         String address = request.getParameter("address");
         String licenseNumber = request.getParameter("licenseNumber");
         String dateOfBirth = request.getParameter("dateOfBirth");
+        String contactNumber = request.getParameter("contactNumber");
         String status = request.getParameter("status");
 
         java.sql.Date sqlDateOfBirth = java.sql.Date.valueOf(dateOfBirth);
@@ -131,6 +134,7 @@ public class DriverServlet extends HttpServlet {
         driver.setAddress(address);
         driver.setLicenseNumber(licenseNumber);
         driver.setDateOfBirth(sqlDateOfBirth);
+        driver.setContactNumber(contactNumber);
         driver.setStatus(status);
 
         try {

@@ -166,4 +166,32 @@ public class DriverDAOImpl implements DriverDAO {
         }
 
     }
+
+    @Override
+    public List<Driver> getAllAvailableDrivers() {
+        List<Driver> availableDriverList = new ArrayList<>();
+        String sql = "SELECT * FROM drivers WHERE status = 'AVAILABLE' ORDER BY updated_date DESC";
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Driver driver = new Driver(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("nic"),
+                        rs.getDate("date_of_birth"),
+                        rs.getString("address"),
+                        rs.getString("license_number"),
+                        rs.getString("contact_number"),
+                        rs.getString("status"),
+                        rs.getTimestamp("created_date"),
+                        rs.getTimestamp("updated_date")
+                );
+                availableDriverList.add(driver);
+            }
+            return availableDriverList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

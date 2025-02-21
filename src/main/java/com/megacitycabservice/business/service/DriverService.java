@@ -9,4 +9,5 @@ public interface DriverService {
     List<Driver> getAllDrivers();
     String updateDriver(Driver driver);
     Boolean deleteDriver(int id);
+    List<Driver> getAllAvailableDrivers();
 }
