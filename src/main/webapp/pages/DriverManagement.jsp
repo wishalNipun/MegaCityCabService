@@ -123,7 +123,7 @@
             <div><h1><a href="${pageContext.request.contextPath}/pages/adminDashboard.jsp"><i
                     class="fas fa-th-large"></i> DashBoard</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-user"></i> Customer</a></h1></div>
-            <div><h1><a href="login.jsp"><i class="fa-solid fa-car"></i> Cars</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/pages/VehicleManagement.jsp"><i class="fa-solid fa-car"></i> Vehicles</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/drivers"><i class="fas fa-male"></i> Drivers</a></h1>
             </div>
             <div><h1><a href="login.jsp"><i class="fa-solid fa-calendar-days"></i> Bookings</a></h1></div>
@@ -138,7 +138,7 @@
     </section>
     <section>
         <div>
-            <h1>Driver Manager</h1>
+            <h1>Driver Management</h1>
         </div>
         <div>
             <form action="${pageContext.request.contextPath}/drivers" method="post">
@@ -186,6 +186,7 @@
 <%--                        <button type="submit" class="btn btn-primary">Search</button>--%>
                         <button type="submit" class="btn btn-success">Save</button>
                     </div>
+
                 </div>
             </form>
 
