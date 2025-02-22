@@ -34,4 +34,9 @@ public class VehicleServiceImpl implements VehicleService {
     public Boolean deleteVehicle(int id) {
         return vehicleDAO.deleteVehicle(id);
     }
+
+    @Override
+    public List<Vehicle> getAvailableVehicles() {
+        return vehicleDAO.getAvailableVehicles();
+    }
 }

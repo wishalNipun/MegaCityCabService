@@ -178,4 +178,41 @@ public class VehicleDAOImpl implements VehicleDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<Vehicle> getAvailableVehicles() {
+        List<Vehicle> vehicleList = new ArrayList<>();
+        String sql = "SELECT * FROM vehicles WHERE status = 'AVAILABLE' ORDER BY updated_date DESC";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                byte[] imgBytes = rs.getBytes("img");
+                String imgBase64 = null;
+                if (imgBytes != null) {
+                    imgBase64 = Base64.getEncoder().encodeToString(imgBytes);
+                }
+
+                Vehicle vehicle = new Vehicle(
+                        rs.getInt("id"),
+                        rs.getString("vehicle_type"),
+                        rs.getString("model"),
+                        rs.getString("plate_number"),
+                        rs.getInt("driver_id"),
+                        rs.getInt("number_of_passenger"),
+                        rs.getDouble("price_per_km"),
+                        rs.getString("status"),
+                        rs.getBytes("img"),
+                        rs.getTimestamp("created_date"),
+                        rs.getTimestamp("updated_date")
+                );
+                vehicle.setBase64Img(imgBase64);
+                vehicleList.add(vehicle);
+            }
+            return vehicleList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

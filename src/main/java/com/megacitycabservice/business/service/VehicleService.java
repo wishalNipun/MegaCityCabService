@@ -9,4 +9,5 @@ public interface VehicleService {
     List<Vehicle> getAllVehicles();
     String updateVehicle(Vehicle vehicle);
     Boolean deleteVehicle(int id);
+    List<Vehicle> getAvailableVehicles();
 }
