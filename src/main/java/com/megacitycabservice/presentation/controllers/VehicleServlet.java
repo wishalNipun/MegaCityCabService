@@ -7,10 +7,14 @@ import com.megacitycabservice.business.service.impl.DriverServiceImpl;
 import com.megacitycabservice.business.service.impl.VehicleServiceImpl;
 import com.megacitycabservice.model.Driver;
 import com.megacitycabservice.model.Vehicle;
+import com.megacitycabservice.util.ResponseUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +29,7 @@ import java.util.List;
 public class VehicleServlet extends HttpServlet {
     private VehicleService vehicleService;
     private DriverService driverService;
+
 
     @Override
     public void init() {
@@ -43,23 +48,18 @@ public class VehicleServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String action = request.getParameter("action");
-        addVehicle(request, response);
-        System.out.println("added click");
 
+        if ("delete".equals(action)) {
+            deleteVehicle(request, response);
+        } else {
+            String vehicleId = request.getParameter("id");
+            if (vehicleId == null || vehicleId.isEmpty()) {
+                addVehicle(request, response);
+            } else {
+                updateVehicle(request, response);
+            }
 
-//        if ("delete".equals(action)) {
-//           // deleteVehicle(request, response);
-//        } else {
-//            String driverId = request.getParameter("id");
-//
-//            if (driverId == null || driverId.isEmpty()) {
-//
-//               addVehicle(request, response);
-//            } else {
-//
-//               // updateVehicle(request, response);
-//            }
-//        }
+        }
 
     }
 
@@ -112,32 +112,97 @@ public class VehicleServlet extends HttpServlet {
         vehicle.setPricePerKm(pricePerKm);
         vehicle.setStatus(status);
         vehicle.setImg(imageBytes);
-        System.out.println(vehicleType);
-        System.out.println(model);
-        System.out.println(plateNumber);
-        System.out.println(driverId);
-        System.out.println(numberOfPassengers);
-        System.out.println(pricePerKm);
-        System.out.println(status);
 
 
         try {
             String message = vehicleService.addVehicle(vehicle);
-            HttpSession session = request.getSession();
 
             if ("success".equals(message)) {
-                session.setAttribute("alert", "success");
-                session.setAttribute("message", "Vehicle added successfully!");
+                ResponseUtil.setResponseMessage(request, "success", "Vehicle added successfully!");
             } else {
-                session.setAttribute("alert", "error");
-                session.setAttribute("message", message);
+                ResponseUtil.setResponseMessage(request, "error", message);
             }
             response.sendRedirect(request.getContextPath() + "/vehicles");
 
         } catch (Exception e) {
-            e.printStackTrace();  // This will help capture any unexpected errors
-            response.getWriter().write("Error occurred: " + e.getMessage());
+            e.printStackTrace();
+            ResponseUtil.setResponseMessage(request, "error", "Failed to added vehicle.");
         }
 
     }
+
+    private void updateVehicle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String vehicleId = request.getParameter("id");
+        String vehicleType = request.getParameter("vehicleType");
+        String model = request.getParameter("model");
+        String plateNumber = request.getParameter("plateNumber");
+        String driverIdStr = request.getParameter("driverId");
+        String passengerCountStr = request.getParameter("numberOfPassengers");
+        String pricePerKmStr = request.getParameter("pricePerKm");
+        String status = request.getParameter("status");
+
+        int id = Integer.parseInt(vehicleId);
+        int driverId = driverIdStr != null && !driverIdStr.isEmpty() ? Integer.parseInt(driverIdStr) : 0;
+        int numberOfPassengers = Integer.parseInt(passengerCountStr);
+        double pricePerKm = Double.parseDouble(pricePerKmStr);
+
+        Part imagePart = request.getPart("img");
+        byte[] imageBytes = null;
+        if (imagePart != null && imagePart.getSize() > 0) {
+            try (InputStream inputStream = imagePart.getInputStream()) {
+                imageBytes = inputStream.readAllBytes();
+            }
+        }
+
+        Vehicle vehicle = new Vehicle();
+        vehicle.setId(id);
+        vehicle.setVehicleType(vehicleType);
+        vehicle.setModel(model);
+        vehicle.setPlateNumber(plateNumber);
+        vehicle.setDriverId(driverId);
+        vehicle.setNumberOfPassengers(numberOfPassengers);
+        vehicle.setPricePerKm(pricePerKm);
+        vehicle.setStatus(status);
+        vehicle.setImg(imageBytes);
+
+        System.out.println("ID: " + id);
+        System.out.println("vehicleType: " + vehicleType);
+        System.out.println("model: " + model);
+        System.out.println("Driver ID: " + driverId);
+        System.out.println("Number of Passengers: " + numberOfPassengers);
+        System.out.println("Price Per Km: " + pricePerKm);
+        System.out.println("status: " + status);
+        System.out.println("Price Per Km: " + pricePerKm);
+
+        try {
+            String message = vehicleService.updateVehicle(vehicle);
+
+            if ("success".equals(message)) {
+                ResponseUtil.setResponseMessage(request, "success", "Vehicle updated successfully!");
+            } else {
+                ResponseUtil.setResponseMessage(request, "error", message);
+            }
+            response.sendRedirect(request.getContextPath() + "/vehicles");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.setResponseMessage(request, "error", "Failed to update vehicle.");
+        }
+    }
+
+    private void deleteVehicle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String vehicleId = request.getParameter("id");
+        System.out.println(vehicleId);
+
+        if (vehicleId != null && !vehicleId.isEmpty()) {
+            boolean isDeleted = vehicleService.deleteVehicle(Integer.parseInt(vehicleId));
+
+            if (isDeleted) {
+                ResponseUtil.setResponseMessage(request, "success", "Vehicle deleted successfully!");
+            } else {
+                ResponseUtil.setResponseMessage(request, "error", "Failed to delete vehicle.");
+            }
+            response.sendRedirect(request.getContextPath() + "/vehicles");
+        }
+    }
+
 }

@@ -46,10 +46,12 @@
                 let vehicleType = $(this).data("type");
                 let model = $(this).data("model");
                 let plateNumber = $(this).data("plate");
-                let passengerCount = $(this).data("passengers");
+                let passengerCount = $(this).data("numberOfPassengers");
                 let pricePerKm = $(this).data("price");
                 let status = $(this).data("status");
                 let driverId = $(this).data("driver");
+
+                console.log("Passenger Count: ", passengerCount);
 
                 $("#editVehicleId").val(vehicleId);
                 $("#editVehicleType").val(vehicleType);
@@ -73,7 +75,7 @@
             <% } %>
         });
 
-        function confirmDelete(driverId) {
+        function confirmDelete(vehicleId) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "Do you want to delete this Vehicle?",
@@ -98,7 +100,7 @@
                     let idInput = document.createElement("input");
                     idInput.type = "hidden";
                     idInput.name = "id";
-                    idInput.value = driverId;
+                    idInput.value = vehicleId;
 
 
                     form.appendChild(actionInput);
@@ -155,6 +157,7 @@
                     <div>
                         <h3>Vehicle Type</h3>
                         <select class="form-control" name="vehicleType" aria-label="Default select example">
+                            <option value="" selected disabled>-- Select a Vehicle --</option>
                             <option selected value="CAR">Car</option>
                             <option value="VAN">Van</option>
                             <option value="MOTORCYCLE">Motorcycle</option>
@@ -251,13 +254,13 @@
                                     data-type="${vehicle.vehicleType}"
                                     data-model="${vehicle.model}"
                                     data-plate="${vehicle.plateNumber}"
-                                    data-passenger="${vehicle.numberOfPassengers}"
+                                    data-number-of-passengers="${vehicle.numberOfPassengers}"
                                     data-price="${vehicle.pricePerKm}"
                                     data-driver="${vehicle.driverId}"
                                     data-status="${vehicle.status}">
                                 Edit
                             </button>
-                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('${vehicle.id}')">Delete
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete(${vehicle.id})">Delete
                             </button>
                         </td>
                     </tr>
@@ -296,7 +299,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="editVehicleForm" method="post" action="${pageContext.request.contextPath}/vehicles">
+                        <form id="editVehicleForm" method="post" action="${pageContext.request.contextPath}/vehicles" enctype="multipart/form-data">
                             <input type="hidden" id="editVehicleId" name="id">
 
                             <div class="mb-3">
@@ -322,7 +325,7 @@
                             <div class="mb-3">
                                 <label for="editPassengerCount" class="form-label">Number of Passengers</label>
                                 <input type="number" class="form-control" id="editPassengerCount"
-                                       name="numberOfPassenger">
+                                       name="numberOfPassengers">
                             </div>
 
                             <div class="mb-3">
@@ -341,12 +344,16 @@
                             <div class="mb-3">
                                 <label for="editDriverId" class="form-label">Driver</label>
                                 <select class="form-control" id="editDriverId" name="driverId">
+                                    <option value="0" ${vehicle.driverId == null ? 'selected' : ''}>-- No Driver Assigned --</option>
                                     <c:forEach var="driver" items="${driverList}">
-                                        <option value="${driver.id}">${driver.name}</option>
+                                        <option value="${driver.id}">${driver.id } - ${ driver.name}</option>
                                     </c:forEach>
                                 </select>
                             </div>
-
+                            <div class="mb-3">
+                                <label for="editImg" class="form-label">Status</label>
+                                <input id="editImg" type="file" name="img" accept="image/*" class="form-control" placeholder="Upload Image">
+                            </div>
                             <button type="submit" class="btn btn-warning">Update</button>
                         </form>
                     </div>

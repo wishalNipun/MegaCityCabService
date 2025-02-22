@@ -22,7 +22,7 @@ public class VehicleDAOImpl implements VehicleDAO {
 
     @Override
     public String addVehicle(Vehicle vehicle) {
-        System.out.println("Database connection established: " + (conn != null));
+
         try {
 
             String checkPlateSql = "SELECT COUNT(*) FROM vehicles WHERE plate_number = ?";
@@ -55,16 +55,6 @@ public class VehicleDAOImpl implements VehicleDAO {
                 insertStmt.setDouble(6, vehicle.getPricePerKm());
                 insertStmt.setString(7, vehicle.getStatus());
                 insertStmt.setBytes(8, vehicle.getImg());
-
-
-                // Debugging logs
-                System.out.println("Vehicle Type: " + vehicle.getVehicleType());
-                System.out.println("Model: " + vehicle.getModel());
-                System.out.println("Plate Number: " + vehicle.getPlateNumber());
-                System.out.println("Driver ID: " + vehicle.getDriverId());
-                System.out.println("Passengers: " + vehicle.getNumberOfPassengers());
-                System.out.println("Price Per Km: " + vehicle.getPricePerKm());
-                System.out.println("Status: " + vehicle.getStatus());
 
                 insertStmt.executeUpdate();
                 System.out.println("Vehicle added successfully!");
@@ -114,11 +104,78 @@ public class VehicleDAOImpl implements VehicleDAO {
 
     @Override
     public String updateVehicle(Vehicle vehicle) {
-        return "";
+
+        try {
+
+            String checkPlateSql = "SELECT COUNT(*) FROM vehicles WHERE plate_number = ? AND id != ?";
+            try (PreparedStatement checkPlateStmt = conn.prepareStatement(checkPlateSql)) {
+                checkPlateStmt.setString(1, vehicle.getPlateNumber());
+                checkPlateStmt.setInt(2, vehicle.getId());
+                try (ResultSet rsPlate = checkPlateStmt.executeQuery()) {
+                    if (rsPlate.next() && rsPlate.getInt(1) > 0) {
+                        return "Vehicle with this plate number already exists.";
+                    }
+                }
+            }
+
+
+            String checkDriverSql = "SELECT COUNT(*) FROM vehicles WHERE driver_id = ? AND id != ?";
+            try (PreparedStatement checkDriverStmt = conn.prepareStatement(checkDriverSql)) {
+                checkDriverStmt.setInt(1, vehicle.getDriverId());
+                checkDriverStmt.setInt(2, vehicle.getId());
+                try (ResultSet rsDriver = checkDriverStmt.executeQuery()) {
+                    if (rsDriver.next() && rsDriver.getInt(1) > 0) {
+                        return "Driver is already assigned to another vehicle.";
+                    }
+                }
+            }
+
+            if(vehicle.getDriverId() == 0){
+                return "Driver is not selected !.";
+            }
+
+            String insertSql;
+            if (vehicle.getImg() != null) {
+                insertSql = "UPDATE vehicles SET vehicle_type = ?, model = ?, plate_number = ?, driver_id = ?, number_of_passenger = ?, price_per_km = ?, status = ?, img = ?, updated_date = NOW() WHERE id = ?";
+            } else {
+                insertSql = "UPDATE vehicles SET vehicle_type = ?, model = ?, plate_number = ?, driver_id = ?, number_of_passenger = ?, price_per_km = ?, status = ?, updated_date = NOW() WHERE id = ?";
+            }
+
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                insertStmt.setString(1, vehicle.getVehicleType());
+                insertStmt.setString(2, vehicle.getModel());
+                insertStmt.setString(3, vehicle.getPlateNumber());
+                insertStmt.setInt(4, vehicle.getDriverId());
+                insertStmt.setInt(5, vehicle.getNumberOfPassengers());
+                insertStmt.setDouble(6, vehicle.getPricePerKm());
+                insertStmt.setString(7, vehicle.getStatus());
+
+                if (vehicle.getImg() != null) {
+                    insertStmt.setBytes(8, vehicle.getImg());
+                    insertStmt.setInt(9, vehicle.getId());
+                } else {
+                    insertStmt.setInt(8, vehicle.getId());
+                }
+
+                insertStmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error: " + e.getMessage();
+        }
+        return "success";
     }
 
     @Override
     public Boolean deleteVehicle(int id) {
-        return null;
+        String query = "DELETE FROM vehicles WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            int executeUpdate = preparedStatement.executeUpdate();
+            return executeUpdate > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
