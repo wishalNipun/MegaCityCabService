@@ -351,7 +351,7 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="editImg" class="form-label">Status</label>
+                                <label for="editImg" class="form-label">Upload Image</label>
                                 <input id="editImg" type="file" name="img" accept="image/*" class="form-control" placeholder="Upload Image">
                             </div>
                             <button type="submit" class="btn btn-warning">Update</button>
