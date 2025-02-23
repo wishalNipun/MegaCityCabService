@@ -132,7 +132,7 @@
             <div><h1><a href="login.jsp"><i class="fas fa-money-bill"></i> Payment</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-chart-area"></i> Bills</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-male"></i>User</a></h1></div>
-            <div><h1 style=" color: darkred;"><a href="${pageContext.request.contextPath}/pages/login.jsp"><i
+            <div><h1 style=" color: darkred;"><a href="${pageContext.request.contextPath}/logout"><i
                     class="fas fa-sign-out-alt"></i> log Out</a></h1>
             </div>
         </div>

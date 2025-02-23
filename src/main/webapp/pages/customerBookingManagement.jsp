@@ -37,7 +37,7 @@
             <li><a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a></li>
             <li><a href="${pageContext.request.contextPath}/bookings">Booking</a></li>
             <li><a href="#">Booking Detail</a></li>
-            <li><a style="color: brown" href="${pageContext.request.contextPath}/pages/login.jsp">Log Out</a></li>
+            <li><a style="color: brown" href="${pageContext.request.contextPath}/logout">Log Out</a></li>
         </ul>
     </nav>
 </header>
@@ -68,7 +68,19 @@
                             <p>${ vehicle.getPricePerKm() }</p>
                         </div>
                     </div>
-                    <button class="btn btn-primary">Add To Booking</button>
+                    <button class="btn btn-primary"
+                            data-id="${vehicle.getId()}"
+                            data-model="${vehicle.getModel()}"
+                            data-type="${vehicle.getVehicleType()}"
+                            data-passengers="${vehicle.getNumberOfPassengers()}"
+                            data-price="${vehicle.getPricePerKm()}"
+                            data-driver="${vehicle.getDriverId()}"
+                            data-plate="${vehicle.getPlateNumber()}"
+                            data-status="${vehicle.getStatus()}"
+                            onclick="addToBooking(this)">
+                        Add To Booking
+                    </button>
+
                 </div>
 
             </div>
@@ -81,7 +93,7 @@
     </div>
     <div>
         <form>
-            <table class="table table-hover" >
+            <table class="table table-hover">
                 <thead class="table-primary ">
                 <tr>
                     <th scope="col">Vehicle ID</th>
@@ -95,22 +107,7 @@
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
-                <tbody id = "tableCheckOutCart">
-                <tr>
-                    <td>Mercedes</td>
-                    <td>18000.00</td>
-                    <td>300000.00</td>
-                    <td>20000.00</td>
-                    <td>Mercedes</td>
-                    <td>18000.00</td>
-                    <td>300000.00</td>
-                    <td>20000.00</td>
-                    <td class="tblcoldelete">
-                        <button class="btn">
-                            <img src="assets/img/circleDelete.png"></img>
-                        </button>
-                    </td>
-                </tr>
+                <tbody id="tableCheckOutCart">
 
                 </tbody>
             </table>
@@ -123,14 +120,118 @@
                 <input type="text" class="form-control" placeholder="Enter Drop Location">
             </div>
             <div>
-                <h1>Base Fee (Without tax/discount)</h1>
-                <h2>xxxxxxx</h2>
+                <h1>Distance Km</h1>
+                <input type="text" class="form-control" id="distanceInput" placeholder="Enter Distance (Km)" onchange="checkBtnTextFieldValidation()">
             </div>
             <div>
-                <button type="submit" class="btn btn-success">Place Booking</button>
+                <h1>Base Fee (Without tax/discount)</h1>
+                <h2 id="baseFeeDisplay"></h2>
+            </div>
+            <div>
+                <button type="submit" id="placeBooking" class="btn btn-success" disabled>Place Booking</button>
             </div>
         </form>
     </div>
 </main>
+<script>
+    let bookingCart = [];
+    checkBtnTextFieldValidation();
+
+    function checkBtnTextFieldValidation(){
+        if (bookingCart.length === 0) {
+            document.getElementById('distanceInput').disabled = true;
+            document.getElementById('placeBooking').disabled = true;
+        } else {
+            document.getElementById('distanceInput').disabled = false;
+            document.getElementById('placeBooking').disabled = false;
+
+
+        }
+    }
+
+
+    document.getElementById('distanceInput').addEventListener('input', function() {
+        const distance = parseFloat(this.value);
+        if (!isNaN(distance) && distance > 0) {
+            updateBaseFee(distance);
+        } else {
+            document.getElementById('baseFeeDisplay').innerText = 'Invalid Distance';
+        }
+    });
+
+    function updateBaseFee(distance) {
+        let totalBaseFee = 0;
+
+        bookingCart.forEach(vehicle => {
+            totalBaseFee += distance * vehicle.pricePerKm;
+        });
+        console.log(totalBaseFee)
+
+        document.getElementById('baseFeeDisplay').innerText =  "LKR " + totalBaseFee.toFixed(2);
+    }
+
+
+    function addToBooking(button) {
+        const vehicleId = button.getAttribute('data-id');
+        const model = button.getAttribute('data-model');
+        const type = button.getAttribute('data-type');
+        const passengers = button.getAttribute('data-passengers');
+        const pricePerKm = button.getAttribute('data-price');
+        const driver = button.getAttribute('data-driver');
+        const plateNumber = button.getAttribute('data-plate');
+        const status = button.getAttribute('data-status');
+
+
+        if (bookingCart.some(v => v.vehicleId === vehicleId)) {
+            Swal.fire("Already Added", "This vehicle is already in your booking list!", "warning");
+            return;
+        }
+
+
+        bookingCart.push({ vehicleId, model, type, passengers, pricePerKm, driver, plateNumber, status});
+        console.log(bookingCart);
+
+        updateBookingTable();
+        checkBtnTextFieldValidation();
+    }
+
+
+    function updateBookingTable() {
+        let tableBody = document.getElementById("tableCheckOutCart");
+        tableBody.innerHTML = "";
+
+
+        bookingCart.forEach((vehicle, index) => {
+            let row = tableBody.insertRow();
+
+            row.insertCell(0).textContent = vehicle.vehicleId;
+            row.insertCell(1).textContent = vehicle.type;
+            row.insertCell(2).textContent = vehicle.model;
+            row.insertCell(3).textContent = vehicle.plateNumber;
+            row.insertCell(4).textContent = vehicle.passengers;
+            row.insertCell(5).textContent = vehicle.pricePerKm;
+            row.insertCell(6).textContent = vehicle.driver;
+            row.insertCell(7).textContent = vehicle.status;
+
+            let removeCell = row.insertCell(8);
+            let removeButton = document.createElement("button");
+            removeButton.classList.add("btn","btn-sm");
+            let deleteImg = document.createElement("img");
+            deleteImg.src = `<%= request.getContextPath() %>/assets/img/circleDelete.png`;
+            deleteImg.alt = "Delete";
+            deleteImg.style.width = "16px";
+            deleteImg.style.height = "16px";
+            removeButton.appendChild(deleteImg);
+            removeButton.onclick = function() { removeFromCart(index); };
+            removeCell.appendChild(removeButton);
+        });
+    }
+
+    function removeFromCart(index) {
+        bookingCart.splice(index, 1);
+        updateBookingTable();
+        checkBtnTextFieldValidation();
+    }
+</script>
 </body>
 </html>
