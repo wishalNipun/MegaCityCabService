@@ -37,25 +37,24 @@
             <li><a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a></li>
             <li><a href="${pageContext.request.contextPath}/bookings">Booking</a></li>
             <li><a href="#">Booking Detail</a></li>
-            <li><a href="#">Check Out</a></li>
             <li><a style="color: brown" href="${pageContext.request.contextPath}/pages/login.jsp">Log Out</a></li>
         </ul>
     </nav>
 </header>
-<main id="Booking" class="container-fluid">
+<main id="vehicleStore" class="container-fluid">
     <div>
-        <h1>Unbeatable price.</h1>
         <h2><span>Booking Vehicles</span> & Expert Services</h2>
         <p>Recommendation for You</p>
-        <div id="cardsStore">
-            <c:forEach var="vehicle" items="${availableVehicleList}">
+
+    </div>
+    <div id="cardsStore">
+        <c:forEach var="vehicle" items="${availableVehicleList}">
             <div class="card" style="width: 14rem;">
                 <img src="data:image/jpeg;base64,${vehicle.getBase64Img()}" class="card-img-top" alt="Vehicle Image">
                 <hr>
                 <div class="card-body border-bottom-0">
                     <h5 class="card-title"> Model - ${vehicle.getModel()}</h5>
                     <p class="card-text"> Vehicle Type - ${ vehicle.getVehicleType() }</p>
-                    <button class="viewDetail btn btn-light">ViewDetail</button>
                 </div>
                 <hr>
                 <div class="card-body text-center">
@@ -73,12 +72,65 @@
                 </div>
 
             </div>
-            </c:forEach>
-
-
-        </div>
+        </c:forEach>
     </div>
+</main>
+<main id="booking" class="container-fluid">
+    <div>
+        <h2>Booking Cart</h2>
+    </div>
+    <div>
+        <form>
+            <table class="table table-hover" >
+                <thead class="table-primary ">
+                <tr>
+                    <th scope="col">Vehicle ID</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Plate No</th>
+                    <th scope="col">Passengers</th>
+                    <th scope="col">Price Per Km</th>
+                    <th scope="col">Driver</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody id = "tableCheckOutCart">
+                <tr>
+                    <td>Mercedes</td>
+                    <td>18000.00</td>
+                    <td>300000.00</td>
+                    <td>20000.00</td>
+                    <td>Mercedes</td>
+                    <td>18000.00</td>
+                    <td>300000.00</td>
+                    <td>20000.00</td>
+                    <td class="tblcoldelete">
+                        <button class="btn">
+                            <img src="assets/img/circleDelete.png"></img>
+                        </button>
+                    </td>
+                </tr>
 
+                </tbody>
+            </table>
+            <div>
+                <h1>Pick Up Location</h1>
+                <input type="text" class="form-control" placeholder="Enter Pick Up Location">
+            </div>
+            <div>
+                <h1>Drop Location</h1>
+                <input type="text" class="form-control" placeholder="Enter Drop Location">
+            </div>
+            <div>
+                <h1>Base Fee (Without tax/discount)</h1>
+                <h2>xxxxxxx</h2>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success">Place Booking</button>
+            </div>
+        </form>
+    </div>
 </main>
 </body>
 </html>
