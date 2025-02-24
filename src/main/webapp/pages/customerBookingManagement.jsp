@@ -92,7 +92,7 @@
         <h2>Booking Cart</h2>
     </div>
     <div>
-        <form>
+        <form id="bookingForm">
             <table class="table table-hover">
                 <thead class="table-primary ">
                 <tr>
@@ -113,22 +113,22 @@
             </table>
             <div>
                 <h1>Pick Up Location</h1>
-                <input type="text" class="form-control" placeholder="Enter Pick Up Location">
+                <input type="text" class="form-control" id="pickUpLocation" placeholder="Enter Pick Up Location">
             </div>
             <div>
                 <h1>Drop Location</h1>
-                <input type="text" class="form-control" placeholder="Enter Drop Location">
+                <input type="text" class="form-control" id="dropLocation" placeholder="Enter Drop Location">
             </div>
             <div>
                 <h1>Distance Km</h1>
-                <input type="text" class="form-control" id="distanceInput" placeholder="Enter Distance (Km)" onchange="checkBtnTextFieldValidation()">
+                <input type="number" class="form-control" id="distanceInput" placeholder="Enter Distance (Km)" onchange="checkBtnTextFieldValidation()">
             </div>
             <div>
                 <h1>Base Fee (Without tax/discount)</h1>
                 <h2 id="baseFeeDisplay"></h2>
             </div>
             <div>
-                <button type="submit" id="placeBooking" class="btn btn-success" disabled>Place Booking</button>
+                <button type="button" id="placeBooking" class="btn btn-success" disabled>Place Booking</button>
             </div>
         </form>
     </div>
@@ -137,46 +137,38 @@
     let bookingCart = [];
     checkBtnTextFieldValidation();
 
-    function checkBtnTextFieldValidation(){
+    function checkBtnTextFieldValidation() {
         if (bookingCart.length === 0) {
             document.getElementById('distanceInput').disabled = true;
             document.getElementById('placeBooking').disabled = true;
         } else {
             document.getElementById('distanceInput').disabled = false;
             document.getElementById('placeBooking').disabled = false;
-
-
         }
     }
 
-
-    document.getElementById('distanceInput').addEventListener('input', function() {
-        const distance = parseFloat(this.value);
-        if (!isNaN(distance) && distance > 0) {
-            updateBaseFee(distance);
-        } else {
-            document.getElementById('baseFeeDisplay').innerText = 'Invalid Distance';
-        }
+    document.getElementById('distanceInput').addEventListener('input', function () {
+        updateBaseFee();
     });
 
-    function updateBaseFee(distance) {
-        let totalBaseFee = 0;
+    function updateBaseFee() {
+        let distanceInput = document.getElementById('distanceInput').value;
+        let distance = parseFloat(distanceInput);
 
-        bookingCart.forEach(vehicle => {
-            totalBaseFee += distance * vehicle.pricePerKm;
-        });
-        console.log(totalBaseFee)
-
-        document.getElementById('baseFeeDisplay').innerText =  "LKR " + totalBaseFee.toFixed(2);
+        if (!isNaN(distance) && distance > 0) {
+            let totalBaseFee = bookingCart.reduce((total, vehicle) => total + (distance * vehicle.pricePerKm), 0);
+            document.getElementById('baseFeeDisplay').innerText = "LKR " + totalBaseFee.toFixed(2);
+        } else {
+            document.getElementById('baseFeeDisplay').innerText = "Invalid Distance";
+        }
     }
-
 
     function addToBooking(button) {
         const vehicleId = button.getAttribute('data-id');
         const model = button.getAttribute('data-model');
         const type = button.getAttribute('data-type');
         const passengers = button.getAttribute('data-passengers');
-        const pricePerKm = button.getAttribute('data-price');
+        const pricePerKm = parseFloat(button.getAttribute('data-price'));
         const driver = button.getAttribute('data-driver');
         const plateNumber = button.getAttribute('data-plate');
         const status = button.getAttribute('data-status');
@@ -187,23 +179,20 @@
             return;
         }
 
-
-        bookingCart.push({ vehicleId, model, type, passengers, pricePerKm, driver, plateNumber, status});
-        console.log(bookingCart);
-
+        bookingCart.push({ vehicleId, model, type, passengers, pricePerKm, driver, plateNumber, status });
         updateBookingTable();
         checkBtnTextFieldValidation();
+        updateBaseFee();
     }
-
 
     function updateBookingTable() {
         let tableBody = document.getElementById("tableCheckOutCart");
-        tableBody.innerHTML = "";
 
+        document.querySelectorAll(".hiddenVehicleInput").forEach(input => input.remove());
+        tableBody.innerHTML = "";
 
         bookingCart.forEach((vehicle, index) => {
             let row = tableBody.insertRow();
-
             row.insertCell(0).textContent = vehicle.vehicleId;
             row.insertCell(1).textContent = vehicle.type;
             row.insertCell(2).textContent = vehicle.model;
@@ -215,23 +204,78 @@
 
             let removeCell = row.insertCell(8);
             let removeButton = document.createElement("button");
-            removeButton.classList.add("btn","btn-sm");
+            removeButton.classList.add("btn", "btn-sm");
             let deleteImg = document.createElement("img");
             deleteImg.src = `<%= request.getContextPath() %>/assets/img/circleDelete.png`;
             deleteImg.alt = "Delete";
             deleteImg.style.width = "16px";
             deleteImg.style.height = "16px";
             removeButton.appendChild(deleteImg);
-            removeButton.onclick = function() { removeFromCart(index); };
+            removeButton.onclick = function () { removeFromCart(index); };
             removeCell.appendChild(removeButton);
+
         });
+        updateBaseFee();
     }
 
     function removeFromCart(index) {
         bookingCart.splice(index, 1);
         updateBookingTable();
         checkBtnTextFieldValidation();
+        updateBaseFee();
     }
+
+    $(document).ready(function () {
+        $("#placeBooking").click(function () {
+            let vehicleIds = bookingCart.map(vehicle => vehicle.vehicleId);
+            let pickUp = $("#pickUpLocation").val();
+            let drop = $("#dropLocation").val();
+            let distance = $("#distanceInput").val();
+            let baseFee = parseFloat($("#baseFeeDisplay").text().replace('LKR ', '').trim());
+
+
+            if (vehicleIds.length === 0 || !pickUp || !drop || !distance || isNaN(baseFee)) {
+                Swal.fire("Check Fields", "This is Validation issue fields!", "warning");
+                return;
+            }
+            console.log(vehicleIds);
+
+            let formData = new FormData();
+            formData.append("pickUpLocation", pickUp);
+            formData.append("dropLocation", drop);
+            formData.append("distance", distance);
+            formData.append("baseFee", baseFee);
+            formData.append("vehicleIds", vehicleIds);
+
+
+            $.ajax({
+                url: 'http://localhost:8080/MegaCityCabService_war_exploded/bookings',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Your Booking has been placed",
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "${pageContext.request.contextPath}/pages/BookingDetail.jsp";
+
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire("Booking failed", "There was an issue with the booking. Try again.", "error");
+                    console.log(xhr.responseText);
+                }
+            });
+
+        });
+    });
+
+
 </script>
 </body>
 </html>
