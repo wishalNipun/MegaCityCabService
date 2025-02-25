@@ -14,6 +14,7 @@
         response.sendRedirect(request.getContextPath() + "/pages/login.jsp");
         return;
     }
+
 %>
 <html>
 <head>
@@ -264,6 +265,7 @@
                         showConfirmButton: true,
                     }).then((result) => {
                         if (response.alertType === "success" && result.isConfirmed) {
+                            clear();
                             window.location.href = "${pageContext.request.contextPath}/pages/BookingDetail.jsp";
                         }
                     });
@@ -277,6 +279,14 @@
         });
     });
 
+    function clear(){
+        bookingCart.length=0
+        updateBookingTable();
+        $("#pickUpLocation").val("");
+        $("#dropLocation").val("");
+        $("#distanceInput").val("");
+        updateBaseFee();
+    }
 
 </script>
 </body>
