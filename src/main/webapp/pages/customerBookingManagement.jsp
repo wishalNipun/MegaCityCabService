@@ -226,6 +226,7 @@
     }
 
     $(document).ready(function () {
+
         $("#placeBooking").click(function () {
             let vehicleIds = bookingCart.map(vehicle => vehicle.vehicleId);
             let pickUp = $("#pickUpLocation").val();
@@ -254,15 +255,16 @@
                 data: formData,
                 processData: false,
                 contentType: false,
+                dataType: "json",
                 success: function(response) {
                     Swal.fire({
-                        icon: "success",
-                        title: "Your Booking has been placed",
+                        icon: response.alertType,
+                        title: response.alertType === "success" ? "Success!" : "Error!",
+                        text: response.message,
                         showConfirmButton: true,
                     }).then((result) => {
-                        if (result.isConfirmed) {
+                        if (response.alertType === "success" && result.isConfirmed) {
                             window.location.href = "${pageContext.request.contextPath}/pages/BookingDetail.jsp";
-
                         }
                     });
                 },

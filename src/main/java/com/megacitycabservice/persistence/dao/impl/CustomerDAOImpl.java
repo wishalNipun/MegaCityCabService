@@ -109,4 +109,22 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
     }
 
+    @Override
+    public String getCustomerIdByUsername(String username) {
+        String sql = "SELECT c.customer_id FROM customers c " +
+                "JOIN users u ON c.user_id = u.id " +
+                "WHERE u.username = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("customer_id");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching customer ID for username: " + username, e);
+        }
+        return null;
+    }
 }

@@ -7,5 +7,6 @@ import java.sql.SQLException;
 public interface CustomerDAO {
     String getLatestCustomerId() ;
     String generateCustomerId() ;
-    Boolean registerCustomerWithUser(String name,String nic,String address,String contactNumber, String username, String password) ;
+    Boolean registerCustomerWithUser(String name,String nic,String address,String contactNumber, String username, String password);
+    String getCustomerIdByUsername(String username);
 }
