@@ -1,5 +1,9 @@
 package com.megacitycabservice.model;
 
+import com.megacitycabservice.util.DateUtil;
+
+import java.sql.Timestamp;
+
 public class Customer {
     private String customerId;
     private int userId;
@@ -9,6 +13,8 @@ public class Customer {
     private String contactNumber;
     private String username;
     private String password;
+    private Timestamp createdDate;
+    private Timestamp updatedDate;
 
     public Customer() {
     }
@@ -31,6 +37,19 @@ public class Customer {
         this.contactNumber = contactNumber;
         this.username = username;
         this.password = password;
+    }
+
+    public Customer(String customerId, int userId, String name, String nic, String address, String contactNumber, String username, String password, Timestamp createdDate, Timestamp updatedDate) {
+        this.customerId = customerId;
+        this.userId = userId;
+        this.name = name;
+        this.nic = nic;
+        this.address = address;
+        this.contactNumber = contactNumber;
+        this.username = username;
+        this.password = password;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
     }
 
     public String getCustomerId() {
@@ -95,5 +114,13 @@ public class Customer {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFormattedCreatedDate() {
+        return DateUtil.formatDate(createdDate);
+    }
+
+    public String getFormattedUpdatedDate() {
+        return DateUtil.formatDate(updatedDate);
     }
 }

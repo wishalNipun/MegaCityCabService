@@ -1,9 +1,12 @@
 package com.megacitycabservice.persistence.dao.impl;
 
+import com.megacitycabservice.model.Customer;
 import com.megacitycabservice.persistence.dao.CustomerDAO;
 import com.megacitycabservice.util.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerDAOImpl implements CustomerDAO {
 
@@ -127,4 +130,52 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
         return null;
     }
+
+
+    @Override
+    public List<Customer> getAllCustomers() {
+        List<Customer> customerList = new ArrayList<>();
+        String sql = "SELECT u.username, u.password, c.customer_id, c.user_id, c.name, c.nic, c.address, c.contact_number, c.created_date, c.updated_date " +
+                "FROM customers c " +
+                "JOIN users u ON c.user_id = u.id " +
+                "ORDER BY c.updated_date DESC";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Customer customer = new Customer(
+                        rs.getString("customer_id"),
+                        rs.getInt("user_id"),  // Ensure user_id is retrieved correctly
+                        rs.getString("name"),
+                        rs.getString("nic"),
+                        rs.getString("address"),
+                        rs.getString("contact_number"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getTimestamp("created_date"),
+                        rs.getTimestamp("updated_date")
+                );
+                customerList.add(customer);
+            }
+            return customerList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean deleteCustomer(String customerId) {
+        String deleteUserSQL = "DELETE FROM users WHERE id = (SELECT user_id FROM customers WHERE customer_id = ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(deleteUserSQL)) {
+            stmt.setString(1, customerId);
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting customer: " + e.getMessage(), e);
+        }
+    }
+
+
 }

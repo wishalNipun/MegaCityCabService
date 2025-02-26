@@ -32,7 +32,7 @@
         <h1>Create Your Account.</h1>
         <p>Since this your first trip. You’ll need to provide us
             with some information for Sign Up.</p>
-        <form action="${pageContext.request.contextPath}/customers" method="post">
+        <form action="${pageContext.request.contextPath}/customers?action=register" method="post">
             <div>
                 <input type="text" class="form-control" name="name"  placeholder="Enter Name">
                 <input type="text" class="form-control" name="nic"  placeholder="Enter NIC Number">

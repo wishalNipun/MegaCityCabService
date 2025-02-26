@@ -26,10 +26,10 @@
 
 <html>
 <head>
-    <title>Driver Management</title>
+    <title>Customer Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/style/AdminDrivers.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/style/AdminCustomer.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -42,26 +42,23 @@
         $(document).ready(function () {
             $(".edit-btn").click(function () {
 
-                let driverId = $(this).data("id");
+                let customerId = $(this).data("id");
                 let name = $(this).data("name");
                 let nic = $(this).data("nic");
                 let address = $(this).data("address");
-                let license = $(this).data("license");
-                let dob = $(this).data("dob");
                 let contactNumber = $(this).data("contactNumber");
-                let status = $(this).data("status");
+                let username = $(this).data("username");
+                let password = $(this).data("password");
 
-                $("#editDriverId").val(driverId);
+                $("#editCustomerId").val(customerId);
                 $("#editName").val(name);
                 $("#editNIC").val(nic);
                 $("#editAddress").val(address);
-                $("#editLicense").val(license);
-                $("#editDateOfBirth").val(dob);
                 $("#editContactNumber").val(contactNumber);
-                $("#editStatus").val(status);
+                $("#editUsername").val(username);
+                $("#editPassword").val(password);
 
-
-                $("#editDriverModal").modal("show");
+                $("#editCustomerModal").modal("show");
             });
 
             <% if (alertType != null && message != null) { %>
@@ -74,10 +71,10 @@
             <% } %>
         });
 
-        function confirmDelete(driverId) {
+        function confirmDelete(customerId) {
             Swal.fire({
                 title: 'Are you sure?',
-                text: "Do you want to delete this driver?",
+                text: "Do you want to delete this customer?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!',
@@ -88,7 +85,7 @@
 
                     let form = document.createElement("form");
                     form.method = "post";
-                    form.action = "<%= request.getContextPath() %>/drivers";
+                    form.action = "<%= request.getContextPath() %>/customers";
 
 
                     let actionInput = document.createElement("input");
@@ -98,8 +95,8 @@
 
                     let idInput = document.createElement("input");
                     idInput.type = "hidden";
-                    idInput.name = "id";
-                    idInput.value = driverId;
+                    idInput.name = "customerId";
+                    idInput.value = customerId;
 
 
                     form.appendChild(actionInput);
@@ -113,7 +110,7 @@
     </script>
 </head>
 <body style="background-color: #ededede0">
-<main id="adminDriver" class="container-fluid.p0">
+<main id="adminCustomer" class="container-fluid.p0">
     <section>
         <div>Mega City Cab Service</div>
         <div>
@@ -140,10 +137,10 @@
     </section>
     <section>
         <div>
-            <h1>Driver Management</h1>
+            <h1>Customer Management</h1>
         </div>
         <div>
-            <form action="${pageContext.request.contextPath}/drivers" method="post">
+            <form action="${pageContext.request.contextPath}/customers?action=save" method="post">
                 <div>
                     <div>
                         <h3>Name</h3>
@@ -160,32 +157,21 @@
                 </div>
                 <div>
                     <div>
-                        <h3>Date Of Birth</h3>
-                        <input type="date" name="dateOfBirth" class="form-control" placeholder="Enter Date Of Birth">
-                    </div>
-                    <div>
-                        <h3>Driving License</h3>
-                        <input type="text" name="licenseNumber" class="form-control"
-                               placeholder="Enter Driving License">
-                    </div>
-
-                    <div>
                         <h3>Contact Number</h3>
                         <input type="text" name="contactNumber" class="form-control" placeholder="Enter Contact Number">
                     </div>
-
+                    <div>
+                        <h3>Username</h3>
+                        <input type="text" name="username" class="form-control" placeholder="Enter Username">
+                    </div>
+                    <div>
+                        <h3>Password</h3>
+                        <input type="password" name="password" class="form-control" placeholder="Enter Password">
+                    </div>
 
                 </div>
                 <div>
-                    <div>
-                        <h3>Status</h3>
-                        <select class="form-control" name="status" aria-label="Default select example">
-                            <option selected value="AVAILABLE">Available</option>
-                            <option value="BUSY">BUSY</option>
-                        </select>
-                    </div>
-                    <div id="driverButtonField">
-<%--                        <button type="submit" class="btn btn-primary">Search</button>--%>
+                    <div id="buttonField">
                         <button type="submit" class="btn btn-success">Save</button>
                     </div>
 
@@ -197,52 +183,49 @@
             <table class="table table-hover" >
                 <thead class="table-primary ">
                 <tr>
-                    <th scope="col">Driver Id</th>
+                    <th scope="col">Customer Id</th>
                     <th scope="col">Name</th>
-                    <th scope="col">NIC</th>
                     <th scope="col">Address</th>
-                    <th scope="col">Driving License</th>
-                    <th scope="col">Date Of Birth</th>
+                    <th scope="col">NIC</th>
                     <th scope="col">Contact Number</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Password</th>
                     <th scope="col">Created Date</th>
                     <th scope="col">Last Updated Date</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="driver" items="${driverList}">
+                <c:forEach var="customer" items="${customerList}">
                     <tr>
-                        <td>${driver.id}</td>
-                        <td>${driver.name}</td>
-                        <td>${driver.nic}</td>
-                        <td>${driver.address}</td>
-                        <td>${driver.licenseNumber}</td>
-                        <td>${driver.dateOfBirth}</td>
-                        <td>${driver.contactNumber}</td>
-                        <td>${driver.status}</td>
-                        <td>${driver.formattedCreatedDate}</td>
-                        <td>${driver.formattedUpdatedDate}</td>
+                        <td>${customer.customerId}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.nic}</td>
+                        <td>${customer.address}</td>
+                        <td>${customer.contactNumber}</td>
+                        <td>${customer.username}</td>
+                        <td>${customer.password}</td>
+                        <td>${customer.getFormattedCreatedDate()}</td>
+                        <td>${customer.getFormattedUpdatedDate()}</td>
                         <td>
                             <button class="btn btn-warning btn-sm edit-btn"
-                                    data-id="${driver.id}"
-                                    data-name="${driver.name}"
-                                    data-nic="${driver.nic}"
-                                    data-address="${driver.address}"
-                                    data-license="${driver.licenseNumber}"
-                                    data-dob="${driver.dateOfBirth}"
-                                    data-contactNumber="${driver.dateOfBirth}"
-                                    data-status="${driver.status}">
+                                    data-id="${customer.customerId}"
+                                    data-name="${customer.name}"
+                                    data-nic="${customer.nic}"
+                                    data-address="${customer.address}"
+                                    data-contactNumber="${customer.contactNumber}"
+                                    data-username="${customer.username}"
+                                    data-password="${customer.password}">
                                 Edit
                             </button>
-                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('${driver.id}')">Delete</button>
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('${customer.customerId}')">Delete</button>
                         </td>
 
                     </tr>
                 </c:forEach>
-                <c:if test="${empty driverList}">
+                <c:if test="${empty customerList}">
                     <tr>
-                        <td colspan="10">No Drivers Available</td>
+                        <td colspan="10">No Customers Available</td>
                     </tr>
                 </c:if>
                 </tbody>
@@ -251,57 +234,41 @@
             </table>
         </div>
 
-        <div class="modal fade" id="editDriverModal" tabindex="-1" aria-labelledby="editDriverModalLabel"
-             aria-hidden="true">
+        <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editDriverModalLabel">Edit Driver</h5>
+                        <h5 class="modal-title" id="editCustomerModalLabel">Edit Customer</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="editDriverForm" method="post"
-                              action="${pageContext.request.contextPath}/drivers">
-                            <input type="hidden" id="editDriverId" name="id">
-
+                        <form id="editCustomerForm" method="post" action="${pageContext.request.contextPath}/customers">
+                            <input type="hidden" id="editCustomerId" name="id">
                             <div class="mb-3">
                                 <label for="editName" class="form-label">Name</label>
                                 <input type="text" class="form-control" id="editName" name="name">
-                            </div>
 
+                            </div>
                             <div class="mb-3">
                                 <label for="editNIC" class="form-label">NIC</label>
                                 <input type="text" class="form-control" id="editNIC" name="nic">
                             </div>
-
                             <div class="mb-3">
                                 <label for="editAddress" class="form-label">Address</label>
                                 <input type="text" class="form-control" id="editAddress" name="address">
                             </div>
-
-                            <div class="mb-3">
-                                <label for="editLicense" class="form-label">Driving License</label>
-                                <input type="text" class="form-control" id="editLicense" name="licenseNumber">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="editDateOfBirth" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="editDateOfBirth" name="dateOfBirth">
-                            </div>
-
                             <div class="mb-3">
                                 <label for="editContactNumber" class="form-label">Contact Number</label>
                                 <input type="text" class="form-control" id="editContactNumber" name="contactNumber">
                             </div>
-
                             <div class="mb-3">
-                                <label for="editStatus" class="form-label">Status</label>
-                                <select class="form-control" id="editStatus" name="status">
-                                    <option value="AVAILABLE">Available</option>
-                                    <option value="BUSY">Busy</option>
-                                </select>
+                                <label for="editUsername" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="editUsername" name="username">
                             </div>
-
+                            <div class="mb-3">
+                                <label for="editPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="editPassword" name="password">
+                            </div>
                             <button type="submit" class="btn btn-warning">Update</button>
                         </form>
                     </div>
