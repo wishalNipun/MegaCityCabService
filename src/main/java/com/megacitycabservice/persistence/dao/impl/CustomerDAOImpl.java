@@ -146,7 +146,7 @@ public class CustomerDAOImpl implements CustomerDAO {
             while (rs.next()) {
                 Customer customer = new Customer(
                         rs.getString("customer_id"),
-                        rs.getInt("user_id"),  // Ensure user_id is retrieved correctly
+                        rs.getInt("user_id"),
                         rs.getString("name"),
                         rs.getString("nic"),
                         rs.getString("address"),
@@ -177,5 +177,63 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
     }
 
+    @Override
+    public String updateCustomer(Customer customer) {
+        String checkUsernameSQL = "SELECT COUNT(*) FROM users WHERE username = ? AND id != (SELECT user_id FROM customers WHERE customer_id = ?)";
+        String updateUserSQL = "UPDATE users SET username = ?, password = ? WHERE id = (SELECT user_id FROM customers WHERE customer_id = ?)";
+        String updateCustomerSQL = "UPDATE customers SET name = ?, nic = ?, address = ?, contact_number = ?, updated_date = NOW() WHERE customer_id = ?";
 
+        try {
+
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkUsernameSQL)) {
+                checkStmt.setString(1, customer.getUsername());
+                checkStmt.setString(2, customer.getCustomerId());
+                ResultSet rs = checkStmt.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+
+                    return "ERROR : Username already exists, please choose a different one.";
+                }
+            }
+
+            conn.setAutoCommit(false);
+
+            // Update user information
+            try (PreparedStatement userStmt = conn.prepareStatement(updateUserSQL)) {
+                userStmt.setString(1, customer.getUsername());
+                userStmt.setString(2, customer.getPassword());
+                userStmt.setString(3, customer.getCustomerId());
+
+                int userRows = userStmt.executeUpdate();
+                if (userRows == 0) {
+                    conn.rollback();
+                    return "Error: updating user information.";
+                }
+            }
+
+            // Update customer information
+            try (PreparedStatement customerStmt = conn.prepareStatement(updateCustomerSQL)) {
+                customerStmt.setString(1, customer.getName());
+                customerStmt.setString(2, customer.getNic());
+                customerStmt.setString(3, customer.getAddress());
+                customerStmt.setString(4, customer.getContactNumber());
+                customerStmt.setString(5, customer.getCustomerId());
+
+                int customerRows = customerStmt.executeUpdate();
+                if (customerRows == 0) {
+                    conn.rollback();
+                    return "Error: updating customer information.";
+                }
+            }
+
+            conn.commit();
+            return "success";
+        } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            throw new RuntimeException("Error: updating customer: " + e.getMessage(), e);
+        }
+    }
 }

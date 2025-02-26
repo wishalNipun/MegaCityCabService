@@ -4,6 +4,7 @@ import com.megacitycabservice.business.service.impl.CustomerServiceImpl;
 import com.megacitycabservice.business.service.impl.DriverServiceImpl;
 import com.megacitycabservice.model.Customer;
 import com.megacitycabservice.model.Driver;
+import com.megacitycabservice.util.ResponseUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -40,7 +41,7 @@ public class CustomerServlet extends HttpServlet {
         } else if ("delete".equals(action)) {
             deleteCustomer(request,response);
         } else if ("update".equals(action)) {
-            updateCustomer();
+            updateCustomer(request,response);
         } else if("register".equals(action)){
             registerCustomer(request,response);
         }
@@ -115,20 +116,46 @@ public class CustomerServlet extends HttpServlet {
             boolean isDeleted = customerService.deleteCustomer(customerId);
 
             if (isDeleted) {
-                HttpSession session = request.getSession();
-                session.setAttribute("alert", "success");
-                session.setAttribute("message", "Customer deleted successfully!");
-                response.sendRedirect(request.getContextPath() + "/customers");
+                ResponseUtil.setResponseMessage(request, "success", "Customer deleted successfully!");
             } else {
-                HttpSession session = request.getSession();
-                session.setAttribute("alert", "error");
-                session.setAttribute("message", "Failed to delete Customer.");
-                response.sendRedirect(request.getContextPath() + "/customers");
+                ResponseUtil.setResponseMessage(request, "error", "Failed to delete Customer.");
+
             }
+            response.sendRedirect(request.getContextPath() + "/customers");
         }
     }
 
-    public void updateCustomer(){
+    public void updateCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String customerId = request.getParameter("customerId");
+        String name = request.getParameter("name");
+        String nic = request.getParameter("nic");
+        String address = request.getParameter("address");
+        String contactNumber = request.getParameter("contactNumber");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        System.out.println("Updating Customer: " + customerId + ", Name: " + name + ", Contact: " + contactNumber);
 
+        if (customerId == null || customerId.isEmpty()) {
+            ResponseUtil.setResponseMessage(request, "error", "Error: Customer ID is missing.");
+            response.sendRedirect(request.getContextPath() + "/customers");
+            return;
+        }
+
+        Customer customer = new Customer();
+        customer.setCustomerId(customerId);
+        customer.setName(name);
+        customer.setAddress(address);
+        customer.setNic(nic);
+        customer.setContactNumber(contactNumber);
+        customer.setUsername(username);
+        customer.setPassword(password);
+        String message = customerService.updateCustomer(customer);
+
+        if ("success".equals(message)) {
+            ResponseUtil.setResponseMessage(request, "success", "Customer updated successfully!");
+        } else {
+            ResponseUtil.setResponseMessage(request, "error", message);
+        }
+        response.sendRedirect(request.getContextPath() + "/customers");
     }
 }
