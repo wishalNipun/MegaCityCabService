@@ -48,23 +48,52 @@ public class CustomerServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
 
-        try {
-            List<Customer> customerList = customerService.getAllCustomers();
+        if ("getCustomerDetail".equals(action)) {
+            getCustomerDetail(request, response);
+        } else {
+            try {
+                List<Customer> customerList = customerService.getAllCustomers();
+                request.setAttribute("customerList", customerList);
+                request.getRequestDispatcher("/pages/CustomerManagement.jsp").forward(request, response);
+            } catch (ServletException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
-            request.setAttribute("customerList", customerList);
+    private void getCustomerDetail(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String customerId = request.getParameter("customerId");
 
-
-            request.getRequestDispatcher("/pages/CustomerManagement.jsp").forward(request, response);
-
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (customerId == null || customerId.isEmpty()) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"error\": \"Customer ID is missing\"}");
+            return;
         }
 
+        Customer customer = customerService.getCustomerById(customerId);
 
+        if (customer != null) {
+            String json = "{"
+                    + "\"customerId\":\"" + customer.getCustomerId() + "\","
+                    + "\"name\":\"" + customer.getName() + "\","
+                    + "\"address\":\"" + customer.getAddress() + "\","
+                    + "\"contactNumber\":\"" + customer.getContactNumber() + "\","
+                    + "\"nic\":\"" + customer.getNic() + "\","
+                    + "\"username\":\"" + customer.getUsername() + "\""
+                    + "}";
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
+        } else {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"error\": \"Customer not found\"}");
+        }
     }
 
     public void addCustomer(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

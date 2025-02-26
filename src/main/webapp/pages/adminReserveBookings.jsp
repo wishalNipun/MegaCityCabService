@@ -42,37 +42,35 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        $(document).ready(function () {
-            <% if (alertType != null && message != null) { %>
-            Swal.fire({
-                icon: '<%= alertType.equals("success") ? "success" : "error" %>',
-                title: '<%= alertType.equals("success") ? "Success!" : "Error!" %>',
-                text: '<%= message %>',
-                showConfirmButton: true
+
+        function fetchCustomerDetails(customerId) {
+            $.ajax({
+                url: "${pageContext.request.contextPath}/customers?action=getCustomerDetail",
+                type: "GET",
+                data: {customerId: customerId},
+                dataType: "json",
+                success: function (response) {
+                    // Populate modal fields with the fetched customer data
+                    $('#customerId').text(response.customerId);
+                    $('#customerName').text(response.name);
+                    $('#customerAddress').text(response.address);
+                    $('#customerContactNumber').text(response.contactNumber);
+                    $('#customerNic').text(response.nic);
+
+                    // Show the modal
+                    var myModal = new bootstrap.Modal(document.getElementById('customerModal'));
+                    myModal.show();
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: "Failed to fetch customer details.",
+                        showConfirmButton: true
+                    });
+                }
             });
-            <% } %>
-
-        });
-        function submitForm(selectElement) {
-            var form = selectElement.closest('form');
-            form.submit();
         }
-
-        <% Customer customer = (Customer) request.getAttribute("customer"); %>
-        <% if (customer != null) { %>
-
-        document.getElementById('customerId').innerText = '<%= customer.getCustomerId() %>';
-        document.getElementById('customerName').innerText = '<%= customer.getName() %>';
-        document.getElementById('customerAddress').innerText = '<%= customer.getAddress() %>';
-        document.getElementById('customerContactNumber').innerText = '<%= customer.getContactNumber() %>';
-        document.getElementById('customerNic').innerText = '<%= customer.getNic() %>';
-
-        var myModal = new bootstrap.Modal(document.getElementById('customerModal'), {
-            keyboard: false
-        });
-        myModal.show();
-
-        <% } %>
 
     </script>
 </head>
@@ -83,12 +81,14 @@
         <div>
             <h2>Admin</h2>
             <img src="<%= request.getContextPath() %>/assets/img/adminfaceUser.png">
-            <h1><%= user.getUsername() %></h1>
+            <h1><%= user.getUsername() %>
+            </h1>
         </div>
         <div>
             <div><h1><a href="${pageContext.request.contextPath}/pages/adminDashboard.jsp"><i
                     class="fas fa-th-large"></i> DashBoard</a></h1></div>
-            <div><h1><a href="${pageContext.request.contextPath}/customers"><i class="fa-solid fa-user"></i> Customer</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/customers"><i class="fa-solid fa-user"></i>
+                Customer</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/vehicles"><i
                     class="fa-solid fa-car"></i> Vehicles</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/drivers"><i class="fas fa-male"></i> Drivers</a></h1>
@@ -130,11 +130,10 @@
                     <tr>
                         <td>${booking.bookingNumber}</td>
                         <td>${booking.customerId}
-
-                            <form action="${pageContext.request.contextPath}/bookings?action=customerDetail" method="post">
-                                <input type="hidden" name="customerId" value="1">
-                                <button type="submit" class="btn btn-primary">Show Details</button>
-                            </form>
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    onclick="fetchCustomerDetails('${booking.customerId}')">
+                                Show Details
+                            </button>
                         </td>
                         <td>${booking.pickupLocation}</td>
                         <td>${booking.dropLocation}</td>
@@ -159,36 +158,6 @@
                         <td>vehicle details</td>
                         <td>${booking.formattedCreatedDate}</td>
                         <td>${booking.formattedUpdatedDate}</td>
-
-                            <%--                        <td>--%>
-                            <%--                            <!-- Show vehicle details in a nested table -->--%>
-                            <%--                            <button class="btn btn-info btn-sm" data-bs-toggle="collapse" data-bs-target="#vehicleDetails${booking.id}">--%>
-                            <%--                                View Vehicle--%>
-                            <%--                            </button>--%>
-                            <%--                            <div id="vehicleDetails${booking.id}" class="collapse mt-3">--%>
-                            <%--                                <table class="table table-sm table-bordered">--%>
-                            <%--                                    <thead>--%>
-                            <%--                                    <tr>--%>
-                            <%--                                        <th>Vehicle Type</th>--%>
-                            <%--                                        <th>Model</th>--%>
-                            <%--                                        <th>Plate Number</th>--%>
-                            <%--                                        <th>Driver</th>--%>
-                            <%--                                    </tr>--%>
-                            <%--                                    </thead>--%>
-                            <%--                                    <tbody>--%>
-                            <%--                                    <c:forEach var="vehicle" items="${booking.vehicleList}">--%>
-                            <%--                                        <tr>--%>
-                            <%--                                            <td>${vehicle.vehicleType}</td>--%>
-                            <%--                                            <td>${vehicle.model}</td>--%>
-                            <%--                                            <td>${vehicle.plateNumber}</td>--%>
-                            <%--                                            <td>${vehicle.driverName}</td>--%>
-                            <%--                                        </tr>--%>
-                            <%--                                    </c:forEach>--%>
-                            <%--                                    </tbody>--%>
-                            <%--                                </table>--%>
-                            <%--                            </div>--%>
-                            <%--                        </td>--%>
-
                     </tr>
                 </c:forEach>
                 <c:if test="${empty bookingList}">
@@ -210,10 +179,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>customerId:</strong> <span id="customerId"></span></p>
+                <p><strong>Customer ID:</strong> <span id="customerId"></span></p>
                 <p><strong>Name:</strong> <span id="customerName"></span></p>
                 <p><strong>Address:</strong> <span id="customerAddress"></span></p>
-                <p><strong>ContactNumber:</strong> <span id="customerContactNumber"></span></p>
+                <p><strong>Contact Number:</strong> <span id="customerContactNumber"></span></p>
                 <p><strong>NIC:</strong> <span id="customerNic"></span></p>
             </div>
             <div class="modal-footer">
@@ -222,5 +191,7 @@
         </div>
     </div>
 </div>
+
+
 </body>
 </html>

@@ -9,4 +9,5 @@ public interface CustomerService {
     List<Customer> getAllCustomers();
     boolean deleteCustomer(String customerId);
     String updateCustomer(Customer customer);
+    Customer getCustomerById(String customerId);
 }

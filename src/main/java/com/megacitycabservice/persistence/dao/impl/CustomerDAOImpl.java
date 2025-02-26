@@ -236,4 +236,36 @@ public class CustomerDAOImpl implements CustomerDAO {
             throw new RuntimeException("Error: updating customer: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public Customer getCustomerById(String customerId) {
+        String sql = "SELECT u.username, c.customer_id, c.user_id, c.name, c.nic, c.address, c.contact_number " +
+                "FROM customers c " +
+                "JOIN users u ON c.user_id = u.id " +
+                "WHERE c.customer_id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, customerId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Customer(
+                        rs.getString("customer_id"),
+                        rs.getInt("user_id"),
+                        rs.getString("name"),
+                        rs.getString("nic"),
+                        rs.getString("address"),
+                        rs.getString("contact_number"),
+                        rs.getString("username"),
+                        null,
+                        null,
+                        null
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving customer", e);
+        }
+        return null;
+    }
+
 }
