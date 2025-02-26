@@ -10,4 +10,6 @@ public interface VehicleDAO {
     String updateVehicle(Vehicle vehicle);
     Boolean deleteVehicle(int id);
     List<Vehicle> getAvailableVehicles();
+    String getVehicleStatus(int vehicleId);
+    void updateVehicleStatus(List<Integer> vehicleIds, String status);
 }

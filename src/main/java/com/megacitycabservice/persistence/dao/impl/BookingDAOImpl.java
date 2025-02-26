@@ -6,6 +6,7 @@ import com.megacitycabservice.persistence.dao.CustomerDAO;
 import com.megacitycabservice.util.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookingDAOImpl implements BookingDAO {
@@ -84,19 +85,18 @@ public class BookingDAOImpl implements BookingDAO {
             PreparedStatement vehicleBookingStmt = conn.prepareStatement(vehicleBookingSql);
 
             for (String vehicleId : vehicles) {
-                System.out.println("x2222   "+vehicleId);
                 vehicleBookingStmt.setInt(1, generatedBookingId);
                 vehicleBookingStmt.setInt(2, Integer.parseInt(vehicleId));
                 vehicleBookingStmt.addBatch();
             }
             vehicleBookingStmt.executeBatch();
 
-            // Commit transaction
+
             conn.commit();
             return "success";
         } catch (SQLException e) {
             try {
-                conn.rollback(); // Rollback if there's any error
+                conn.rollback();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -107,16 +107,93 @@ public class BookingDAOImpl implements BookingDAO {
 
     @Override
     public List<Booking> getAllBookings() {
-        return List.of();
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM bookings order by updated_date DESC";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Booking booking = new Booking();
+                booking.setId(rs.getInt("id"));
+                booking.setBookingNumber(rs.getString("booking_number"));
+                booking.setCustomerId(rs.getString("customer_id"));
+                booking.setPickupLocation(rs.getString("pickup_location"));
+                booking.setDropLocation(rs.getString("drop_location"));
+                booking.setDistanceKm(rs.getDouble("distance_km"));
+                booking.setFee(rs.getDouble("fee"));
+                booking.setStatus(rs.getString("status"));
+                booking.setCreatedDate(rs.getTimestamp("created_date"));
+                booking.setUpdatedDate(rs.getTimestamp("updated_date"));
+                bookings.add(booking);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return bookings;
     }
+
 
     @Override
     public String updateBooking(Booking booking) {
-        return "";
+        String sql = "UPDATE bookings SET status = ?, updated_date = NOW() WHERE id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, booking.getStatus());
+            stmt.setInt(2, booking.getId());
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                return "success";
+            } else {
+                return "Error: Booking not found.";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error: " + e.getMessage();
+        }
     }
 
     @Override
-    public Boolean deleteBooking(int id) {
+    public boolean doesBookingExist(int bookingId) {
+        String sql = "SELECT COUNT(*) FROM bookings WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, bookingId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public void updateBookingStatus(int bookingId, String status) {
+        String sql = "UPDATE bookings SET status = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, bookingId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getBookingStatus(int bookingId) {
+        String sql = "SELECT status FROM bookings WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, bookingId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("status");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
+
 }

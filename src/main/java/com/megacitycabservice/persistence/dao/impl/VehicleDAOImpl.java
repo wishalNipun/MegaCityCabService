@@ -215,4 +215,32 @@ public class VehicleDAOImpl implements VehicleDAO {
         }
     }
 
+    public String getVehicleStatus(int vehicleId) {
+        String sql = "SELECT status FROM vehicles WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, vehicleId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("status");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void updateVehicleStatus(List<Integer> vehicleIds, String status) {
+        String sql = "UPDATE vehicles SET status = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (int vehicleId : vehicleIds) {
+                stmt.setString(1, status);
+                stmt.setInt(2, vehicleId);
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

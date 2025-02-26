@@ -137,7 +137,7 @@
                     class="fa-solid fa-car"></i> Vehicles</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/drivers"><i class="fas fa-male"></i> Drivers</a></h1>
             </div>
-            <div><h1><a href="login.jsp"><i class="fa-solid fa-calendar-days"></i> Bookings</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/bookings?action=viewBookings"><i class="fa-solid fa-calendar-days"></i> Reserve Bookings</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-money-bill"></i> Payment</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-chart-area"></i> Bills</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-male"></i>User</a></h1></div>

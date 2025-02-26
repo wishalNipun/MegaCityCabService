@@ -6,6 +6,7 @@ import com.megacitycabservice.business.service.impl.BookingServiceImpl;
 import com.megacitycabservice.business.service.impl.VehicleServiceImpl;
 import com.megacitycabservice.model.Booking;
 import com.megacitycabservice.model.Vehicle;
+import com.megacitycabservice.util.ResponseUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -44,13 +45,9 @@ public class BookingServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
-        System.out.println("post hit");
-        String action = request.getParameter("action");
 
-        if ("delete".equals(action)) {
-            System.out.println("delete hit");
-            deleteBooking(request, response);
-        } else {
+
+
             String bookID = request.getParameter("id");
 
             if (bookID == null || bookID.isEmpty()) {
@@ -60,7 +57,6 @@ public class BookingServlet extends HttpServlet {
                 System.out.println("update hit");
                 updateBooking(request, response);
             }
-        }
 
     }
 
@@ -116,25 +112,52 @@ public class BookingServlet extends HttpServlet {
     }
 
     private void updateBooking(HttpServletRequest request, HttpServletResponse response) {
+        String bookingId = request.getParameter("id");
+        String status = request.getParameter("status");
+
+        Booking booking = new Booking();
+        booking.setId(Integer.parseInt(bookingId));
+        booking.setStatus(status);
+        System.out.println(booking.getId());
+
+        try {
+            String message = bookingService.updateBooking(booking);
+            if ("success".equals(message)) {
+                ResponseUtil.setResponseMessage(request, "success", "Booking updated successfully!");
+            } else {
+                ResponseUtil.setResponseMessage(request, "error", message);
+            }
+            response.sendRedirect(request.getContextPath() + "/bookings?action=viewBookings");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.setResponseMessage(request, "error", "Failed to update Booking.");
+        }
+
     }
 
-    private void deleteBooking(HttpServletRequest request, HttpServletResponse response) {
-    }
 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
+            String action = request.getParameter("action");
 
-            List<Vehicle> vehicleList = vehicleService.getAvailableVehicles();
-
-            if (vehicleList != null && !vehicleList.isEmpty()) {
-                request.setAttribute("availableVehicleList", vehicleList);
+            if ("viewBookings".equals(action)) {
+                System.out.println("view bookings");
+                List<Booking> bookingList = bookingService.getAllBookings();
+                request.setAttribute("bookingList", bookingList);
+                request.getRequestDispatcher("/pages/adminReserveBookings.jsp").forward(request, response);
             } else {
-                System.out.println("No vehicles found");
+
+                List<Vehicle> vehicleList = vehicleService.getAvailableVehicles();
+
+                if (vehicleList != null && !vehicleList.isEmpty()) {
+                    request.setAttribute("availableVehicleList", vehicleList);
+                }
+
+                request.getRequestDispatcher("/pages/customerBookingManagement.jsp").forward(request, response);
             }
 
-            request.getRequestDispatcher("/pages/customerBookingManagement.jsp").forward(request, response);
 
         } catch (ServletException | IOException e) {
             throw new RuntimeException(e);

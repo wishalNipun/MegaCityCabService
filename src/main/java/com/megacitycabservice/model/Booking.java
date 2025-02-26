@@ -1,5 +1,7 @@
 package com.megacitycabservice.model;
 
+import com.megacitycabservice.util.DateUtil;
+
 import java.sql.Timestamp;
 
 public class Booking {
@@ -108,5 +110,13 @@ public class Booking {
 
     public void setUpdatedDate(Timestamp updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public String getFormattedCreatedDate() {
+        return DateUtil.formatDate(createdDate);
+    }
+
+    public String getFormattedUpdatedDate() {
+        return DateUtil.formatDate(updatedDate);
     }
 }

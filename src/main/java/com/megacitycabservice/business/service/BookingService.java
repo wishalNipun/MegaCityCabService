@@ -8,5 +8,4 @@ public interface BookingService {
     String addBooking(Booking booking,String[] vehicles,String username);
     List<Booking> getAllBookings();
     String updateBooking(Booking booking);
-    Boolean deleteBooking(int id);
 }
