@@ -37,38 +37,54 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public String updateBooking(Booking booking) {
-        int id = booking.getId();
-        boolean doesBookingExist = bookingDAO.doesBookingExist(id);
-        if (doesBookingExist) {
-            if (booking.getStatus().equals("CONFIRMED")) {
+        int bookingId = booking.getId();
 
-                List<Integer> vehicleIds = bookingVehicleDAO.getVehicleIdsByBookingId(booking.getId());
+        if (!bookingDAO.doesBookingExist(bookingId)) {
+            return "Error: Booking not found.";
+        }
+
+
+        String currentBookingStatus = bookingDAO.getBookingStatus(bookingId);
+
+
+        if ("CANCELLED".equals(currentBookingStatus)) {
+            return "Error: This booking has already been cancelled and cannot be changed.";
+        }
+
+        if ("CONFIRMED".equals(booking.getStatus())) {
+            if ("PENDING".equals(currentBookingStatus)) {
+                List<Integer> vehicleIds = bookingVehicleDAO.getVehicleIdsByBookingId(bookingId);
                 for (int vehicleId : vehicleIds) {
-                    String vehicleStatus = vehicleDAO.getVehicleStatus(vehicleId);
-                    if ("BUSY".equals(vehicleStatus)) {
+                    if ("BUSY".equals(vehicleDAO.getVehicleStatus(vehicleId))) {
                         return "Error: One or more vehicles are currently busy. Cannot confirm booking.";
                     }
                 }
-                bookingDAO.updateBookingStatus(booking.getId(), "CONFIRMED");
+
+                bookingDAO.updateBookingStatus(bookingId, "CONFIRMED");
                 vehicleDAO.updateVehicleStatus(vehicleIds, "BUSY");
                 return "success";
-
-
-            } else if (booking.getStatus().equals("CANCELLED")) {
-
-                String currentBookingStatus = bookingDAO.getBookingStatus(booking.getId());
-
-                if ("CONFIRMED".equals(currentBookingStatus)) {
-                    List<Integer> vehicleIds = bookingVehicleDAO.getVehicleIdsByBookingId(booking.getId());
-                    vehicleDAO.updateVehicleStatus(vehicleIds, "AVAILABLE");
-                }
-
-                bookingDAO.updateBookingStatus(booking.getId(), "CANCELLED");
-                return "success";
             }
-            return bookingDAO.updateBooking(booking);
-        } else {
-            return "Error: Booking not found.";
         }
+
+
+        if ("CANCELLED".equals(booking.getStatus())) {
+            if ("CONFIRMED".equals(currentBookingStatus)) {
+                List<Integer> vehicleIds = bookingVehicleDAO.getVehicleIdsByBookingId(bookingId);
+                vehicleDAO.updateVehicleStatus(vehicleIds, "AVAILABLE");
+            }
+            bookingDAO.updateBookingStatus(bookingId, "CANCELLED");
+            return "success";
+        }
+
+        if ("PENDING".equals(booking.getStatus())) {
+            if ("CONFIRMED".equals(currentBookingStatus)) {
+                List<Integer> vehicleIds = bookingVehicleDAO.getVehicleIdsByBookingId(bookingId);
+                vehicleDAO.updateVehicleStatus(vehicleIds, "AVAILABLE");
+            }
+            bookingDAO.updateBookingStatus(bookingId, "PENDING");
+            return "success";
+        }
+
+        return "Error: Invalid status update.";
     }
 }
