@@ -1,10 +1,11 @@
 <%--
   Created by IntelliJ IDEA.
   User: wishal siriwardana
-  Date: 2/14/2025
-  Time: 6:24 PM
+  Date: 2/27/2025
+  Time: 1:41 AM
   To change this template use File | Settings | File Templates.
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
@@ -31,7 +32,7 @@
     <title>Customer Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/style/AdminCustomer.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/style/AdminUser.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -44,23 +45,16 @@
         $(document).ready(function () {
             $(".edit-btn").click(function () {
 
-                let customerId = $(this).data("id");
-                let name = $(this).data("name");
-                let nic = $(this).data("nic");
-                let address = $(this).data("address");
-                let contactNumber = $(this).data("contact-number"); // Use correct selector
+                let id = $(this).data("id");
+
                 let username = $(this).data("username");
                 let password = $(this).data("password");
-                console.log("Customer ID: " + customerId);
-                $("#editCustomerId").val(customerId);
-                $("#editName").val(name);
-                $("#editNIC").val(nic);
-                $("#editAddress").val(address);
-                $("#editContactNumber").val(contactNumber);
+
+                $("#editUserId").val(id);
                 $("#editUsername").val(username);
                 $("#editPassword").val(password);
 
-                $("#editCustomerModal").modal("show");
+                $("#editUserModal").modal("show");
             });
 
             <% if (alertType != null && message != null) { %>
@@ -73,10 +67,10 @@
             <% } %>
         });
 
-        function confirmDelete(customerId) {
+        function confirmDelete(id) {
             Swal.fire({
                 title: 'Are you sure?',
-                text: "Do you want to delete this customer?",
+                text: "Do you want to delete this User?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!',
@@ -87,7 +81,7 @@
 
                     let form = document.createElement("form");
                     form.method = "post";
-                    form.action = "<%= request.getContextPath() %>/customers";
+                    form.action = "<%= request.getContextPath() %>/users";
 
 
                     let actionInput = document.createElement("input");
@@ -97,8 +91,8 @@
 
                     let idInput = document.createElement("input");
                     idInput.type = "hidden";
-                    idInput.name = "customerId";
-                    idInput.value = customerId;
+                    idInput.name = "id";
+                    idInput.value = id;
 
 
                     form.appendChild(actionInput);
@@ -112,7 +106,7 @@
     </script>
 </head>
 <body style="background-color: #ededede0">
-<main id="adminCustomer" class="container-fluid.p0">
+<main id="adminUser" class="container-fluid.p0">
     <section>
         <div>Mega City Cab Service</div>
         <div>
@@ -130,7 +124,7 @@
             <div><h1><a href="${pageContext.request.contextPath}/bookings?action=viewBookings"><i class="fa-solid fa-calendar-days"></i> Reserve Bookings</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-money-bill"></i> Payment</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-chart-area"></i> Bills</a></h1></div>
-            <div><h1><a href="${pageContext.request.contextPath}/users"><i class="fas fa-male"></i> User</a></h1></div>>
+            <div><h1><a href="${pageContext.request.contextPath}/users"><i class="fas fa-male"></i>User</a></h1></div>
             <div><h1 style=" color: darkred;"><a href="${pageContext.request.contextPath}/logout"><i
                     class="fas fa-sign-out-alt"></i> log Out</a></h1>
             </div>
@@ -139,29 +133,11 @@
     </section>
     <section>
         <div>
-            <h1>Customer Management</h1>
+            <h1>User Management</h1>
         </div>
         <div>
-            <form action="${pageContext.request.contextPath}/customers?action=save" method="post">
+            <form action="${pageContext.request.contextPath}/users?action=save" method="post">
                 <div>
-                    <div>
-                        <h3>Name</h3>
-                        <input type="text" name="name" class="form-control" placeholder="Enter Name">
-                    </div>
-                    <div>
-                        <h3>NIC</h3>
-                        <input type="text" name="nic" class="form-control" placeholder="Enter Nic">
-                    </div>
-                    <div>
-                        <h3>Address</h3>
-                        <input type="text" name="address" class="form-control" placeholder="Enter Address">
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <h3>Contact Number</h3>
-                        <input type="text" name="contactNumber" class="form-control" placeholder="Enter Contact Number">
-                    </div>
                     <div>
                         <h3>Username</h3>
                         <input type="text" name="username" class="form-control" placeholder="Enter Username">
@@ -170,13 +146,9 @@
                         <h3>Password</h3>
                         <input type="password" name="password" class="form-control" placeholder="Enter Password">
                     </div>
-
-                </div>
-                <div>
                     <div id="buttonField">
                         <button type="submit" class="btn btn-success">Save</button>
                     </div>
-
                 </div>
             </form>
 
@@ -185,96 +157,66 @@
             <table class="table table-hover" >
                 <thead class="table-primary ">
                 <tr>
-                    <th scope="col">Customer Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">NIC</th>
-                    <th scope="col">Contact Number</th>
+                    <th scope="col">User Id</th>
                     <th scope="col">Username</th>
                     <th scope="col">Password</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Created Date</th>
                     <th scope="col">Last Updated Date</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="customer" items="${customerList}">
+                <c:forEach var="user" items="${userList}">
                     <tr>
-                        <td>${customer.customerId}</td>
-                        <td>${customer.name}</td>
-                        <td>${customer.nic}</td>
-                        <td>${customer.address}</td>
-                        <td>${customer.contactNumber}</td>
-                        <td>${customer.username}</td>
-                        <td>${customer.password}</td>
-                        <td>${customer.getFormattedCreatedDate()}</td>
-                        <td>${customer.getFormattedUpdatedDate()}</td>
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.password}</td>
+                        <td>${user.role}</td>
+                        <td>${user.getFormattedCreatedDate()}</td>
+                        <td>${user.getFormattedUpdatedDate()}</td>
                         <td>
                             <button class="btn btn-warning btn-sm edit-btn"
-                                    data-id="${customer.customerId}"
-                                    data-name="${customer.name}"
-                                    data-nic="${customer.nic}"
-                                    data-address="${customer.address}"
-                                    data-contact-number="${customer.contactNumber}"
-                                    data-username="${customer.username}"
-                                    data-password="${customer.password}">
+                                    data-id="${user.id}"
+                                    data-username="${user.username}"
+                                    data-password="${user.password}">
                                 Edit
                             </button>
-                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('${customer.customerId}')">Delete</button>
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('${user.id}')">Delete</button>
                         </td>
 
                     </tr>
                 </c:forEach>
-                <c:if test="${empty customerList}">
+                <c:if test="${empty userList}">
                     <tr>
-                        <td colspan="10">No Customers Available</td>
+                        <td colspan="10">No Users Available</td>
                     </tr>
                 </c:if>
-                </tbody>
-
                 </tbody>
             </table>
         </div>
 
-        <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editCustomerModalLabel">Edit Customer</h5>
+                        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="editCustomerForm" method="post" action="${pageContext.request.contextPath}/customers?action=update">
+                        <form id="editUserForm" method="post" action="${pageContext.request.contextPath}/users?action=update">
+                            <input type="hidden" id="editUserId" name="id">
 
-                            <div class="mb-3">
-                                <label for="editCustomerId" class="form-label">Customer Id</label>
-                                <input type="text" class="form-control" id="editCustomerId" name="customerId" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editName" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="editName" name="name">
-
-                            </div>
-                            <div class="mb-3">
-                                <label for="editNIC" class="form-label">NIC</label>
-                                <input type="text" class="form-control" id="editNIC" name="nic">
-                            </div>
-                            <div class="mb-3">
-                                <label for="editAddress" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="editAddress" name="address">
-                            </div>
-                            <div class="mb-3">
-                                <label for="editContactNumber" class="form-label">Contact Number</label>
-                                <input type="text" class="form-control" id="editContactNumber" name="contactNumber">
-                            </div>
                             <div class="mb-3">
                                 <label for="editUsername" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="editUsername" name="username">
                             </div>
+
                             <div class="mb-3">
                                 <label for="editPassword" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="editPassword" name="password">
+                                <input type="text" class="form-control" id="editPassword" name="password">
                             </div>
+
                             <button type="submit" class="btn btn-warning">Update</button>
                         </form>
                     </div>
@@ -285,4 +227,5 @@
 </main>
 </body>
 </html>
+
 
