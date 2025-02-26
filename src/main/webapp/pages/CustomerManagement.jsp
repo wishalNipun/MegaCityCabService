@@ -8,12 +8,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
+<%@ page import="com.megacitycabservice.model.User" %>
 <%
     HttpSession sessionObj = request.getSession(false);
     if (sessionObj == null || sessionObj.getAttribute("user") == null) {
         response.sendRedirect(request.getContextPath() + "/pages/login.jsp");
         return;
     }
+    User user = (User) sessionObj.getAttribute("user");
 
     String alertType = (String) session.getAttribute("alert");
     String message = (String) session.getAttribute("message");
@@ -46,10 +48,10 @@
                 let name = $(this).data("name");
                 let nic = $(this).data("nic");
                 let address = $(this).data("address");
-                let contactNumber = $(this).data("contactNumber");
+                let contactNumber = $(this).data("contact-number"); // Use correct selector
                 let username = $(this).data("username");
                 let password = $(this).data("password");
-
+                console.log("Customer ID: " + customerId);
                 $("#editCustomerId").val(customerId);
                 $("#editName").val(name);
                 $("#editNIC").val(nic);
@@ -116,7 +118,7 @@
         <div>
             <h2>Admin</h2>
             <img src="<%= request.getContextPath() %>/assets/img/adminfaceUser.png">
-            <h1>Wishal Nipun Siriwardana</h1>
+            <h1><%= user.getUsername() %></h1>
         </div>
         <div>
             <div><h1><a href="${pageContext.request.contextPath}/pages/adminDashboard.jsp"><i
@@ -213,7 +215,7 @@
                                     data-name="${customer.name}"
                                     data-nic="${customer.nic}"
                                     data-address="${customer.address}"
-                                    data-contactNumber="${customer.contactNumber}"
+                                    data-contact-number="${customer.contactNumber}"
                                     data-username="${customer.username}"
                                     data-password="${customer.password}">
                                 Edit
@@ -242,8 +244,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="editCustomerForm" method="post" action="${pageContext.request.contextPath}/customers">
-                            <input type="hidden" id="editCustomerId" name="id">
+                        <form id="editCustomerForm" method="post" action="${pageContext.request.contextPath}/customers?action=update">
+
+                            <div class="mb-3">
+                                <label for="editCustomerId" class="form-label">Customer Id</label>
+                                <input type="text" class="form-control" id="editCustomerId" name="customerId" readonly>
+                            </div>
                             <div class="mb-3">
                                 <label for="editName" class="form-label">Name</label>
                                 <input type="text" class="form-control" id="editName" name="name">
