@@ -35,6 +35,7 @@ public class BookingServiceImpl implements BookingService {
         return bookingDAO.getAllBookings();
     }
 
+
     @Override
     public String updateBooking(Booking booking) {
         int bookingId = booking.getId();
