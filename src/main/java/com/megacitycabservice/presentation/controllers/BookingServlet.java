@@ -159,7 +159,7 @@ public class BookingServlet extends HttpServlet {
                 request.getRequestDispatcher("/pages/customerBookingManagement.jsp").forward(request, response);
             }else if ("getVehicleDetailBooking".equals(action)){
                 getVehicleDetailBooking(request,response);
-            }else if ("bookingDeatil".equals(action)){
+            }else if ("bookingDetail".equals(action)){
 
                 String username = request.getParameter("username");
                 List<Booking> bookingList = bookingService.getBookingsByUsername(username);
@@ -199,6 +199,7 @@ public class BookingServlet extends HttpServlet {
                         .append("\"numberOfPassenger\":\"").append(vehicle.getNumberOfPassengers()).append("\",")
                         .append("\"pricePerKm\":\"").append(vehicle.getPricePerKm()).append("\",")
                         .append("\"status\":\"").append(vehicle.getStatus()).append("\",")
+                        .append("\"driverId\":\"").append(vehicle.getDriverId()).append("\",")
                         .append("\"assignedDate\":\"").append(vehicle.getAssignedDate()).append("\"")
                         .append("}");
 

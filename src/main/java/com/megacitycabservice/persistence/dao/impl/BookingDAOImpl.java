@@ -228,7 +228,7 @@ public class BookingDAOImpl implements BookingDAO {
     public List<Vehicle> getVehiclesByBookingNumber(String bookingNumber) {
         List<Vehicle> vehicleList = new ArrayList<>();
         String sql = "SELECT v.id, v.vehicle_type, v.model, v.plate_number, v.number_of_passenger, " +
-                "v.price_per_km, v.status, v.img, bv.assigned_date " +
+                "v.price_per_km, v.status, v.img, bv.assigned_date, v.driver_id " +
                 "FROM booking_vehicles bv " +
                 "JOIN vehicles v ON bv.vehicle_id = v.id " +
                 "JOIN bookings b ON bv.booking_id = b.id " +
@@ -249,6 +249,7 @@ public class BookingDAOImpl implements BookingDAO {
                 vehicle.setStatus(rs.getString("status"));
                 vehicle.setImg(rs.getBytes("img"));
                 vehicle.setAssignedDate(rs.getTimestamp("assigned_date"));
+                vehicle.setDriverId(rs.getInt("driver_id"));
                 vehicleList.add(vehicle);
             }
         } catch (SQLException e) {

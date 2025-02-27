@@ -2,6 +2,7 @@ package com.megacitycabservice.persistence.dao;
 
 import com.megacitycabservice.model.Driver;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface DriverDAO {
@@ -11,4 +12,5 @@ public interface DriverDAO {
     String updateDriver(Driver driver);
     Boolean deleteDriver(int id);
     List<Driver> getAllAvailableDrivers();
+    Driver getDriverById(int driverId);
 }

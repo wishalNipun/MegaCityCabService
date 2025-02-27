@@ -2,6 +2,7 @@ package com.megacitycabservice.presentation.controllers;
 
 import com.megacitycabservice.business.service.DriverService;
 import com.megacitycabservice.business.service.impl.DriverServiceImpl;
+import com.megacitycabservice.model.Customer;
 import com.megacitycabservice.model.Driver;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -55,24 +56,35 @@ public class DriverServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-        try {
-            driverService = new DriverServiceImpl();
-            List<Driver> driverList = driverService.getAllDrivers();
+        String action = request.getParameter("action");
 
-            request.setAttribute("driverList", driverList);
-            System.out.println("Driver List: " + driverList);
+        if ("getDriverDetailUsingID".equals(action)) {
+            try {
+                getDriverDetailUsingID(request, response);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            try {
+                driverService = new DriverServiceImpl();
+                List<Driver> driverList = driverService.getAllDrivers();
 
-            request.getRequestDispatcher("/pages/DriverManagement.jsp").forward(request, response);
+                request.setAttribute("driverList", driverList);
+                System.out.println("Driver List: " + driverList);
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                request.getRequestDispatcher("/pages/DriverManagement.jsp").forward(request, response);
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (ServletException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+
 
 
     }
@@ -169,6 +181,39 @@ public class DriverServlet extends HttpServlet {
                 session.setAttribute("message", "Failed to delete driver.");
                 response.sendRedirect(request.getContextPath() + "/drivers");
             }
+        }
+    }
+
+    private void getDriverDetailUsingID(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String id = request.getParameter("id");
+
+        if (id == null || id.isEmpty()) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"error\": \"Driver ID is missing\"}");
+            return;
+        }
+
+        Driver driver = driverService.getDriverById(Integer.parseInt(id));
+
+        if (driver != null) {
+            String json = "{"
+                    + "\"id\":\"" + driver.getId() + "\","
+                    + "\"name\":\"" + driver.getName() + "\","
+                    + "\"address\":\"" + driver.getAddress() + "\","
+                    + "\"licenseNumber\":\"" + driver.getLicenseNumber() + "\","
+                    + "\"nic\":\"" + driver.getNic() + "\","
+                    + "\"dateOfBirth\":\"" + driver.getDateOfBirth() + "\","
+                    + "\"contactNumber\":\"" + driver.getContactNumber() + "\""
+                    + "}";
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
+        } else {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"error\": \"Driver not found\"}");
         }
     }
 }

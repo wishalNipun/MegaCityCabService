@@ -40,4 +40,9 @@ public class DriverServiceImpl implements DriverService {
     public List<Driver> getAllAvailableDrivers() {
         return driverDAO.getAllAvailableDrivers();
     }
+
+    @Override
+    public Driver getDriverById(int driverId) {
+        return driverDAO.getDriverById(driverId);
+    }
 }

@@ -60,7 +60,15 @@
                         row.insertCell(4).textContent = vehicle.numberOfPassenger
                         row.insertCell(5).textContent = vehicle.pricePerKm
                         row.insertCell(6).textContent = vehicle.status
-                        row.insertCell(7).textContent = vehicle.assignedDate
+                        let driverCell = row.insertCell(7);
+                        let button = document.createElement("button");
+                        button.textContent = "Show Details";
+                        button.className = "btn btn-primary btn-sm";
+                        button.onclick = function () {
+                            fetchDriverDetails(vehicle.driverId);
+                        };
+                        driverCell.appendChild(button)
+                        row.insertCell(8).textContent = vehicle.assignedDate
                     });
 
                     let myModal = new bootstrap.Modal(document.getElementById('vehicleDetailsModal'));
@@ -76,6 +84,37 @@
                     });
                 });
         }
+
+
+        function fetchDriverDetails(driverId) {
+            $.ajax({
+                url: "${pageContext.request.contextPath}/drivers?action=getDriverDetailUsingID",
+                type: "GET",
+                data: {id: driverId},
+                dataType: "json",
+                success: function (response) {
+                    // Populate modal fields with the fetched customer data
+                    $('#id').text(response.id);
+                    $('#driverName').text(response.name);
+                    $('#driverAddress').text(response.address);
+                    $('#driverLicenseNumber').text(response.licenseNumber);
+                    $('#driverNic').text(response.nic);
+                    $('#driverDateOfBirth').text(response.dateOfBirth);
+                    $('#driverContactNumber').text(response.contactNumber);
+                    // Show the modal
+                    var myModal = new bootstrap.Modal(document.getElementById('driverModal'));
+                    myModal.show();
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: "Failed to fetch Driver details.",
+                        showConfirmButton: true
+                    });
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -84,7 +123,9 @@
         <ul>
             <li><a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a></li>
             <li><a href="${pageContext.request.contextPath}/bookings?action=availableVehicles">Booking</a></li>
-            <li><a href="${pageContext.request.contextPath}/bookings?action=bookingDeatil&username=<%= user.getUsername() %>">Booking Detail</a></li>
+            <li>
+                <a href="${pageContext.request.contextPath}/bookings?action=bookingDetail&username=<%= user.getUsername() %>">Booking
+                    Detail</a></li>
             <li><a style="color: brown" href="${pageContext.request.contextPath}/logout">Log Out</a></li>
         </ul>
     </nav>
@@ -140,27 +181,6 @@
     </div>
 </main>
 <main>
-    <div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="customerModalLabel">Driver Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Driver ID:</strong> <span id="customerId"></span></p>
-                    <p><strong>Name:</strong> <span id="customerName"></span></p>
-                    <p><strong>Address:</strong> <span id="customerAddress"></span></p>
-                    <p><strong>Contact Number:</strong> <span id="customerContactNumber"></span></p>
-                    <p><strong>NIC:</strong> <span id="customerNic"></span></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="modal fade" id="vehicleDetailsModal" tabindex="-1" aria-labelledby="vehicleDetailsModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -180,6 +200,7 @@
                             <th>Passengers</th>
                             <th>Price/km</th>
                             <th>Status</th>
+                            <th>Driver Detail</th>
                             <th>Assigned Date</th>
                         </tr>
                         </thead>
@@ -187,6 +208,29 @@
 
                         </tbody>
                     </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="driverModal" tabindex="-1" aria-labelledby="driverModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="driverModalLabel">Driver Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Driver ID:</strong> <span id="id"></span></p>
+                    <p><strong>Name:</strong> <span id="driverName"></span></p>
+                    <p><strong>Address:</strong> <span id="driverAddress"></span></p>
+                    <p><strong>Address:</strong> <span id="driverLicenseNumber"></span></p>
+                    <p><strong>Address:</strong> <span id="driverDateOfBirth"></span></p>
+                    <p><strong>NIC:</strong> <span id="driverNic"></span></p>
+                    <p><strong>Contact Number:</strong> <span id="driverContactNumber"></span></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
