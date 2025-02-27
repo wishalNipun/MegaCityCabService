@@ -42,6 +42,50 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        $(document).ready(function () {
+            <% if (alertType != null && message != null) { %>
+            Swal.fire({
+                icon: '<%= alertType.equals("success") ? "success" : "error" %>',
+                title: '<%= alertType.equals("success") ? "Success!" : "Error!" %>',
+                text: '<%= message %>',
+                showConfirmButton: true
+            });
+            <% } %>
+
+        });
+        function submitForm(selectElement) {
+            var form = selectElement.closest('form');
+            form.submit();
+        }
+
+        function fetchCustomerDetails(customerId) {
+            $.ajax({
+                url: "${pageContext.request.contextPath}/customers?action=getCustomerDetail",
+                type: "GET",
+                data: {customerId: customerId},
+                dataType: "json",
+                success: function (response) {
+                    // Populate modal fields with the fetched customer data
+                    $('#customerId').text(response.customerId);
+                    $('#customerName').text(response.name);
+                    $('#customerAddress').text(response.address);
+                    $('#customerContactNumber').text(response.contactNumber);
+                    $('#customerNic').text(response.nic);
+
+                    // Show the modal
+                    var myModal = new bootstrap.Modal(document.getElementById('customerModal'));
+                    myModal.show();
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: "Failed to fetch customer details.",
+                        showConfirmButton: true
+                    });
+                }
+            });
+        }
 
         function fetchVehicleDetails(bookingNumber) {
             fetch(`${pageContext.request.contextPath}/bookings?action=getVehicleDetailBooking&bookingNumber=` + bookingNumber)
