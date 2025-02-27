@@ -147,7 +147,7 @@ public class BookingServlet extends HttpServlet {
                 List<Booking> bookingList = bookingService.getAllBookings();
                 request.setAttribute("bookingList", bookingList);
                 request.getRequestDispatcher("/pages/adminReserveBookings.jsp").forward(request, response);
-            } else {
+            } else if ("availableVehicles".equals(action)){
 
                 List<Vehicle> vehicleList = vehicleService.getAvailableVehicles();
 
@@ -156,11 +156,54 @@ public class BookingServlet extends HttpServlet {
                 }
 
                 request.getRequestDispatcher("/pages/customerBookingManagement.jsp").forward(request, response);
+            }else{
+                getVehicleDetailBooking(request,response);
             }
 
 
         } catch (ServletException | IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    protected void getVehicleDetailBooking(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String bookingNumber = request.getParameter("bookingNumber");
+
+        if (bookingNumber == null || bookingNumber.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing booking number");
+            return;
+        }
+
+        List<Vehicle> vehicles = bookingService.getVehiclesByBookingNumber(bookingNumber);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        if (vehicles != null && !vehicles.isEmpty()) {
+            StringBuilder json = new StringBuilder("{\"vehicles\":[");
+
+            for (int i = 0; i < vehicles.size(); i++) {
+                Vehicle vehicle = vehicles.get(i);
+                json.append("{")
+                        .append("\"id\":\"").append(vehicle.getId()).append("\",")
+                        .append("\"vehicleType\":\"").append(vehicle.getVehicleType()).append("\",")
+                        .append("\"model\":\"").append(vehicle.getModel()).append("\",")
+                        .append("\"plateNumber\":\"").append(vehicle.getPlateNumber()).append("\",")
+                        .append("\"numberOfPassenger\":\"").append(vehicle.getNumberOfPassengers()).append("\",")
+                        .append("\"pricePerKm\":\"").append(vehicle.getPricePerKm()).append("\",")
+                        .append("\"status\":\"").append(vehicle.getStatus()).append("\",")
+                        .append("\"assignedDate\":\"").append(vehicle.getAssignedDate()).append("\"")
+                        .append("}");
+
+                if (i < vehicles.size() - 1) {
+                    json.append(",");
+                }
+            }
+
+            json.append("]}");
+            response.getWriter().write(json.toString());
+        } else {
+            response.getWriter().write("{\"error\": \"No vehicles assigned to this booking\"}");
         }
     }
 

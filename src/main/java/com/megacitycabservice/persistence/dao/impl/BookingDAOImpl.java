@@ -1,6 +1,7 @@
 package com.megacitycabservice.persistence.dao.impl;
 
 import com.megacitycabservice.model.Booking;
+import com.megacitycabservice.model.Vehicle;
 import com.megacitycabservice.persistence.dao.BookingDAO;
 import com.megacitycabservice.persistence.dao.CustomerDAO;
 import com.megacitycabservice.util.DBConnection;
@@ -195,5 +196,36 @@ public class BookingDAOImpl implements BookingDAO {
         }
         return null;
     }
+    @Override
+    public List<Vehicle> getVehiclesByBookingNumber(String bookingNumber) {
+        List<Vehicle> vehicleList = new ArrayList<>();
+        String sql = "SELECT v.id, v.vehicle_type, v.model, v.plate_number, v.number_of_passenger, " +
+                "v.price_per_km, v.status, v.img, bv.assigned_date " +
+                "FROM booking_vehicles bv " +
+                "JOIN vehicles v ON bv.vehicle_id = v.id " +
+                "JOIN bookings b ON bv.booking_id = b.id " +
+                "WHERE b.booking_number = ?";
 
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, bookingNumber);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Vehicle vehicle = new Vehicle();
+                vehicle.setId(rs.getInt("id"));
+                vehicle.setVehicleType(rs.getString("vehicle_type"));
+                vehicle.setModel(rs.getString("model"));
+                vehicle.setPlateNumber(rs.getString("plate_number"));
+                vehicle.setNumberOfPassengers(rs.getInt("number_of_passenger"));
+                vehicle.setPricePerKm(rs.getDouble("price_per_km"));
+                vehicle.setStatus(rs.getString("status"));
+                vehicle.setImg(rs.getBytes("img"));
+                vehicle.setAssignedDate(rs.getTimestamp("assigned_date"));
+                vehicleList.add(vehicle);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return vehicleList;
+    }
 }

@@ -18,6 +18,7 @@ public class Vehicle {
     private Timestamp createdDate;
     private Timestamp updatedDate;
     private String base64Img;
+    private Timestamp assignedDate;
 
     public Vehicle() {
     }
@@ -138,6 +139,14 @@ public class Vehicle {
 
     public void setBase64Img(String base64Img) {
         this.base64Img = base64Img;
+    }
+
+    public Timestamp getAssignedDate() {
+        return assignedDate;
+    }
+
+    public void setAssignedDate(Timestamp assignedDate) {
+        this.assignedDate = assignedDate;
     }
 
     @Override

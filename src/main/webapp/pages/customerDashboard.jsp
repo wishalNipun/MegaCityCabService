@@ -31,7 +31,7 @@
     <nav id="Nav">
         <ul>
             <li><a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a></li>
-            <li><a href="${pageContext.request.contextPath}/bookings">Booking</a></li>
+            <li><a href="${pageContext.request.contextPath}/bookings?action=availableVehicles">Booking</a></li>
             <li><a href="#">Booking Detail</a></li>
             <li><a style="color: brown" href="${pageContext.request.contextPath}/logout">Log Out</a></li>
         </ul>

@@ -2,6 +2,7 @@ package com.megacitycabservice.business.service.impl;
 
 import com.megacitycabservice.business.service.BookingService;
 import com.megacitycabservice.model.Booking;
+import com.megacitycabservice.model.Vehicle;
 import com.megacitycabservice.persistence.dao.BookingDAO;
 import com.megacitycabservice.persistence.dao.BookingVehicleDAO;
 import com.megacitycabservice.persistence.dao.VehicleDAO;
@@ -87,5 +88,10 @@ public class BookingServiceImpl implements BookingService {
         }
 
         return "Error: Invalid status update.";
+    }
+
+    @Override
+    public List<Vehicle> getVehiclesByBookingNumber(String bookingNumber) {
+        return bookingDAO.getVehiclesByBookingNumber(bookingNumber);
     }
 }

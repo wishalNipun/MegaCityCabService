@@ -43,33 +43,49 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 
-        function fetchCustomerDetails(customerId) {
-            $.ajax({
-                url: "${pageContext.request.contextPath}/customers?action=getCustomerDetail",
-                type: "GET",
-                data: {customerId: customerId},
-                dataType: "json",
-                success: function (response) {
-                    // Populate modal fields with the fetched customer data
-                    $('#customerId').text(response.customerId);
-                    $('#customerName').text(response.name);
-                    $('#customerAddress').text(response.address);
-                    $('#customerContactNumber').text(response.contactNumber);
-                    $('#customerNic').text(response.nic);
+        function fetchVehicleDetails(bookingNumber) {
+            fetch(`${pageContext.request.contextPath}/bookings?action=getVehicleDetailBooking&bookingNumber=` + bookingNumber)
+                .then(response => response.json())
+                .then(data => {
 
-                    // Show the modal
-                    var myModal = new bootstrap.Modal(document.getElementById('customerModal'));
+
+                    let tableBody = document.getElementById("vehicleDetailsTableBody");
+                    tableBody.innerHTML = "";
+
+                    if (!data.vehicles || data.vehicles.length === 0) {
+
+                        Swal.fire({
+                            icon: "info",
+                            title: "No Vehicles Found",
+                            text: "No vehicles are assigned to this booking.",
+                            showConfirmButton: true
+                        });
+                        return;
+                    }
+                    data.vehicles.forEach(vehicle => {
+                        let row = tableBody.insertRow();
+                        row.insertCell(0).textContent = vehicle.id
+                        row.insertCell(1).textContent = vehicle.vehicleType
+                        row.insertCell(2).textContent = vehicle.model
+                        row.insertCell(3).textContent = vehicle.plateNumber
+                        row.insertCell(4).textContent = vehicle.numberOfPassenger
+                        row.insertCell(5).textContent = vehicle.pricePerKm
+                        row.insertCell(6).textContent = vehicle.status
+                        row.insertCell(7).textContent = vehicle.assignedDate
+                    });
+
+                    let myModal = new bootstrap.Modal(document.getElementById('vehicleDetailsModal'));
                     myModal.show();
-                },
-                error: function () {
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                     Swal.fire({
                         icon: "error",
                         title: "Error!",
-                        text: "Failed to fetch customer details.",
+                        text: "An error occurred while fetching vehicle details.",
                         showConfirmButton: true
                     });
-                }
-            });
+                });
         }
 
     </script>
@@ -129,7 +145,7 @@
                 <c:forEach var="booking" items="${bookingList}">
                     <tr>
                         <td>${booking.bookingNumber}</td>
-                        <td>${booking.customerId}
+                        <td>
                             <button type="button" class="btn btn-primary btn-sm"
                                     onclick="fetchCustomerDetails('${booking.customerId}')">
                                 Show Details
@@ -155,7 +171,12 @@
                                 </select>
                             </form>
                         </td>
-                        <td>vehicle details</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    onclick="fetchVehicleDetails('${booking.bookingNumber}')">
+                                Show Details
+                            </button>
+                        </td>
                         <td>${booking.formattedCreatedDate}</td>
                         <td>${booking.formattedUpdatedDate}</td>
                     </tr>
@@ -171,27 +192,62 @@
     </section>
 </main>
 
-<div class="modal" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="customerModalLabel">Customer Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Customer ID:</strong> <span id="customerId"></span></p>
-                <p><strong>Name:</strong> <span id="customerName"></span></p>
-                <p><strong>Address:</strong> <span id="customerAddress"></span></p>
-                <p><strong>Contact Number:</strong> <span id="customerContactNumber"></span></p>
-                <p><strong>NIC:</strong> <span id="customerNic"></span></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+<main>
+    <div class="modal" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="customerModalLabel">Customer Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Customer ID:</strong> <span id="customerId"></span></p>
+                    <p><strong>Name:</strong> <span id="customerName"></span></p>
+                    <p><strong>Address:</strong> <span id="customerAddress"></span></p>
+                    <p><strong>Contact Number:</strong> <span id="customerContactNumber"></span></p>
+                    <p><strong>NIC:</strong> <span id="customerNic"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+    <div class="modal fade" id="vehicleDetailsModal" tabindex="-1" aria-labelledby="vehicleDetailsModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="vehicleDetailsModalLabel">Assigned Vehicles</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Model</th>
+                            <th>Plate No</th>
+                            <th>Passengers</th>
+                            <th>Price/km</th>
+                            <th>Status</th>
+                            <th>Assigned Date</th>
+                        </tr>
+                        </thead>
+                        <tbody id="vehicleDetailsTableBody">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 
 </body>
 </html>
