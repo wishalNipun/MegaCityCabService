@@ -12,10 +12,33 @@ public class User {
     private Timestamp createdDate;
     private Timestamp updatedDate;
 
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
     public User() {
     }
 
-
+    public User(int id, String username, String password, String role, Timestamp createdDate, Timestamp updatedDate) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+    }
 
     public User(int id, String username, String password, String role) {
         this.id = id;

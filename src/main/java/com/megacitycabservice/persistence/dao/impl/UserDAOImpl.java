@@ -77,7 +77,9 @@ public class UserDAOImpl implements UserDAO {
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("role")
+                        rs.getString("role"),
+                        rs.getTimestamp("created_date"),
+                        rs.getTimestamp("updated_date")
                 ));
             }
         } catch (SQLException e) {
