@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -156,8 +157,14 @@ public class BookingServlet extends HttpServlet {
                 }
 
                 request.getRequestDispatcher("/pages/customerBookingManagement.jsp").forward(request, response);
-            }else{
+            }else if ("getVehicleDetailBooking".equals(action)){
                 getVehicleDetailBooking(request,response);
+            }else if ("bookingDeatil".equals(action)){
+
+                String username = request.getParameter("username");
+                List<Booking> bookingList = bookingService.getBookingsByUsername(username);
+                request.setAttribute("bookingList", bookingList);
+                request.getRequestDispatcher("/pages/BookingDetail.jsp").forward(request, response);
             }
 
 

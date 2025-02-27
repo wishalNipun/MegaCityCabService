@@ -10,4 +10,5 @@ public interface BookingService {
     List<Booking> getAllBookings();
     String updateBooking(Booking booking);
     List<Vehicle> getVehiclesByBookingNumber(String bookingNumber);
+    List<Booking> getBookingsByUsername(String username);
 }

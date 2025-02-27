@@ -5,9 +5,11 @@ import com.megacitycabservice.model.Booking;
 import com.megacitycabservice.model.Vehicle;
 import com.megacitycabservice.persistence.dao.BookingDAO;
 import com.megacitycabservice.persistence.dao.BookingVehicleDAO;
+import com.megacitycabservice.persistence.dao.UserDAO;
 import com.megacitycabservice.persistence.dao.VehicleDAO;
 import com.megacitycabservice.persistence.dao.impl.BookingDAOImpl;
 import com.megacitycabservice.persistence.dao.impl.BookingVehicleDAOImpl;
+import com.megacitycabservice.persistence.dao.impl.UserDAOImpl;
 import com.megacitycabservice.persistence.dao.impl.VehicleDAOImpl;
 
 import java.sql.SQLException;
@@ -18,11 +20,13 @@ public class BookingServiceImpl implements BookingService {
     private final BookingDAO bookingDAO;
     private final BookingVehicleDAO bookingVehicleDAO;
     private final VehicleDAO vehicleDAO;
+    private final UserDAO userDAO;
 
     public BookingServiceImpl() throws SQLException, ClassNotFoundException {
         this.bookingDAO = new BookingDAOImpl();
         this.bookingVehicleDAO = new BookingVehicleDAOImpl();
         this.vehicleDAO = new VehicleDAOImpl();
+        this.userDAO = new UserDAOImpl();
     }
 
 
@@ -94,4 +98,20 @@ public class BookingServiceImpl implements BookingService {
     public List<Vehicle> getVehiclesByBookingNumber(String bookingNumber) {
         return bookingDAO.getVehiclesByBookingNumber(bookingNumber);
     }
+
+    @Override
+    public List<Booking> getBookingsByUsername(String username) {
+
+        try {
+            String customerIdByUsername = userDAO.getCustomerIdByUsername(username);
+            if (customerIdByUsername != null){
+                List<Booking> bookingList = bookingDAO.getBookingsByCustomerId(customerIdByUsername);
+                return bookingList;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
 }

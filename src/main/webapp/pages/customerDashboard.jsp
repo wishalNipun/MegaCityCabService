@@ -7,12 +7,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
+<%@ page import="com.megacitycabservice.model.User" %>
 <%
     HttpSession sessionObj = request.getSession(false);
     if (sessionObj == null || sessionObj.getAttribute("user") == null) {
         response.sendRedirect(request.getContextPath() + "/pages/login.jsp");
         return;
     }
+    User user = (User) sessionObj.getAttribute("user");
 %>
 <html>
 <head>
@@ -32,7 +34,7 @@
         <ul>
             <li><a href="${pageContext.request.contextPath}/pages/customerDashboard.jsp">Home</a></li>
             <li><a href="${pageContext.request.contextPath}/bookings?action=availableVehicles">Booking</a></li>
-            <li><a href="#">Booking Detail</a></li>
+            <li><a href="${pageContext.request.contextPath}/bookings?action=bookingDeatil&username=<%= user.getUsername() %>">Booking Detail</a></li>
             <li><a style="color: brown" href="${pageContext.request.contextPath}/logout">Log Out</a></li>
         </ul>
     </nav>

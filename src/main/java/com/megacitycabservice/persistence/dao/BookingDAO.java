@@ -15,4 +15,5 @@ public interface BookingDAO {
     void updateBookingStatus(int bookingId, String status);
     String getBookingStatus(int bookingId);
     List<Vehicle> getVehiclesByBookingNumber(String bookingNumber);
+    List<Booking> getBookingsByCustomerId(String customerId);
 }

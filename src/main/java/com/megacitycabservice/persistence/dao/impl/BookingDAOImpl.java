@@ -135,6 +135,34 @@ public class BookingDAOImpl implements BookingDAO {
         return bookings;
     }
 
+    @Override
+    public List<Booking> getBookingsByCustomerId(String customerId) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM bookings WHERE customer_id = ? ORDER BY updated_date DESC";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, customerId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Booking booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setBookingNumber(rs.getString("booking_number"));
+                    booking.setCustomerId(rs.getString("customer_id"));
+                    booking.setPickupLocation(rs.getString("pickup_location"));
+                    booking.setDropLocation(rs.getString("drop_location"));
+                    booking.setDistanceKm(rs.getDouble("distance_km"));
+                    booking.setFee(rs.getDouble("fee"));
+                    booking.setStatus(rs.getString("status"));
+                    booking.setCreatedDate(rs.getTimestamp("created_date"));
+                    booking.setUpdatedDate(rs.getTimestamp("updated_date"));
+                    bookings.add(booking);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
+
 
     @Override
     public String updateBooking(Booking booking) {

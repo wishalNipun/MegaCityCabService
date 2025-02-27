@@ -12,4 +12,5 @@ public interface UserDAO {
     List<User> getAllUsers();
     boolean deleteUser(int id) throws SQLException;
     boolean updateUser(User user) throws SQLException;
+    String getCustomerIdByUsername(String username) throws SQLException;
 }

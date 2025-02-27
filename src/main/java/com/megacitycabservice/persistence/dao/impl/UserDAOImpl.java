@@ -109,4 +109,22 @@ public class UserDAOImpl implements UserDAO {
             return ps.executeUpdate() > 0;
         }
     }
+
+    @Override
+    public String getCustomerIdByUsername(String username) throws SQLException {
+        String sql = "SELECT c.customer_id FROM customers c " +
+                "JOIN users u ON c.user_id = u.id " +
+                "WHERE u.username = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("customer_id");
+            }
+        }
+        return null;
+    }
+
 }
