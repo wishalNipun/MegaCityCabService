@@ -112,4 +112,11 @@ public class BookingServiceImpl implements BookingService {
         return bookingDAO.getBookingsByStatus(status);
     }
 
+    @Override
+    public Integer getBookingsCountByStatus(String status) {
+        return bookingDAO.getBookingsCountByStatus(status);
+    }
+
+
+
 }

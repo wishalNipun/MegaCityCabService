@@ -12,5 +12,5 @@ public interface BookingService extends SuperBOService{
     List<Vehicle> getVehiclesByBookingNumber(String bookingNumber);
     List<Booking> getBookingsByUsername(String username);
     List<Booking>getBookingsByStatus(String status);
-
+    Integer getBookingsCountByStatus(String status);
 }

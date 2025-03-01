@@ -10,4 +10,5 @@ public interface VehicleService extends SuperBOService{
     String updateVehicle(Vehicle vehicle);
     Boolean deleteVehicle(int id);
     List<Vehicle> getAvailableVehicles();
+    Integer getVehicleCountByStatus(String status);
 }

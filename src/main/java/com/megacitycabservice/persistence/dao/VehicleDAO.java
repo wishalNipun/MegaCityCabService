@@ -8,4 +8,5 @@ public interface VehicleDAO extends CrudDAO<Vehicle,Integer> , SuperDAO{
     List<Vehicle> getAvailableVehicles();
     String getVehicleStatus(int vehicleId);
     void updateVehicleStatus(List<Integer> vehicleIds, String status);
+    Integer getVehicleCountByStatus(String status);
 }

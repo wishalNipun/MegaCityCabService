@@ -36,7 +36,7 @@ public class VehicleServlet extends HttpServlet {
     public void init() {
         try {
             vehicleService = (VehicleService) BOFactory.getInstance().getBO(BOFactory.BOTypes.VEHICLE);
-            driverService = (DriverService) BOFactory.getInstance().getBO(BOFactory.BOTypes.VEHICLE);
+            driverService = (DriverService) BOFactory.getInstance().getBO(BOFactory.BOTypes.DRIVER);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {

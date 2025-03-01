@@ -244,5 +244,21 @@ public class VehicleDAOImpl implements VehicleDAO {
         }
     }
 
+    @Override
+    public Integer getVehicleCountByStatus(String status) {
+        String sql = "SELECT COUNT(*) FROM vehicles WHERE status = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
 }

@@ -38,4 +38,9 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Vehicle> getAvailableVehicles() {
         return vehicleDAO.getAvailableVehicles();
     }
+
+    @Override
+    public Integer getVehicleCountByStatus(String status) {
+        return vehicleDAO.getVehicleCountByStatus(status);
+    }
 }

@@ -146,7 +146,7 @@
             </h1>
         </div>
         <div>
-            <div><h1><a href="${pageContext.request.contextPath}/pages/adminDashboard.jsp"><i
+            <div><h1><a href="${pageContext.request.contextPath}/adminDashBoard"><i
                     class="fas fa-th-large"></i> DashBoard</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/customers"><i class="fa-solid fa-user"></i>
                 Customer</a></h1></div>
