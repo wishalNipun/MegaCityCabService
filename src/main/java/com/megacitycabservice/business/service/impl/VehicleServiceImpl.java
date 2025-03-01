@@ -17,22 +17,22 @@ public class VehicleServiceImpl implements VehicleService {
     }
     @Override
     public String addVehicle(Vehicle vehicle) {
-        return vehicleDAO.addVehicle(vehicle);
+        return vehicleDAO.insert(vehicle);
     }
 
     @Override
     public List<Vehicle> getAllVehicles() {
-        return vehicleDAO.getAllVehicles();
+        return vehicleDAO.getAll();
     }
 
     @Override
     public String updateVehicle(Vehicle vehicle) {
-        return vehicleDAO.updateVehicle(vehicle);
+        return vehicleDAO.update(vehicle);
     }
 
     @Override
     public Boolean deleteVehicle(int id) {
-        return vehicleDAO.deleteVehicle(id);
+        return vehicleDAO.delete(id);
     }
 
     @Override

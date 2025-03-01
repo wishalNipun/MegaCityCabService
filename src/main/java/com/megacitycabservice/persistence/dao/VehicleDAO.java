@@ -4,11 +4,7 @@ import com.megacitycabservice.model.Vehicle;
 
 import java.util.List;
 
-public interface VehicleDAO {
-    String addVehicle(Vehicle vehicle);
-    List<Vehicle> getAllVehicles();
-    String updateVehicle(Vehicle vehicle);
-    Boolean deleteVehicle(int id);
+public interface VehicleDAO extends CrudDAO<Vehicle,Integer>{
     List<Vehicle> getAvailableVehicles();
     String getVehicleStatus(int vehicleId);
     void updateVehicleStatus(List<Integer> vehicleIds, String status);

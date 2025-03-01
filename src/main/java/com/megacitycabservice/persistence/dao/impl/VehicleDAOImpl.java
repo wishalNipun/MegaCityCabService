@@ -20,8 +20,9 @@ public class VehicleDAOImpl implements VehicleDAO {
         this.conn = DBConnection.getDbConnection().getConnection();
     }
 
+
     @Override
-    public String addVehicle(Vehicle vehicle) {
+    public String insert(Vehicle vehicle) {
 
         try {
 
@@ -66,9 +67,8 @@ public class VehicleDAOImpl implements VehicleDAO {
         return "success";
     }
 
-
     @Override
-    public List<Vehicle> getAllVehicles() {
+    public List<Vehicle> getAll() {
         List<Vehicle> vehicleList = new ArrayList<>();
         String sql = "SELECT * FROM vehicles order by updated_date DESC";
         try (PreparedStatement stmt = conn.prepareStatement(sql);
@@ -103,7 +103,7 @@ public class VehicleDAOImpl implements VehicleDAO {
     }
 
     @Override
-    public String updateVehicle(Vehicle vehicle) {
+    public String update(Vehicle vehicle) {
 
         try {
 
@@ -167,7 +167,7 @@ public class VehicleDAOImpl implements VehicleDAO {
     }
 
     @Override
-    public Boolean deleteVehicle(int id) {
+    public Boolean delete(Integer id) {
         String query = "DELETE FROM vehicles WHERE id = ?";
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -243,4 +243,6 @@ public class VehicleDAOImpl implements VehicleDAO {
             e.printStackTrace();
         }
     }
+
+
 }
