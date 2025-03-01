@@ -11,7 +11,7 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
     CustomerDAO customerDAO;
     public CustomerServiceImpl() throws SQLException, ClassNotFoundException {
-        this.customerDAO = DAOFactory.getCustomerDAO();
+        this.customerDAO = (CustomerDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.CUSTOMER);
     }
     @Override
     public Boolean registerCustomerWithUser(String name, String nic, String address, String contactNumber, String username, String password) {

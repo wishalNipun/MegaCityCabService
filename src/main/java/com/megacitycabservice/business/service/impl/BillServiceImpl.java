@@ -13,10 +13,10 @@ public class BillServiceImpl implements BillService {
     private final BookingVehicleDAO bookingVehicleDAO;
     private final VehicleDAO vehicleDAO;
     public BillServiceImpl() throws SQLException, ClassNotFoundException {
-        this.billDAO = DAOFactory.getBillDAO();
-        this.bookingDAO = DAOFactory.getBookingDAO();
-        this.bookingVehicleDAO = DAOFactory.getBookingVehicleDAO();
-        this.vehicleDAO =DAOFactory.getVehicleDAO();
+        this.billDAO = (BillDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.BILL);
+        this.bookingDAO = (BookingDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.BOOKING);
+        this.bookingVehicleDAO = (BookingVehicleDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.BOOKING_VEHICLE);
+        this.vehicleDAO = (VehicleDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.VEHICLE);
     }
 
     @Override

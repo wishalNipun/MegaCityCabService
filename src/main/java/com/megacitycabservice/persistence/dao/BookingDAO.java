@@ -5,7 +5,7 @@ import com.megacitycabservice.model.Vehicle;
 
 import java.util.List;
 
-public interface BookingDAO {
+public interface BookingDAO extends SuperDAO{
     String generateBookId();
     String getLatestBookId();
     String addBooking(Booking booking,String[] vehicles,String username);

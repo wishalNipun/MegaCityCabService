@@ -12,7 +12,7 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleDAO vehicleDAO;
 
     public VehicleServiceImpl() throws SQLException, ClassNotFoundException {
-       vehicleDAO = DAOFactory.getVehicleDAO();
+       vehicleDAO = (VehicleDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.VEHICLE);
     }
     @Override
     public String addVehicle(Vehicle vehicle) {

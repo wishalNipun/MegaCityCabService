@@ -12,7 +12,7 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     public UserServiceImpl() throws SQLException, ClassNotFoundException {
-        userDAO = DAOFactory.getUserDAO();
+        userDAO = (UserDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.USER);
     }
 
     @Override

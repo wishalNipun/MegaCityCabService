@@ -13,7 +13,7 @@ public class DriverServiceImpl implements DriverService {
     private final DriverDAO driverDAO;
 
     public DriverServiceImpl() throws SQLException, ClassNotFoundException {
-        driverDAO = DAOFactory.getDriverDAO();
+        driverDAO = (DriverDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.DRIVER);
     }
 
     @Override

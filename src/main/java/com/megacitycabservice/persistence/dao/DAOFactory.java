@@ -5,31 +5,70 @@ import com.megacitycabservice.persistence.dao.impl.*;
 import java.sql.SQLException;
 
 public class DAOFactory {
-    public static BillDAO getBillDAO() throws SQLException, ClassNotFoundException {
-        return new BillDAOImpl();
+    private static DAOFactory daoFactory;
+
+
+    private static BillDAO billDAO;
+    private static BookingDAO bookingDAO;
+    private static BookingVehicleDAO bookingVehicleDAO;
+    private static CustomerDAO customerDAO;
+    private static DriverDAO driverDAO;
+    private static UserDAO userDAO;
+    private static VehicleDAO vehicleDAO;
+
+
+    private DAOFactory() {}
+
+    public static DAOFactory getInstance() {
+        if (daoFactory == null) {
+            daoFactory = new DAOFactory();
+        }
+        return daoFactory;
     }
 
-    public static BookingDAO getBookingDAO() throws SQLException, ClassNotFoundException {
-        return new BookingDAOImpl();
+    public enum DAOTypes {
+        BILL, BOOKING, BOOKING_VEHICLE, CUSTOMER, DRIVER, USER, VEHICLE
     }
 
-    public static BookingVehicleDAO getBookingVehicleDAO() {
-        return new BookingVehicleDAOImpl();
-    }
-
-    public static CustomerDAO getCustomerDAO() throws SQLException, ClassNotFoundException {
-        return new CustomerDAOImpl();
-    }
-
-    public static DriverDAO getDriverDAO() throws SQLException, ClassNotFoundException {
-        return new DriverDAOImpl();
-    }
-
-    public static UserDAO getUserDAO() throws SQLException, ClassNotFoundException {
-        return new UserDAOImpl();
-    }
-
-    public static VehicleDAO getVehicleDAO() throws SQLException, ClassNotFoundException {
-        return new VehicleDAOImpl();
+    public SuperDAO getDAO(DAOTypes daoType) throws SQLException, ClassNotFoundException {
+        switch (daoType) {
+            case BILL:
+                if (billDAO == null) {
+                    billDAO = new BillDAOImpl();
+                }
+                return billDAO;
+            case BOOKING:
+                if (bookingDAO == null) {
+                    bookingDAO = new BookingDAOImpl();
+                }
+                return bookingDAO;
+            case BOOKING_VEHICLE:
+                if (bookingVehicleDAO == null) {
+                    bookingVehicleDAO = new BookingVehicleDAOImpl();
+                }
+                return bookingVehicleDAO;
+            case CUSTOMER:
+                if (customerDAO == null) {
+                    customerDAO = new CustomerDAOImpl();
+                }
+                return customerDAO;
+            case DRIVER:
+                if (driverDAO == null) {
+                    driverDAO = new DriverDAOImpl();
+                }
+                return driverDAO;
+            case USER:
+                if (userDAO == null) {
+                    userDAO = new UserDAOImpl();
+                }
+                return userDAO;
+            case VEHICLE:
+                if (vehicleDAO == null) {
+                    vehicleDAO = new VehicleDAOImpl();
+                }
+                return vehicleDAO;
+            default:
+                return null;
+        }
     }
 }

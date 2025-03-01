@@ -16,10 +16,10 @@ public class BookingServiceImpl implements BookingService {
     private final UserDAO userDAO;
 
     public BookingServiceImpl() throws SQLException, ClassNotFoundException {
-        this.bookingDAO = DAOFactory.getBookingDAO();
-        this.bookingVehicleDAO = DAOFactory.getBookingVehicleDAO();
-        this.vehicleDAO = DAOFactory.getVehicleDAO();
-        this.userDAO = DAOFactory.getUserDAO();
+        this.bookingDAO = (BookingDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.BOOKING);
+        this.bookingVehicleDAO = (BookingVehicleDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.BOOKING_VEHICLE);
+        this.vehicleDAO = (VehicleDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.VEHICLE);
+        this.userDAO = (UserDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.USER);
     }
 
 
