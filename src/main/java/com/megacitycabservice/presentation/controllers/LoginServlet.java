@@ -1,5 +1,6 @@
 package com.megacitycabservice.presentation.controllers;
 
+import com.megacitycabservice.business.service.BOFactory;
 import com.megacitycabservice.model.User;
 import com.megacitycabservice.business.service.UserService;
 import com.megacitycabservice.business.service.impl.UserServiceImpl;
@@ -20,8 +21,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void init() {
         try {
-            System.out.println("running");
-            userService = new UserServiceImpl();
+            userService = (UserService) BOFactory.getInstance().getBO(BOFactory.BOTypes.USER);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }

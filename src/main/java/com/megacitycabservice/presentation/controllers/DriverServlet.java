@@ -1,5 +1,6 @@
 package com.megacitycabservice.presentation.controllers;
 
+import com.megacitycabservice.business.service.BOFactory;
 import com.megacitycabservice.business.service.DriverService;
 import com.megacitycabservice.business.service.impl.DriverServiceImpl;
 import com.megacitycabservice.model.Customer;
@@ -23,7 +24,7 @@ public class DriverServlet extends HttpServlet {
     @Override
     public void init() {
         try {
-            driverService = new DriverServiceImpl();
+            driverService = (DriverService) BOFactory.getInstance().getBO(BOFactory.BOTypes.DRIVER);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {

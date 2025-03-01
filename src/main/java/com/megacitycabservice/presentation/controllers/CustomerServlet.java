@@ -1,4 +1,5 @@
 package com.megacitycabservice.presentation.controllers;
+import com.megacitycabservice.business.service.BOFactory;
 import com.megacitycabservice.business.service.CustomerService;
 import com.megacitycabservice.business.service.impl.CustomerServiceImpl;
 import com.megacitycabservice.business.service.impl.DriverServiceImpl;
@@ -25,7 +26,7 @@ public class CustomerServlet extends HttpServlet {
     public void init() {
 
         try {
-            customerService = new CustomerServiceImpl();
+            customerService = (CustomerService) BOFactory.getInstance().getBO(BOFactory.BOTypes.CUSTOMER);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {

@@ -1,6 +1,7 @@
 package com.megacitycabservice.presentation.controllers;
 
 
+import com.megacitycabservice.business.service.BOFactory;
 import com.megacitycabservice.business.service.DriverService;
 import com.megacitycabservice.business.service.VehicleService;
 import com.megacitycabservice.business.service.impl.DriverServiceImpl;
@@ -34,9 +35,8 @@ public class VehicleServlet extends HttpServlet {
     @Override
     public void init() {
         try {
-            System.out.println("vehicle runnn");
-            vehicleService = new VehicleServiceImpl();
-            driverService = new DriverServiceImpl();
+            vehicleService = (VehicleService) BOFactory.getInstance().getBO(BOFactory.BOTypes.VEHICLE);
+            driverService = (DriverService) BOFactory.getInstance().getBO(BOFactory.BOTypes.VEHICLE);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {

@@ -1,5 +1,6 @@
 package com.megacitycabservice.presentation.controllers;
 
+import com.megacitycabservice.business.service.BOFactory;
 import com.megacitycabservice.business.service.BookingService;
 import com.megacitycabservice.business.service.VehicleService;
 import com.megacitycabservice.business.service.impl.BookingServiceImpl;
@@ -32,9 +33,8 @@ public class BookingServlet extends HttpServlet {
     @Override
     public void init() {
         try {
-            System.out.println("Boooking");
-            vehicleService = new VehicleServiceImpl();
-            bookingService = new BookingServiceImpl();
+            vehicleService = (VehicleService) BOFactory.getInstance().getBO(BOFactory.BOTypes.VEHICLE);
+            bookingService = (BookingService) BOFactory.getInstance().getBO(BOFactory.BOTypes.BOOKING);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {

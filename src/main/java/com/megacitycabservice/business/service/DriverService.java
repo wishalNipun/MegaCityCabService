@@ -4,7 +4,7 @@ import com.megacitycabservice.model.Driver;
 
 import java.util.List;
 
-public interface DriverService {
+public interface DriverService extends SuperBOService{
     String addDriver(Driver driver);
     List<Driver> getAllDrivers();
     String updateDriver(Driver driver);

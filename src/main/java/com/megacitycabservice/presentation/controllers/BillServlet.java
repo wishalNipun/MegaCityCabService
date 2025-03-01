@@ -1,5 +1,6 @@
 package com.megacitycabservice.presentation.controllers;
 
+import com.megacitycabservice.business.service.BOFactory;
 import com.megacitycabservice.business.service.BillService;
 import com.megacitycabservice.business.service.impl.BillServiceImpl;
 import com.megacitycabservice.model.Bill;
@@ -20,7 +21,7 @@ public class BillServlet extends HttpServlet {
     @Override
     public void init() {
         try {
-            billService = new BillServiceImpl();
+            billService = (BillService) BOFactory.getInstance().getBO(BOFactory.BOTypes.BILL);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
