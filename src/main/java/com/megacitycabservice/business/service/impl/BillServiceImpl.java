@@ -51,6 +51,15 @@ public class BillServiceImpl implements BillService {
         bill.setTotalAmount(total);
         bill.setTaxPrice(taxPrice);
 
+        System.out.println("---- Mega City Cab - Invoice ----");
+        System.out.println("Booking ID: " + bill.getBookingId());
+        System.out.println("Base Fee: " + bill.getBaseFee());
+        System.out.println("Tax Percentage: " + bill.getTaxPercentage() + "%");
+        System.out.println("Tax Price: " + bill.getTaxPrice());
+        System.out.println("Discount: " + bill.getDiscount());
+        System.out.println("Total Amount: " + bill.getTotalAmount());
+        System.out.println("Thank you for choosing Mega City Cab!");
+
         return billDAO.insert(bill);
     }
 
