@@ -5,12 +5,7 @@ import com.megacitycabservice.model.Driver;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface DriverDAO {
-
-    String addDriver(Driver driver);
-    List<Driver> getAllDrivers();
-    String updateDriver(Driver driver);
-    Boolean deleteDriver(int id);
+public interface DriverDAO extends CrudDAO<Driver,Integer>{
     List<Driver> getAllAvailableDrivers();
     Driver getDriverById(int driverId);
 }

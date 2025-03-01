@@ -18,22 +18,22 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public List<Driver> getAllDrivers() {
-        return driverDAO.getAllDrivers();
+        return driverDAO.getAll();
     }
 
     @Override
     public String addDriver(Driver driver) {
-        return driverDAO.addDriver(driver);
+        return driverDAO.insert(driver);
     }
 
     @Override
     public String updateDriver(Driver driver) {
-        return driverDAO.updateDriver(driver);
+        return driverDAO.update(driver);
     }
 
     @Override
     public Boolean deleteDriver(int id) {
-        return driverDAO.deleteDriver(id);
+        return driverDAO.delete(id);
     }
 
     @Override
