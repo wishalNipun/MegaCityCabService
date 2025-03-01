@@ -114,4 +114,9 @@ public class BookingServiceImpl implements BookingService {
         return null;
     }
 
+    @Override
+    public List<Booking> getBookingsByStatus(String status) {
+        return bookingDAO.getBookingsByStatus(status);
+    }
+
 }

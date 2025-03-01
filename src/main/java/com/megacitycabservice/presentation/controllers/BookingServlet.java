@@ -165,6 +165,10 @@ public class BookingServlet extends HttpServlet {
                 List<Booking> bookingList = bookingService.getBookingsByUsername(username);
                 request.setAttribute("bookingList", bookingList);
                 request.getRequestDispatcher("/pages/BookingDetail.jsp").forward(request, response);
+            }else if ("availablePayBookings".equals(action)){
+                List<Booking> bookingList = bookingService.getBookingsByStatus("CONFIRMED");
+                request.setAttribute("bookingList", bookingList);
+                request.getRequestDispatcher("/pages/PaymentManagement.jsp").forward(request, response);
             }
 
 

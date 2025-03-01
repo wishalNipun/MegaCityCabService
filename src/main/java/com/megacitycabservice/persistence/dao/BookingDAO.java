@@ -12,8 +12,11 @@ public interface BookingDAO {
     List<Booking> getAllBookings();
     String updateBooking(Booking booking);
     boolean doesBookingExist(int bookingId);
+    Integer doesBookingExistCheck(String bookingNumber);
     void updateBookingStatus(int bookingId, String status);
     String getBookingStatus(int bookingId);
     List<Vehicle> getVehiclesByBookingNumber(String bookingNumber);
     List<Booking> getBookingsByCustomerId(String customerId);
+    List<Booking>getBookingsByStatus(String status);
+
 }

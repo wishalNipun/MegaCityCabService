@@ -199,6 +199,20 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
+    public Integer doesBookingExistCheck(String bookingNumber) {
+        String sql = "SELECT id FROM bookings WHERE booking_number = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, bookingNumber);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id"); // Return the booking ID
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Return null if no booking found
+    }
+    @Override
     public void updateBookingStatus(int bookingId, String status) {
         String sql = "UPDATE bookings SET status = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -257,4 +271,36 @@ public class BookingDAOImpl implements BookingDAO {
         }
         return vehicleList;
     }
+
+    @Override
+    public List<Booking> getBookingsByStatus(String status) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM bookings WHERE status = ? ORDER BY updated_date DESC";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Booking booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setBookingNumber(rs.getString("booking_number"));
+                    booking.setCustomerId(rs.getString("customer_id"));
+                    booking.setPickupLocation(rs.getString("pickup_location"));
+                    booking.setDropLocation(rs.getString("drop_location"));
+                    booking.setDistanceKm(rs.getDouble("distance_km"));
+                    booking.setFee(rs.getDouble("fee"));
+                    booking.setStatus(rs.getString("status"));
+                    booking.setCreatedDate(rs.getTimestamp("created_date"));
+                    booking.setUpdatedDate(rs.getTimestamp("updated_date"));
+                    bookings.add(booking);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return bookings;
+    }
+
 }

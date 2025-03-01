@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
 <%@ page import="com.megacitycabservice.model.User" %>
+<%@ page import="jakarta.servlet.http.HttpSession" %>
 <%
     HttpSession sessionObj = request.getSession(false);
     if (sessionObj == null || sessionObj.getAttribute("user") == null) {
@@ -43,7 +44,7 @@
             <div><h1><a href="${pageContext.request.contextPath}/vehicles"><i class="fa-solid fa-car"></i> Vehicle</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/drivers"><i class="fas fa-male"></i> Drivers</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/bookings?action=viewBookings"><i class="fa-solid fa-calendar-days"></i> Reserve Bookings</a></h1></div>
-            <div><h1><a href="${pageContext.request.contextPath}/pages/PaymentManagement.jsp"><i class="fas fa-money-bill"></i> Payment</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/bookings?action=availablePayBookings"><i class="fas fa-money-bill"></i> Payment</a></h1></div>
             <div><h1><a href="login.jsp"><i class="fas fa-chart-area"></i> Bills</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/users"><i class="fas fa-male"></i> User</a></h1></div>
             <div><h1 style=" color: darkred;"><a href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt"></i> log Out</a></h1>

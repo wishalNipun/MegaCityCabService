@@ -52,41 +52,26 @@
             });
             <% } %>
 
-        });
+            $("#bookingSelect").change(function () {
+                var selectedOption = $(this).find(":selected");
+                fetchVehicleDetails(selectedOption.data("id"))
 
-        function submitForm(selectElement) {
-            var form = selectElement.closest('form');
-            form.submit();
-        }
-
-        function fetchCustomerDetails(customerId) {
-            $.ajax({
-                url: "${pageContext.request.contextPath}/customers?action=getCustomerDetail",
-                type: "GET",
-                data: {customerId: customerId},
-                dataType: "json",
-                success: function (response) {
-                    // Populate modal fields with the fetched customer data
-                    $('#customerId').text(response.customerId);
-                    $('#customerName').text(response.name);
-                    $('#customerAddress').text(response.address);
-                    $('#customerContactNumber').text(response.contactNumber);
-                    $('#customerNic').text(response.nic);
-
-                    // Show the modal
-                    var myModal = new bootstrap.Modal(document.getElementById('customerModal'));
-                    myModal.show();
-                },
-                error: function () {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error!",
-                        text: "Failed to fetch customer details.",
-                        showConfirmButton: true
-                    });
-                }
+                $("#customerId").text(selectedOption.data("customer") || "-");
+                $("#pickupLocation").text(selectedOption.data("pickup") || "-");
+                $("#dropLocation").text(selectedOption.data("drop") || "-");
+                $("#distance").text(selectedOption.data("distance") || "-");
+                $("#fee").text(selectedOption.data("fee") || "-");
             });
-        }
+
+            $("#tax").val("");
+            $("#discount").val("");
+            $("#totalAmount").text("-");
+            $("#placeBooking").prop('disabled', true);
+
+            $("#tax, #discount").on('input', function () {
+                calculateTotal();
+            });
+        });
 
         function fetchVehicleDetails(bookingNumber) {
             fetch(`${pageContext.request.contextPath}/bookings?action=getVehicleDetailBooking&bookingNumber=` + bookingNumber)
@@ -115,12 +100,8 @@
                         row.insertCell(3).textContent = vehicle.plateNumber
                         row.insertCell(4).textContent = vehicle.numberOfPassenger
                         row.insertCell(5).textContent = vehicle.pricePerKm
-                        row.insertCell(6).textContent = vehicle.status
-                        row.insertCell(7).textContent = vehicle.assignedDate
+                        row.insertCell(6).textContent = vehicle.assignedDate
                     });
-
-                    let myModal = new bootstrap.Modal(document.getElementById('vehicleDetailsModal'));
-                    myModal.show();
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -131,6 +112,26 @@
                         showConfirmButton: true
                     });
                 });
+        }
+
+        function calculateTotal() {
+            var baseFee = parseFloat($("#fee").text()) || 0;
+            var taxPercentage = parseFloat($("#tax").val()) || 0;
+            var discount = parseFloat($("#discount").val()) || 0;
+
+            var taxAmount = (baseFee * taxPercentage) / 100;
+
+            var totalAmount = baseFee + taxAmount - discount;
+
+            $("#baseFeeInput").val(baseFee.toFixed(2));
+            $("#totalAmount").text(totalAmount.toFixed(2));
+            $("#totalAmountInput").val(totalAmount.toFixed(2));
+
+            if (totalAmount > 0) {
+                $("#placeBooking").prop('disabled', false);
+            } else {
+                $("#placeBooking").prop('disabled', true);
+            }
         }
 
     </script>
@@ -170,38 +171,47 @@
             <h1>Reserve Bookings Management</h1>
         </div>
         <div>
-            <form action="" method="post">
+            <form action="${pageContext.request.contextPath}/bills?action=payBook" method="post">
                 <div>
                     <div>
                         <h3>Booking Id</h3>
-                        <select class="form-control" aria-label="Default select example">
-                            <option selected="">Available</option>
-                            <option value="1">Not Available</option>
-                        </select></div>
+                        <select class="form-control" id="bookingSelect" name="bookingId" required>
+                            <option value="" disabled selected>Select a Booking</option>
+                            <c:forEach var="booking" items="${bookingList}">
+                                <option value="${booking.bookingNumber}"
+                                        data-id="${booking.bookingNumber}"
+                                        data-customer="${booking.customerId}"
+                                        data-pickup="${booking.pickupLocation}"
+                                        data-drop="${booking.dropLocation}"
+                                        data-distance="${booking.distanceKm}"
+                                        data-fee="${booking.fee}">
+                                    ${booking.bookingNumber}
+                                </option>
+                            </c:forEach>
+
+                        </select>
+                    </div>
                     <div>
                         <h3>Customer Id</h3>
-                        <div>wishal Niypun Siriwardana</div>
+                        <div id="customerId">-</div>
                     </div>
                     <div>
                         <h3>Pickup Location</h3>
-                        <div>wishal Niypun Siriwardana</div>
+                        <div id="pickupLocation">-</div>
                     </div>
-                </div>
-                <div>
                     <div>
                         <h3>Drop Location</h3>
-                        <div>wishal Niypun Siriwardana</div>
+                        <div id="dropLocation">-</div>
                     </div>
                     <div>
-                        <h3>Distance</h3>
-                        <div>wishal Niypun Siriwardana</div>
+                        <h3>Distance (Km)</h3>
+                        <div id="distance">-</div>
                     </div>
-
                     <div>
-                        <h3>Fee</h3>
-                        <div>wishal Niypun Siriwardana</div>
+                        <h3>Base Fee</h3>
+                        <div id="fee">-</div>
+                        <input type="hidden" id="baseFeeInput" name="baseFee">
                     </div>
-
                 </div>
                 <div>
                     <table class="table table-hover">
@@ -213,28 +223,10 @@
                             <th scope="col">Plate No</th>
                             <th scope="col">Passengers</th>
                             <th scope="col">Price Per Km</th>
-                            <th scope="col">Driver</th>
+                            <th scope="col">Assigned Date</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <c:forEach var="vehicle" items="${vehicleList}">
-                            <tr>
-                                <td>${vehicle.id}</td>
-                                <td>${vehicle.vehicleType}</td>
-                                <td>${vehicle.model}</td>
-                                <td>${vehicle.plateNumber}</td>
-                                <td>${vehicle.numberOfPassengers}</td>
-                                <td>${vehicle.pricePerKm}</td>
-                                <td>${vehicle.driverId}</td>
-                            </tr>
-                        </c:forEach>
-                        <c:if test="${empty vehicleList}">
-                            <tr>
-                                <td colspan="7">No Vehicles Available</td>
-                            </tr>
-                        </c:if>
-                        </tbody>
-
+                        <tbody id="vehicleDetailsTableBody">
                         </tbody>
                     </table>
                 </div>
@@ -242,19 +234,20 @@
 
                     <div>
                         <div class="payDiv">
-                            <h1>Tax</h1>
-                            <input type="text" name="model" class="form-control" placeholder="Enter Model">
+                            <h1>Tax (%)</h1>
+                            <input type="number" id="tax" name="tax" class="form-control" placeholder="Enter Tax (%)" step="0.01">
                         </div>
                         <div class="payDiv">
                             <h1>Discount</h1>
-                            <input type="text" name="model" class="form-control" placeholder="Enter Model">
+                            <input type="number" id="discount" name="discount" class="form-control" placeholder="Enter Discount" step="0.01">
                         </div>
                         <div class="payDiv">
-                            <h1>Plate Number</h1>
-                            <h2>Total Amount</h2>
+                            <h1>Total Amount</h1>
+                            <div id="totalAmount">-</div>
+                            <input type="hidden" id="totalAmountInput" name="totalAmount">
                         </div>
                         <div id="payBtn">
-                            <button type="button" id="placeBooking" class="btn btn-success" disabled>Pay Booking</button>
+                            <button type="submit" id="placeBooking" class="btn btn-success" disabled>Pay Booking</button>
                         </div>
                     </div>
 
@@ -265,6 +258,29 @@
         </div>
 
     </section>
+
+    <div class="modal fade" id="driverModal" tabindex="-1" aria-labelledby="driverModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="driverModalLabel">Driver Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Driver ID:</strong> <span id="id"></span></p>
+                    <p><strong>Name:</strong> <span id="driverName"></span></p>
+                    <p><strong>Address:</strong> <span id="driverAddress"></span></p>
+                    <p><strong>Address:</strong> <span id="driverLicenseNumber"></span></p>
+                    <p><strong>Address:</strong> <span id="driverDateOfBirth"></span></p>
+                    <p><strong>NIC:</strong> <span id="driverNic"></span></p>
+                    <p><strong>Contact Number:</strong> <span id="driverContactNumber"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 </body>
