@@ -105,15 +105,15 @@ public class CustomerServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        boolean isRegistered = customerService.registerCustomerWithUser(name, nic, address, contactNumber, username, password);
+        String message = customerService.registerCustomerWithUser(name, nic, address, contactNumber, username, password);
 
 
 
-        if (isRegistered) {
-            request.setAttribute("message", "Customer registered successfully.");
+        if (message.equals("success")) {
+            ResponseUtil.setResponseMessage(request, "success", "Customer registered successfully.");
             response.sendRedirect(request.getContextPath() + "/customers");
         } else {
-            request.setAttribute("message", "Registration failed. Please try again.");
+            ResponseUtil.setResponseMessage(request, "error", message);
             response.sendRedirect(request.getContextPath() + "/customers");
         }
     }
@@ -126,15 +126,14 @@ public class CustomerServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        boolean isRegistered = customerService.registerCustomerWithUser(name, nic, address, contactNumber, username, password);
+        String message = customerService.registerCustomerWithUser(name, nic, address, contactNumber, username, password);
 
-        if (isRegistered) {
-            request.setAttribute("message", "Customer registered successfully.");
+
+        if ("success".equals(message)) {
             request.getRequestDispatcher("pages/customerDashboard.jsp").forward(request, response);
         } else {
-            request.setAttribute("message", "Registration failed. Please try again.");
+            ResponseUtil.setResponseMessage(request, "error", message);
             request.getRequestDispatcher("pages/register.jsp").forward(request, response);
-
         }
     }
 

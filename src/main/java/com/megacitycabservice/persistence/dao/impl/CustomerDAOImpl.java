@@ -52,7 +52,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public Boolean registerCustomerWithUser(String name, String nic, String address, String contactNumber, String username, String password) {
+    public String registerCustomerWithUser(String name, String nic, String address, String contactNumber, String username, String password) {
         try {
             conn.setAutoCommit(false);
 
@@ -93,7 +93,7 @@ public class CustomerDAOImpl implements CustomerDAO {
             }
 
             conn.commit();
-            return true;
+            return "success";
 
         } catch (SQLException e) {
             try {
@@ -102,7 +102,7 @@ public class CustomerDAOImpl implements CustomerDAO {
                 rollbackEx.printStackTrace();
             }
             e.printStackTrace();
-            return false;
+            return "Failed to create customer.";
         } finally {
             try {
                 conn.setAutoCommit(true);

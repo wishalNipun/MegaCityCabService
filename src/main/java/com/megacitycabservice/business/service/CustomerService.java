@@ -5,7 +5,7 @@ import com.megacitycabservice.model.Customer;
 import java.util.List;
 
 public interface CustomerService extends SuperBOService{
-    Boolean registerCustomerWithUser(String name,String nic,String address,String contactNumber, String username, String password);
+    String registerCustomerWithUser(String name,String nic,String address,String contactNumber, String username, String password);
     List<Customer> getAllCustomers();
     boolean deleteCustomer(String customerId);
     String updateCustomer(Customer customer);

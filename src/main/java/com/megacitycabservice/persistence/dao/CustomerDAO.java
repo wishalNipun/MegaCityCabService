@@ -8,7 +8,7 @@ import java.util.List;
 public interface CustomerDAO extends CrudDAO<Customer,String>,SuperDAO{
     String getLatestCustomerId() ;
     String generateCustomerId() ;
-    Boolean registerCustomerWithUser(String name,String nic,String address,String contactNumber, String username, String password);
+    String registerCustomerWithUser(String name,String nic,String address,String contactNumber, String username, String password);
     String getCustomerIdByUsername(String username);
     Customer getCustomerById(String customerId);
 }
