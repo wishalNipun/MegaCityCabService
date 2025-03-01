@@ -1,0 +1,99 @@
+drop DATABASE megacitycabservice;
+CREATE DATABASE megacitycabservice;
+use megacitycabservice;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('ADMIN', 'CUSTOMER') NOT NULL,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO users (username, password, role)
+VALUES ('wishal', '1234', 'ADMIN');
+INSERT INTO users (username, password, role)
+VALUES ('C0000001', '1234', 'CUSTOMER');
+
+CREATE TABLE customers (
+    customer_id VARCHAR(10) PRIMARY KEY,
+    user_id INT UNIQUE,
+    name VARCHAR(100) NOT NULL,
+    address TEXT,
+    nic VARCHAR(20) UNIQUE,
+    contact_number VARCHAR(20),
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bookings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_number VARCHAR(20) UNIQUE NOT NULL,
+    customer_id VARCHAR(10) NOT NULL,
+    pickup_location VARCHAR(255),
+    drop_location VARCHAR(255),
+	distance_km DECIMAL(5,2) NOT NULL,
+    fee DECIMAL(10,2),
+    status ENUM('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED') DEFAULT 'PENDING',
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE
+);
+
+CREATE TABLE booking_vehicles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id INT NOT NULL,
+    vehicle_id INT NOT NULL,
+    assigned_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE
+);
+
+CREATE TABLE drivers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    nic VARCHAR(20) UNIQUE NOT NULL,
+    date_of_birth DATE NOT NULL,
+    address TEXT NOT NULL,
+    license_number VARCHAR(50) UNIQUE NOT NULL,
+    contact_number VARCHAR(20),
+    status ENUM('AVAILABLE', 'BUSY') DEFAULT 'AVAILABLE',
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+
+CREATE TABLE vehicles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_type VARCHAR(50) NOT NULL,
+    model VARCHAR(100) NOT NULL,
+    plate_number VARCHAR(20) UNIQUE NOT NULL,
+    driver_id INT UNIQUE,
+    number_of_passenger INT NOT NULL,
+    price_per_km DECIMAL(10,2) NOT NULL,
+    status VARCHAR(20) DEFAULT 'AVAILABLE',
+    img LONGBLOB,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (driver_id) REFERENCES drivers(id) ON DELETE SET NULL
+);
+
+
+CREATE TABLE bills (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id INT NOT NULL,
+    base_fee DECIMAL(10,2) NOT NULL,
+    tax_percentage DECIMAL(5,2) DEFAULT 0.00,
+	tax_price DECIMAL(10,2) DEFAULT 0.00,
+    discount DECIMAL(10,2) DEFAULT 0.00,
+    total_amount DECIMAL(10,2) NOT NULL,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE
+);
+
+ALTER TABLE vehicles AUTO_INCREMENT = 1;
+ALTER TABLE bookings AUTO_INCREMENT = 1;
+ALTER TABLE booking_vehicles AUTO_INCREMENT = 1;
