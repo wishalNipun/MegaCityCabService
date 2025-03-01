@@ -1,5 +1,7 @@
 package com.megacitycabservice.model;
 
+import com.megacitycabservice.util.DateUtil;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -11,7 +13,9 @@ public class Bill {
     private BigDecimal taxPrice;
     private BigDecimal discount;
     private BigDecimal totalAmount;
-    private java.sql.Timestamp createdDate;
+    private Timestamp createdDate;
+    private String bookingNumber;
+    private String customerId;
 
     public Bill() {
     }
@@ -88,5 +92,24 @@ public class Bill {
 
     public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getBookingNumber() {
+        return bookingNumber;
+    }
+
+    public void setBookingNumber(String bookingNumber) {
+        this.bookingNumber = bookingNumber;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+    public String getFormattedCreatedDate() {
+        return DateUtil.formatDate(createdDate);
     }
 }

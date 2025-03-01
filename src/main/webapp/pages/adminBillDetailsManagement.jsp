@@ -1,10 +1,11 @@
 <%--
   Created by IntelliJ IDEA.
   User: wishal siriwardana
-  Date: 2/25/2025
-  Time: 10:36 PM
+  Date: 3/1/2025
+  Time: 2:40 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
@@ -29,10 +30,10 @@
 %>
 <html>
 <head>
-    <title>Reserve Bookings Management</title>
+    <title>Bills Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/style/AdminReserveBookings.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/style/adminBookingDetails.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -135,7 +136,7 @@
     </script>
 </head>
 <body style="background-color: #ededede0">
-<main id="AdminReserveBookings" class="container-fluid.p0">
+<main id="AdminBookingDetails" class="container-fluid.p0">
     <section>
         <div>Mega City Cab Service</div>
         <div>
@@ -166,72 +167,55 @@
     </section>
     <section>
         <div>
-            <h1>Reserve Bookings Management</h1>
+            <h1>Bills Details</h1>
         </div>
 
         <div class="table-responsive" style="padding: 1rem">
             <table class="table table-hover">
                 <thead class="table-primary">
                 <tr>
+                    <th scope="col">Bill ID</th>
                     <th scope="col">Booking Number</th>
                     <th scope="col">Customer</th>
-                    <th scope="col">Pickup Location</th>
-                    <th scope="col">Drop Location</th>
-                    <th scope="col">Distance (KM)</th>
-                    <th scope="col">Fee</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Base Fee</th>
+                    <th scope="col">Tax (%)</th>
+                    <th scope="col">Tax Amount</th>
+                    <th scope="col">Discount</th>
+                    <th scope="col">Total Amount</th>
                     <th scope="col">Vehicle Details</th>
                     <th scope="col">Created Date</th>
-                    <th scope="col">Last Updated Date</th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="booking" items="${bookingList}">
+                <c:forEach var="bill" items="${billList}">
                     <tr>
-                        <td>${booking.bookingNumber}</td>
+                        <td>${bill.id}</td>
+                        <td>${bill.bookingNumber}</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-sm"
-                                    onclick="fetchCustomerDetails('${booking.customerId}')">
+                                    onclick="fetchCustomerDetails('${bill.customerId}')">
                                 Show Details
                             </button>
                         </td>
-                        <td>${booking.pickupLocation}</td>
-                        <td>${booking.dropLocation}</td>
-                        <td>${booking.distanceKm}</td>
-                        <td>${booking.fee}</td>
-                        <td>
-                            <form action="${pageContext.request.contextPath}/bookings" method="POST">
-                                <input type="hidden" name="id" value="${booking.id}">
-                                <select class="form-select form-select-sm" name="status" onchange="submitForm(this)">
-                                    <option value="PENDING" <c:if test="${booking.status == 'PENDING'}">selected</c:if>>
-                                        PENDING
-                                    </option>
-                                    <option value="CONFIRMED"
-                                            <c:if test="${booking.status == 'CONFIRMED'}">selected</c:if>>CONFIRMED
-                                    </option>
-                                    <option value="CANCELLED"
-                                            <c:if test="${booking.status == 'CANCELLED'}">selected</c:if>>CANCELLED
-                                    </option>
-
-                                </select>
-                            </form>
-                        </td>
+                        <td>${bill.baseFee}</td>
+                        <td>${bill.taxPercentage}</td>
+                        <td>${bill.taxPrice}</td>
+                        <td>${bill.discount}</td>
+                        <td>${bill.totalAmount}</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-sm"
-                                    onclick="fetchVehicleDetails('${booking.bookingNumber}')">
+                                    onclick="fetchVehicleDetails('${bill.bookingNumber}')">
                                 Show Details
                             </button>
                         </td>
-                        <td>${booking.formattedCreatedDate}</td>
-                        <td>${booking.formattedUpdatedDate}</td>
+                        <td>${bill.getFormattedCreatedDate()}</td>
                     </tr>
                 </c:forEach>
-                <c:if test="${empty bookingList}">
-                    <tr>
-                        <td colspan="11" class="text-center">No Bookings Available</td>
-                    </tr>
+                <c:if test="${empty billList}">
+                <tr>
+                    <td colspan="10" class="text-center">No Bills Available</td>
+                </tr>
                 </c:if>
-                </tbody>
             </table>
         </div>
     </section>
@@ -296,3 +280,4 @@
 
 </body>
 </html>
+

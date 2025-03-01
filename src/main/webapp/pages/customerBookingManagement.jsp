@@ -268,7 +268,7 @@
                     }).then((result) => {
                         if (response.alertType === "success" && result.isConfirmed) {
                             clear();
-                            window.location.href = "${pageContext.request.contextPath}/pages/BookingDetail.jsp";
+                            window.location.href = "${pageContext.request.contextPath}/bookings?action=bookingDetail&username=<%= user.getUsername() %>";
                         }
                     });
                 },

@@ -109,7 +109,7 @@ public class BookingDAOImpl implements BookingDAO {
     @Override
     public List<Booking> getAllBookings() {
         List<Booking> bookings = new ArrayList<>();
-        String sql = "SELECT * FROM bookings order by updated_date DESC";
+        String sql = "SELECT * FROM bookings where status IN ('PENDING', 'CONFIRMED', 'CANCELLED') order by updated_date DESC";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {

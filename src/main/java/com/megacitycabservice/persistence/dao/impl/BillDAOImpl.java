@@ -40,19 +40,26 @@ public class BillDAOImpl implements BillDAO {
 
     @Override
     public List<Bill> getAllBills() throws SQLException {
-        String query = "SELECT * FROM bills  ORDER BY createdDate DESC";
         List<Bill> bills = new ArrayList<>();
+        String query = "SELECT b.id, bk.booking_number, bk.customer_id, b.base_fee, " +
+                "b.tax_percentage, b.tax_price, b.discount, b.total_amount, b.created_date " +
+                "FROM bills b JOIN bookings bk ON b.booking_id = bk.id ORDER BY b.created_date DESC";
+
         try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery(query)) {
+             ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
                 Bill bill = new Bill();
                 bill.setId(rs.getInt("id"));
-                bill.setBookingId(rs.getInt("booking_id"));
+                bill.setBookingNumber(rs.getString("booking_number"));
+                bill.setCustomerId(rs.getString("customer_id"));
                 bill.setBaseFee(rs.getBigDecimal("base_fee"));
                 bill.setTaxPercentage(rs.getBigDecimal("tax_percentage"));
                 bill.setTaxPrice(rs.getBigDecimal("tax_price"));
                 bill.setDiscount(rs.getBigDecimal("discount"));
                 bill.setTotalAmount(rs.getBigDecimal("total_amount"));
+                bill.setCreatedDate(rs.getTimestamp("created_date"));
+
                 bills.add(bill);
             }
         }
