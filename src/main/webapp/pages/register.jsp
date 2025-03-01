@@ -6,14 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="jakarta.servlet.http.HttpSession" %>
-<%
-    HttpSession sessionObj = request.getSession(false);
-    if (sessionObj == null || sessionObj.getAttribute("user") == null) {
-        response.sendRedirect(request.getContextPath() + "/pages/login.jsp");
-        return;
-    }
-%>
+
 <html>
 <head>
     <title>User Create Account</title>
@@ -32,7 +25,7 @@
         <h1>Create Your Account.</h1>
         <p>Since this your first trip. You’ll need to provide us
             with some information for Sign Up.</p>
-        <form action="${pageContext.request.contextPath}/customers" method="post">
+        <form action="${pageContext.request.contextPath}/customers?action=register" method="post">
             <div>
                 <input type="text" class="form-control" name="name"  placeholder="Enter Name">
                 <input type="text" class="form-control" name="nic"  placeholder="Enter NIC Number">

@@ -7,12 +7,15 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
+<%@ page import="com.megacitycabservice.model.User" %>
+<%@ page import="jakarta.servlet.http.HttpSession" %>
 <%
     HttpSession sessionObj = request.getSession(false);
     if (sessionObj == null || sessionObj.getAttribute("user") == null) {
         response.sendRedirect(request.getContextPath() + "/pages/login.jsp");
         return;
     }
+    User user = (User) sessionObj.getAttribute("user");
 %>
 <html>
 <head>
@@ -33,17 +36,17 @@
         <div>
             <h2>Admin</h2>
             <img src="<%= request.getContextPath() %>/assets/img/adminfaceUser.png">
-            <h1>Wishal Nipun Siriwardana</h1>
+            <h1><%= user.getUsername() %></h1>
         </div>
         <div>
             <div><h1><a href="${pageContext.request.contextPath}/pages/adminDashboard.jsp"><i class="fas fa-th-large"></i> DashBoard</a></h1></div>
-            <div><h1><a href="login.jsp"><i class="fa-solid fa-user"></i> Customer</a></h1></div>
-            <div><h1><a href="login.jsp"><i class="fa-solid fa-car"></i> Cars</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/customers"><i class="fa-solid fa-user"></i> Customer</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/vehicles"><i class="fa-solid fa-car"></i> Vehicle</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/drivers"><i class="fas fa-male"></i> Drivers</a></h1></div>
-            <div><h1><a href="login.jsp"><i class="fa-solid fa-calendar-days"></i> Bookings</a></h1></div>
-            <div><h1><a href="login.jsp"><i class="fas fa-money-bill"></i> Payment</a></h1></div>
-            <div><h1><a href="login.jsp"><i class="fas fa-chart-area"></i> Bills</a></h1></div>
-            <div><h1><a href="login.jsp"><i class="fas fa-male"></i>User</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/bookings?action=viewBookings"><i class="fa-solid fa-calendar-days"></i> Reserve Bookings</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/bookings?action=availablePayBookings"><i class="fas fa-money-bill"></i> Payment</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/bills"><i class="fas fa-chart-area"></i> Bills</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/users"><i class="fas fa-male"></i> User</a></h1></div>
             <div><h1 style=" color: darkred;"><a href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt"></i> log Out</a></h1>
             </div>
         </div>
