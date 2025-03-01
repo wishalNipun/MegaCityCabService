@@ -1,7 +1,7 @@
 package com.megacitycabservice.business.service.impl;
 
+import com.megacitycabservice.persistence.dao.DAOFactory;
 import com.megacitycabservice.persistence.dao.UserDAO;
-import com.megacitycabservice.persistence.dao.impl.UserDAOImpl;
 import com.megacitycabservice.model.User;
 import com.megacitycabservice.business.service.UserService;
 
@@ -12,7 +12,7 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     public UserServiceImpl() throws SQLException, ClassNotFoundException {
-        userDAO = new UserDAOImpl();
+        userDAO = DAOFactory.getUserDAO();
     }
 
     @Override

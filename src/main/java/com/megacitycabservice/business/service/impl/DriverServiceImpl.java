@@ -1,7 +1,7 @@
 package com.megacitycabservice.business.service.impl;
 
+import com.megacitycabservice.persistence.dao.DAOFactory;
 import com.megacitycabservice.persistence.dao.DriverDAO;
-import com.megacitycabservice.persistence.dao.impl.DriverDAOImpl;
 import com.megacitycabservice.model.Driver;
 import com.megacitycabservice.business.service.DriverService;
 
@@ -13,7 +13,7 @@ public class DriverServiceImpl implements DriverService {
     private final DriverDAO driverDAO;
 
     public DriverServiceImpl() throws SQLException, ClassNotFoundException {
-        driverDAO = new DriverDAOImpl();
+        driverDAO = DAOFactory.getDriverDAO();
     }
 
     @Override

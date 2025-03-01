@@ -2,15 +2,7 @@ package com.megacitycabservice.business.service.impl;
 
 import com.megacitycabservice.business.service.BillService;
 import com.megacitycabservice.model.Bill;
-import com.megacitycabservice.persistence.dao.BillDAO;
-import com.megacitycabservice.persistence.dao.BookingDAO;
-import com.megacitycabservice.persistence.dao.BookingVehicleDAO;
-import com.megacitycabservice.persistence.dao.VehicleDAO;
-import com.megacitycabservice.persistence.dao.impl.BillDAOImpl;
-import com.megacitycabservice.persistence.dao.impl.BookingDAOImpl;
-import com.megacitycabservice.persistence.dao.impl.BookingVehicleDAOImpl;
-import com.megacitycabservice.persistence.dao.impl.VehicleDAOImpl;
-
+import com.megacitycabservice.persistence.dao.*;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,10 +13,10 @@ public class BillServiceImpl implements BillService {
     private final BookingVehicleDAO bookingVehicleDAO;
     private final VehicleDAO vehicleDAO;
     public BillServiceImpl() throws SQLException, ClassNotFoundException {
-        this.billDAO = new BillDAOImpl();
-        this.bookingDAO = new BookingDAOImpl();
-        this.bookingVehicleDAO = new BookingVehicleDAOImpl();
-        this.vehicleDAO = new VehicleDAOImpl();
+        this.billDAO = DAOFactory.getBillDAO();
+        this.bookingDAO = DAOFactory.getBookingDAO();
+        this.bookingVehicleDAO = DAOFactory.getBookingVehicleDAO();
+        this.vehicleDAO =DAOFactory.getVehicleDAO();
     }
 
     @Override
