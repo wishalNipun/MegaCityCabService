@@ -20,17 +20,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getAllCustomers() {
-        return customerDAO.getAllCustomers();
+        return customerDAO.getAll();
     }
 
     @Override
     public boolean deleteCustomer(String customerId) {
-        return customerDAO.deleteCustomer(customerId);
+        return customerDAO.delete(customerId);
     }
 
     @Override
     public String updateCustomer(Customer customer) {
-       return customerDAO.updateCustomer(customer);
+       return customerDAO.update(customer);
     }
 
     @Override

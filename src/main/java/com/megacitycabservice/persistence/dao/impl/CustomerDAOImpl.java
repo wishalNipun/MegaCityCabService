@@ -131,9 +131,39 @@ public class CustomerDAOImpl implements CustomerDAO {
         return null;
     }
 
+    @Override
+    public Customer getCustomerById(String customerId) {
+        String sql = "SELECT u.username, c.customer_id, c.user_id, c.name, c.nic, c.address, c.contact_number " +
+                "FROM customers c " +
+                "JOIN users u ON c.user_id = u.id " +
+                "WHERE c.customer_id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, customerId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Customer(
+                        rs.getString("customer_id"),
+                        rs.getInt("user_id"),
+                        rs.getString("name"),
+                        rs.getString("nic"),
+                        rs.getString("address"),
+                        rs.getString("contact_number"),
+                        rs.getString("username"),
+                        null,
+                        null,
+                        null
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving customer", e);
+        }
+        return null;
+    }
 
     @Override
-    public List<Customer> getAllCustomers() {
+    public List<Customer> getAll() {
         List<Customer> customerList = new ArrayList<>();
         String sql = "SELECT u.username, u.password, c.customer_id, c.user_id, c.name, c.nic, c.address, c.contact_number, c.created_date, c.updated_date " +
                 "FROM customers c " +
@@ -165,20 +195,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean deleteCustomer(String customerId) {
-        String deleteUserSQL = "DELETE FROM users WHERE id = (SELECT user_id FROM customers WHERE customer_id = ?)";
-
-        try (PreparedStatement stmt = conn.prepareStatement(deleteUserSQL)) {
-            stmt.setString(1, customerId);
-            int rowsDeleted = stmt.executeUpdate();
-            return rowsDeleted > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException("Error deleting customer: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public String updateCustomer(Customer customer) {
+    public String update(Customer customer) {
         String checkUsernameSQL = "SELECT COUNT(*) FROM users WHERE username = ? AND id != (SELECT user_id FROM customers WHERE customer_id = ?)";
         String updateUserSQL = "UPDATE users SET username = ?, password = ? WHERE id = (SELECT user_id FROM customers WHERE customer_id = ?)";
         String updateCustomerSQL = "UPDATE customers SET name = ?, nic = ?, address = ?, contact_number = ?, updated_date = NOW() WHERE customer_id = ?";
@@ -238,34 +255,20 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public Customer getCustomerById(String customerId) {
-        String sql = "SELECT u.username, c.customer_id, c.user_id, c.name, c.nic, c.address, c.contact_number " +
-                "FROM customers c " +
-                "JOIN users u ON c.user_id = u.id " +
-                "WHERE c.customer_id = ?";
+    public Boolean delete(String customerId) {
+        String deleteUserSQL = "DELETE FROM users WHERE id = (SELECT user_id FROM customers WHERE customer_id = ?)";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(deleteUserSQL)) {
             stmt.setString(1, customerId);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Customer(
-                        rs.getString("customer_id"),
-                        rs.getInt("user_id"),
-                        rs.getString("name"),
-                        rs.getString("nic"),
-                        rs.getString("address"),
-                        rs.getString("contact_number"),
-                        rs.getString("username"),
-                        null,
-                        null,
-                        null
-                );
-            }
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
         } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving customer", e);
+            throw new RuntimeException("Error deleting customer: " + e.getMessage(), e);
         }
-        return null;
     }
 
+    @Override
+    public String insert(Customer model) {
+        return "";
+    }
 }
