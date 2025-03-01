@@ -29,52 +29,42 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public String addBill(String bookingId, double fee,double taxP,double discount, double totalAmount) {
-        try {
-            Integer id = bookingDAO.doesBookingExistCheck(bookingId);
-            if (id == null) {
-                return "Error: Booking not found.";
-            }
-
-            bookingDAO.updateBookingStatus(id,"COMPLETED");
-            List<Integer> vehicleIds = bookingVehicleDAO.getVehicleIdsByBookingId(id);
-            for (int vehicleId : vehicleIds) {
-                if ("BUSY".equals(vehicleDAO.getVehicleStatus(vehicleId))) {
-                    vehicleDAO.updateVehicleStatus(vehicleIds, "AVAILABLE");
-                }
-            }
-
-            Bill bill = new Bill();
-
-
-            BigDecimal baseFee = BigDecimal.valueOf(fee);
-            BigDecimal taxPercentage =  BigDecimal.valueOf(taxP);
-            BigDecimal taxPrice = baseFee.multiply(taxPercentage).divide(new BigDecimal("100"));
-            BigDecimal total = BigDecimal.valueOf(totalAmount);
-            BigDecimal discounts = BigDecimal.valueOf(discount);
-
-            bill.setBookingId(id);
-            bill.setBaseFee(baseFee);
-            bill.setTaxPercentage(taxPercentage);
-            bill.setTaxPrice(taxPrice);
-            bill.setDiscount(discounts);
-            bill.setTotalAmount(total);
-            bill.setTaxPrice(taxPrice);
-
-            return billDAO.addBill(bill);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "Error: Failed to add bill.";
+        Integer id = bookingDAO.doesBookingExistCheck(bookingId);
+        if (id == null) {
+            return "Error: Booking not found.";
         }
+
+        bookingDAO.updateBookingStatus(id,"COMPLETED");
+        List<Integer> vehicleIds = bookingVehicleDAO.getVehicleIdsByBookingId(id);
+        for (int vehicleId : vehicleIds) {
+            if ("BUSY".equals(vehicleDAO.getVehicleStatus(vehicleId))) {
+                vehicleDAO.updateVehicleStatus(vehicleIds, "AVAILABLE");
+            }
+        }
+
+        Bill bill = new Bill();
+
+
+        BigDecimal baseFee = BigDecimal.valueOf(fee);
+        BigDecimal taxPercentage =  BigDecimal.valueOf(taxP);
+        BigDecimal taxPrice = baseFee.multiply(taxPercentage).divide(new BigDecimal("100"));
+        BigDecimal total = BigDecimal.valueOf(totalAmount);
+        BigDecimal discounts = BigDecimal.valueOf(discount);
+
+        bill.setBookingId(id);
+        bill.setBaseFee(baseFee);
+        bill.setTaxPercentage(taxPercentage);
+        bill.setTaxPrice(taxPrice);
+        bill.setDiscount(discounts);
+        bill.setTotalAmount(total);
+        bill.setTaxPrice(taxPrice);
+
+        return billDAO.insert(bill);
     }
 
     @Override
     public List<Bill> getAllBills() {
-        try {
-            return billDAO.getAllBills();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return billDAO.getAll();
     }
 
 }

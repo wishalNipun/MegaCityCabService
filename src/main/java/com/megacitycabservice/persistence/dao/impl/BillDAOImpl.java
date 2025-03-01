@@ -20,7 +20,7 @@ public class BillDAOImpl implements BillDAO {
     }
 
     @Override
-    public String addBill(Bill bill) throws SQLException {
+    public String insert(Bill bill){
         String query = "INSERT INTO bills (booking_id, base_fee, tax_percentage,tax_price, discount, total_amount) VALUES (?, ?, ?, ?, ?,?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, bill.getBookingId());
@@ -34,12 +34,14 @@ public class BillDAOImpl implements BillDAO {
             if (rowsAffected > 0) {
                 return "success";
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return "Error: Failed to add bill.";
     }
 
     @Override
-    public List<Bill> getAllBills() throws SQLException {
+    public List<Bill> getAll() {
         List<Bill> bills = new ArrayList<>();
         String query = "SELECT b.id, bk.booking_number, bk.customer_id, b.base_fee, " +
                 "b.tax_percentage, b.tax_price, b.discount, b.total_amount, b.created_date " +
@@ -62,7 +64,19 @@ public class BillDAOImpl implements BillDAO {
 
                 bills.add(bill);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return bills;
+    }
+
+    @Override
+    public String update(Bill model) {
+        return "";
+    }
+
+    @Override
+    public Boolean delete(Integer integer) {
+        return null;
     }
 }
