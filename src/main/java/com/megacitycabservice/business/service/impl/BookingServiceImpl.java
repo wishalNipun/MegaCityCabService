@@ -49,7 +49,23 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public String updateBooking(Booking booking) {
+
+        System.out.println(booking.getBookingNumber());
+        System.out.println(booking.getId());
+
         int bookingId = booking.getId();
+
+        if (bookingId == 0 && booking.getBookingNumber() != null) {
+            bookingId = bookingDAO.getBookingIdByBookingNumber(booking.getBookingNumber());
+            System.out.println(booking.getBookingNumber());
+            System.out.println(bookingId);
+            if (bookingId == 0) {
+
+                return "Error: Booking not found.";
+            }
+            booking.setId(bookingId);
+        }
+
 
         if (!bookingDAO.doesBookingExist(bookingId)) {
             return "Error: Booking not found.";
@@ -58,7 +74,7 @@ public class BookingServiceImpl implements BookingService {
 
         String currentBookingStatus = bookingDAO.getBookingStatus(bookingId);
 
-
+        System.out.println(currentBookingStatus);
         if ("CANCELLED".equals(currentBookingStatus)) {
             return "Error: This booking has already been cancelled and cannot be changed.";
         }

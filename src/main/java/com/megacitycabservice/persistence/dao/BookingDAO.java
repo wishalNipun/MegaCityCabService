@@ -19,4 +19,5 @@ public interface BookingDAO extends SuperDAO{
     List<Booking> getBookingsByCustomerId(String customerId);
     List<Booking>getBookingsByStatus(String status);
     Integer getBookingsCountByStatus(String status);
+    Integer getBookingIdByBookingNumber(String bookingNumber);
 }
