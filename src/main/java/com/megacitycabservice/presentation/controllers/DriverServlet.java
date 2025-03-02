@@ -5,6 +5,7 @@ import com.megacitycabservice.business.service.DriverService;
 import com.megacitycabservice.business.service.impl.DriverServiceImpl;
 import com.megacitycabservice.model.Customer;
 import com.megacitycabservice.model.Driver;
+import com.megacitycabservice.util.ResponseUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -112,16 +113,19 @@ public class DriverServlet extends HttpServlet {
         driver.setStatus(status);
 
         try {
-            driverService.addDriver(driver);
-            HttpSession session = request.getSession();
-            session.setAttribute("alert", "success");
-            session.setAttribute("message", "Driver added successfully!");
+
+
+            String message =  driverService.addDriver(driver);
+
+            if ("success".equals(message)) {
+                ResponseUtil.setResponseMessage(request, "success", "Driver added successfully!");
+            } else {
+                ResponseUtil.setResponseMessage(request, "error", message);
+            }
             response.sendRedirect(request.getContextPath() + "/drivers");
         } catch (Exception e) {
             e.printStackTrace();
-            HttpSession session = request.getSession();
-            session.setAttribute("alert", "error");
-            session.setAttribute("message", "Failed to add driver.");
+            ResponseUtil.setResponseMessage(request, "error", e.getMessage());
         }
 
 
@@ -151,15 +155,15 @@ public class DriverServlet extends HttpServlet {
         driver.setStatus(status);
 
         try {
-            driverService.updateDriver(driver);
-            HttpSession session = request.getSession();
-            session.setAttribute("alert", "success");
-            session.setAttribute("message", "Driver updated successfully!");
+            String message = driverService.updateDriver(driver);
+            if ("success".equals(message)) {
+                ResponseUtil.setResponseMessage(request, "success", "Driver Update successfully!");
+            } else {
+                ResponseUtil.setResponseMessage(request, "error", message);
+            }
             response.sendRedirect(request.getContextPath() + "/drivers");
         } catch (IOException e) {
-            HttpSession session = request.getSession();
-            session.setAttribute("alert", "error");
-            session.setAttribute("message", "Failed to update driver.");
+            ResponseUtil.setResponseMessage(request, "error", e.getMessage());
             throw new RuntimeException(e);
         }
     }

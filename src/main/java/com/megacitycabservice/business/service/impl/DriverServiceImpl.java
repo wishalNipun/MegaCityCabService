@@ -4,6 +4,7 @@ import com.megacitycabservice.persistence.dao.DAOFactory;
 import com.megacitycabservice.persistence.dao.DriverDAO;
 import com.megacitycabservice.model.Driver;
 import com.megacitycabservice.business.service.DriverService;
+import com.megacitycabservice.util.Validation.DriverValidation;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -23,11 +24,34 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public String addDriver(Driver driver) {
+        String validationMessage = DriverValidation.validateDriver(
+                driver.getName(),
+                driver.getNic(),
+                driver.getAddress(),
+                driver.getLicenseNumber(),
+                driver.getContactNumber()
+        );
+
+        if (validationMessage != null) {
+            System.out.println(validationMessage);
+            return validationMessage;
+        }
         return driverDAO.insert(driver);
     }
 
     @Override
     public String updateDriver(Driver driver) {
+        String validationMessage = DriverValidation.validateDriver(
+                driver.getName(),
+                driver.getNic(),
+                driver.getAddress(),
+                driver.getLicenseNumber(),
+                driver.getContactNumber()
+        );
+        if (validationMessage != null) {
+            System.out.println(validationMessage);
+            return validationMessage;
+        }
         return driverDAO.update(driver);
     }
 

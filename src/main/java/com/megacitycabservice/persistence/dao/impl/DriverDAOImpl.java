@@ -60,7 +60,7 @@ public class DriverDAOImpl implements DriverDAO {
         } catch (SQLException e) {
             return "Error: " + e.getMessage();
         }
-        return "Driver Saved Successfully.";
+        return "success";
     }
 
     @Override
@@ -143,7 +143,7 @@ public class DriverDAOImpl implements DriverDAO {
 
                 int rowsAffected = updateStmt.executeUpdate();
                 if (rowsAffected > 0) {
-                    return "Driver updated successfully!";
+                    return "success";
                 } else {
                     return "Error: Driver update failed.";
                 }
