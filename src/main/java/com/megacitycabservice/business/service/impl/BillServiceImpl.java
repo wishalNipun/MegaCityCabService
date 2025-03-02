@@ -3,6 +3,8 @@ package com.megacitycabservice.business.service.impl;
 import com.megacitycabservice.business.service.BillService;
 import com.megacitycabservice.model.Bill;
 import com.megacitycabservice.persistence.dao.*;
+import com.megacitycabservice.util.Validation.BillValidation;
+
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,6 +23,11 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public String addBill(String bookingId, double fee,double taxP,double discount, double totalAmount) {
+        String validationMessage = BillValidation.validateBill(taxP, discount);
+        if (validationMessage != null) {
+            return validationMessage;
+        }
+
         Integer id = bookingDAO.doesBookingExistCheck(bookingId);
         if (id == null) {
             return "Error: Booking not found.";
