@@ -4,6 +4,8 @@ import com.megacitycabservice.business.service.VehicleService;
 import com.megacitycabservice.model.Vehicle;
 import com.megacitycabservice.persistence.dao.DAOFactory;
 import com.megacitycabservice.persistence.dao.VehicleDAO;
+import com.megacitycabservice.util.Validation.VehicleValidation;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,6 +18,16 @@ public class VehicleServiceImpl implements VehicleService {
     }
     @Override
     public String addVehicle(Vehicle vehicle) {
+        String validationMessage = VehicleValidation.validateVehicle(
+                vehicle.getModel(),
+                vehicle.getPlateNumber(),
+                vehicle.getNumberOfPassengers(),
+                vehicle.getPricePerKm()
+        );
+        if (validationMessage != null) {
+            System.out.println(validationMessage);
+            return validationMessage;
+        }
         return vehicleDAO.insert(vehicle);
     }
 
@@ -26,6 +38,16 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public String updateVehicle(Vehicle vehicle) {
+        String validationMessage = VehicleValidation.validateVehicle(
+                vehicle.getModel(),
+                vehicle.getPlateNumber(),
+                vehicle.getNumberOfPassengers(),
+                vehicle.getPricePerKm()
+        );
+        if (validationMessage != null) {
+            System.out.println(validationMessage);
+            return validationMessage;
+        }
         return vehicleDAO.update(vehicle);
     }
 
