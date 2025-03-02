@@ -54,14 +54,19 @@ public class UserDAOImpl implements UserDAO {
         return null;
     }
     @Override
-    public boolean addUser(User user) throws SQLException {
+    public String addUser(User user) throws SQLException {
         String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getRole());
 
-            return ps.executeUpdate()>0;
+            int executed = ps.executeUpdate();
+            if (executed == 0){
+                return "Failed to create User!.";
+            }else{
+                return "success";
+            }
         }
     }
 
@@ -98,7 +103,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean updateUser(User user) throws SQLException {
+    public String updateUser(User user) throws SQLException {
         String sql = "UPDATE users SET username = ?, password = ?, role = ?, updated_date = NOW() WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
@@ -106,7 +111,12 @@ public class UserDAOImpl implements UserDAO {
             ps.setString(3, user.getRole());
             ps.setInt(4, user.getId());
 
-            return ps.executeUpdate() > 0;
+            int executed = ps.executeUpdate();
+            if (executed == 0){
+                return "Failed to create User!.";
+            }else{
+                return "success";
+            }
         }
     }
 

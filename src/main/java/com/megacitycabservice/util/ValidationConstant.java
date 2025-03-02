@@ -9,6 +9,6 @@ public class ValidationConstant {
     public static final String REGEX_LOCATION ="^[a-zA-Z0-9,.\s-]{3,100}$";
     public static final String REGEX_AMOUNT ="^[+]?[0-9]{1,12}(\\.[0-9]{1,2})?$";
     public static final String REGEX_USERNAME ="^[a-zA-Z0-9_-]{3,20}$";
-    public static final String REGEX_PASSWORD ="^[a-zA-Z0-9@#_-]{5,10}$";
+    public static final String REGEX_PASSWORD ="^[a-zA-Z0-9@#_-]{8,15}$";
     public static final String REGEX_LICENSE_NUMBER = "^([A-Z]{0,2})\\d{7,9}$";
 }
