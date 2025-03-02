@@ -5,12 +5,12 @@ import com.megacitycabservice.model.Vehicle;
 
 import java.util.List;
 
-public interface BookingService {
+public interface BookingService extends SuperBOService{
     String addBooking(Booking booking,String[] vehicles,String username);
     List<Booking> getAllBookings();
     String updateBooking(Booking booking);
     List<Vehicle> getVehiclesByBookingNumber(String bookingNumber);
     List<Booking> getBookingsByUsername(String username);
     List<Booking>getBookingsByStatus(String status);
-
+    Integer getBookingsCountByStatus(String status);
 }

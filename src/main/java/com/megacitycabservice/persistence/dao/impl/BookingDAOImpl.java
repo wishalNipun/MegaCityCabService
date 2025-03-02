@@ -303,4 +303,36 @@ public class BookingDAOImpl implements BookingDAO {
         return bookings;
     }
 
+    @Override
+    public Integer getBookingsCountByStatus(String status) {
+        String sql = "SELECT COUNT(*) FROM bookings WHERE status = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public Integer getBookingIdByBookingNumber(String bookingNumber) {
+        String sql = "SELECT id FROM bookings WHERE booking_number = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, bookingNumber);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

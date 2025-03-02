@@ -16,6 +16,21 @@
         return;
     }
     User user = (User) sessionObj.getAttribute("user");
+
+    Integer pendingBookingsCount = (Integer) request.getAttribute("pendingBookingsCount");
+    Integer confirmedBookingsCount = (Integer) request.getAttribute("confirmedBookingsCount");
+    Integer availableVehicleCount = (Integer) request.getAttribute("availableVehicleCount");
+    Integer busyVehicleCount = (Integer) request.getAttribute("busyVehicleCount");
+    Integer driverCount = (Integer) request.getAttribute("driverCount");
+    Integer customerCount = (Integer) request.getAttribute("customerCount");
+
+    if (pendingBookingsCount == null) pendingBookingsCount = 0;
+    if (confirmedBookingsCount == null) confirmedBookingsCount = 0;
+    if (availableVehicleCount == null) availableVehicleCount = 0;
+    if (busyVehicleCount == null) busyVehicleCount = 0;
+    if (driverCount == null) driverCount = 0;
+    if (customerCount == null) customerCount = 0;
+
 %>
 <html>
 <head>
@@ -39,7 +54,7 @@
             <h1><%= user.getUsername() %></h1>
         </div>
         <div>
-            <div><h1><a href="${pageContext.request.contextPath}/pages/adminDashboard.jsp"><i class="fas fa-th-large"></i> DashBoard</a></h1></div>
+            <div><h1><a href="${pageContext.request.contextPath}/adminDashBoard"><i class="fas fa-th-large"></i> DashBoard</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/customers"><i class="fa-solid fa-user"></i> Customer</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/vehicles"><i class="fa-solid fa-car"></i> Vehicle</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/drivers"><i class="fas fa-male"></i> Drivers</a></h1></div>
@@ -52,39 +67,39 @@
         </div>
 
     </section>
-    <section>
+    <section >
         <div>
             <h1>Summery</h1>
         </div>
         <div>
             <div>
-                <h2>Register Users</h2>
-                <h1>100</h1>
+                <h2>Pending Bookings Count</h2>
+                <h1><%= pendingBookingsCount %></h1>
             </div>
             <div>
-                <h2>Bookings</h2>
-                <h1>30</h1>
+                <h2>Confirmed Bookings (Running) Count</h2>
+                <h1><%= confirmedBookingsCount %></h1>
             </div>
             <div>
-                <h2>Available Cars</h2>
-                <h1>40</h1>
+                <h2>Available Vehicle Count</h2>
+                <h1><%= availableVehicleCount %></h1>
             </div>
             <div>
-                <h2>Receive Cars</h2>
-                <h1>50</h1>
+                <h2>Busy Vehicle Count</h2>
+                <h1><%= busyVehicleCount %></h1>
             </div>
             <div>
-                <h2>Active Bookings</h2>
-                <h1>25</h1>
+                <h2>Drivers Count</h2>
+                <h1><%= driverCount %></h1>
             </div>
             <div>
-                <h2>Available Drivers</h2>
-                <h1>30</h1>
+                <h2>Customer Count</h2>
+                <h1><%= customerCount %></h1>
             </div>
-
         </div>
 
     </section>
+
 </main>
 </body>
 </html>

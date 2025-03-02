@@ -50,7 +50,7 @@
                 let address = $(this).data("address");
                 let license = $(this).data("license");
                 let dob = $(this).data("dob");
-                let contactNumber = $(this).data("contactNumber");
+                let contactNumber = $(this).data("contactnumber");
                 let status = $(this).data("status");
 
                 $("#editDriverId").val(driverId);
@@ -124,7 +124,7 @@
             <h1><%= user.getUsername() %></h1>
         </div>
         <div>
-            <div><h1><a href="${pageContext.request.contextPath}/pages/adminDashboard.jsp"><i
+            <div><h1><a href="${pageContext.request.contextPath}/adminDashBoard"><i
                     class="fas fa-th-large"></i> DashBoard</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/customers"><i class="fa-solid fa-user"></i> Customer</a></h1></div>
             <div><h1><a href="${pageContext.request.contextPath}/vehicles"><i class="fa-solid fa-car"></i> Vehicles</a></h1></div>
@@ -233,7 +233,7 @@
                                     data-address="${driver.address}"
                                     data-license="${driver.licenseNumber}"
                                     data-dob="${driver.dateOfBirth}"
-                                    data-contactNumber="${driver.dateOfBirth}"
+                                    data-contactnumber="${driver.contactNumber}"
                                     data-status="${driver.status}">
                                 Edit
                             </button>

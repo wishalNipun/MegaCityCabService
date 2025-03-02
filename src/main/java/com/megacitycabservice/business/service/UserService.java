@@ -6,7 +6,7 @@ import com.megacitycabservice.model.User;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends SuperBOService{
     User validateUser(String username, String password) throws SQLException;
     String addUser(User user);
     List<User> getAllUsers();

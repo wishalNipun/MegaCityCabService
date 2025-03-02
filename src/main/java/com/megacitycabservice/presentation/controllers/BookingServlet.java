@@ -1,5 +1,6 @@
 package com.megacitycabservice.presentation.controllers;
 
+import com.megacitycabservice.business.service.BOFactory;
 import com.megacitycabservice.business.service.BookingService;
 import com.megacitycabservice.business.service.VehicleService;
 import com.megacitycabservice.business.service.impl.BookingServiceImpl;
@@ -32,9 +33,8 @@ public class BookingServlet extends HttpServlet {
     @Override
     public void init() {
         try {
-            System.out.println("Boooking");
-            vehicleService = new VehicleServiceImpl();
-            bookingService = new BookingServiceImpl();
+            vehicleService = (VehicleService) BOFactory.getInstance().getBO(BOFactory.BOTypes.VEHICLE);
+            bookingService = (BookingService) BOFactory.getInstance().getBO(BOFactory.BOTypes.BOOKING);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
@@ -44,20 +44,17 @@ public class BookingServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-
-
-
-            String bookID = request.getParameter("id");
-
-            if (bookID == null || bookID.isEmpty()) {
-                System.out.println("add hit");
-                addBooking(request, response);
-            } else {
-                System.out.println("update hit");
-                updateBooking(request, response);
-            }
+        String action = request.getParameter("action");
+        if ("add".equals(action)) {
+            System.out.println("add hit");
+            addBooking(request, response);
+        }else if ("removeBooking".equals(action)) {
+            cancelBooking( request,  response);
+        }
+        else {
+            System.out.println("update hit");
+            updateBooking(request, response);
+        }
 
     }
 
@@ -137,7 +134,29 @@ public class BookingServlet extends HttpServlet {
     }
 
 
+    private void cancelBooking(HttpServletRequest request, HttpServletResponse response) {
+        String bookingNumber = request.getParameter("bookingNumber");
+        String status = request.getParameter("status");
 
+        Booking booking = new Booking();
+        booking.setBookingNumber(bookingNumber);
+        booking.setStatus(status);
+
+        try {
+            String message = bookingService.updateBooking(booking);
+            if ("success".equals(message)) {
+                ResponseUtil.setResponseMessage(request, "success", "Booking updated successfully!");
+            } else {
+                ResponseUtil.setResponseMessage(request, "error", message);
+            }
+            String username = (String) request.getSession().getAttribute("username");
+            response.sendRedirect(request.getContextPath() + "/bookings?action=bookingDetail&username="+username);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseUtil.setResponseMessage(request, "error", "Failed to update Booking.");
+        }
+
+    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {

@@ -1,5 +1,6 @@
 package com.megacitycabservice.presentation.controllers;
 
+import com.megacitycabservice.business.service.BOFactory;
 import com.megacitycabservice.model.User;
 import com.megacitycabservice.business.service.UserService;
 import com.megacitycabservice.business.service.impl.UserServiceImpl;
@@ -20,8 +21,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void init() {
         try {
-            System.out.println("running");
-            userService = new UserServiceImpl();
+            userService = (UserService) BOFactory.getInstance().getBO(BOFactory.BOTypes.USER);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -39,7 +39,7 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("user", user);
                 session.setAttribute("username", user.getUsername());
                 if ("ADMIN".equals(user.getRole())) {
-                    response.sendRedirect("pages/adminDashboard.jsp");
+                    response.sendRedirect(request.getContextPath() +"/adminDashBoard");
                 } else {
                     response.sendRedirect("pages/customerDashboard.jsp");
                 }

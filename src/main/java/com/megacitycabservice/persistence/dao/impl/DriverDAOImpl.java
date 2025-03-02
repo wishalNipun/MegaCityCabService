@@ -19,8 +19,9 @@ public class DriverDAOImpl implements DriverDAO {
         this.conn = DBConnection.getDbConnection().getConnection();
     }
 
+
     @Override
-    public String addDriver(Driver driver) {
+    public String insert(Driver driver) {
         try {
 
             String checkNicSql = "SELECT COUNT(*) FROM drivers WHERE nic = ?";
@@ -59,12 +60,11 @@ public class DriverDAOImpl implements DriverDAO {
         } catch (SQLException e) {
             return "Error: " + e.getMessage();
         }
-        return "Driver Saved Successfully.";
+        return "success";
     }
 
-
     @Override
-    public List<Driver> getAllDrivers() {
+    public List<Driver> getAll() {
         List<Driver> driverList = new ArrayList<>();
         String sql = "SELECT * FROM drivers order by updated_date DESC";
         try (PreparedStatement stmt = conn.prepareStatement(sql);
@@ -91,7 +91,7 @@ public class DriverDAOImpl implements DriverDAO {
     }
 
     @Override
-    public String updateDriver(Driver driver) {
+    public String update(Driver driver) {
         String checkSql = "SELECT COUNT(*) FROM drivers WHERE id = ?";
         String checkNicSql = "SELECT COUNT(*) FROM drivers WHERE nic = ? AND id != ?";
         String checkLicenseSql = "SELECT COUNT(*) FROM drivers WHERE license_number = ? AND id != ?";
@@ -143,7 +143,7 @@ public class DriverDAOImpl implements DriverDAO {
 
                 int rowsAffected = updateStmt.executeUpdate();
                 if (rowsAffected > 0) {
-                    return "Driver updated successfully!";
+                    return "success";
                 } else {
                     return "Error: Driver update failed.";
                 }
@@ -154,7 +154,7 @@ public class DriverDAOImpl implements DriverDAO {
     }
 
     @Override
-    public Boolean deleteDriver(int id) {
+    public Boolean delete(Integer id) {
         String query = "DELETE FROM drivers WHERE id = ?";
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -164,7 +164,6 @@ public class DriverDAOImpl implements DriverDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override

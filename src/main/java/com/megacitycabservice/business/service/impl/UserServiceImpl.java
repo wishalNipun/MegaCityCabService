@@ -1,9 +1,10 @@
 package com.megacitycabservice.business.service.impl;
 
+import com.megacitycabservice.persistence.dao.DAOFactory;
 import com.megacitycabservice.persistence.dao.UserDAO;
-import com.megacitycabservice.persistence.dao.impl.UserDAOImpl;
 import com.megacitycabservice.model.User;
 import com.megacitycabservice.business.service.UserService;
+import com.megacitycabservice.util.Validation.UserValidation;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,7 +13,7 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     public UserServiceImpl() throws SQLException, ClassNotFoundException {
-        userDAO = new UserDAOImpl();
+        userDAO = (UserDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.USER);
     }
 
     @Override
@@ -28,11 +29,15 @@ public class UserServiceImpl implements UserService {
     public String addUser(User user) {
 
         try {
+            String validationMessage = UserValidation.validateUser(user.getUsername(),user.getPassword());
+            if (validationMessage != null) {
+                return validationMessage;
+            }
+
             User userByUsername = userDAO.getUserByUsername(user.getUsername());
             if (userByUsername == null){
                 user.setRole("ADMIN");
-                userDAO.addUser(user);
-                return "success";
+                return userDAO.addUser(user);
             }else{
                 return "Error: Username Already exist!.";
             }
@@ -67,23 +72,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public String updateUser(User user) {
         try {
-            System.out.println("hiy");
+
+            String validationMessage = UserValidation.validateUser(user.getUsername(),user.getPassword());
+            if (validationMessage != null) {
+                return validationMessage;
+            }
+
             User existingUser = userDAO.getUserById(user.getId());
             if (existingUser == null) {
                 return "Error: User Not Found!";
             }
-
 
             User userWithSameUsername = userDAO.getUserByUsername(user.getUsername());
             if (userWithSameUsername != null && userWithSameUsername.getId() != user.getId()) {
                 return "Error: Username Already Exists!";
             }
 
-
             user.setRole(existingUser.getRole());
-
-            boolean isUpdated = userDAO.updateUser(user);
-            return isUpdated ? "success" : "Error: Update Failed!";
+            return userDAO.updateUser(user);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

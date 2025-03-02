@@ -16,6 +16,14 @@
         return;
     }
     User user = (User) sessionObj.getAttribute("user");
+
+    String alertType = (String) session.getAttribute("alert");
+    String message = (String) session.getAttribute("message");
+
+    if (alertType != null && message != null) {
+        session.removeAttribute("alert");
+        session.removeAttribute("message");
+    }
 %>
 <html>
 <head>
@@ -32,6 +40,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        $(document).ready(function () {
+            <% if (alertType != null && message != null) { %>
+            Swal.fire({
+                icon: '<%= alertType.equals("success") ? "success" : "error" %>',
+                title: '<%= alertType.equals("success") ? "Success!" : "Error!" %>',
+                text: '<%= message %>',
+                showConfirmButton: true
+            });
+            <% } %>
+
+        });
         function fetchVehicleDetails(bookingNumber) {
             fetch(`${pageContext.request.contextPath}/bookings?action=getVehicleDetailBooking&bookingNumber=` + bookingNumber)
                 .then(response => response.json())
@@ -115,6 +134,47 @@
                 }
             });
         }
+
+        function confirmCancelBooking(bookingNumber) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you really want to Cancel this booking?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, Cancel it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    let form = document.createElement('form');
+                    form.method = "POST";
+                    form.action = "${pageContext.request.contextPath}/bookings";
+                    let actionInput = document.createElement('input');
+                    actionInput.type = "hidden";
+                    actionInput.name = "action";
+                    actionInput.value = "removeBooking";
+                    form.appendChild(actionInput);
+
+                    let bookingInput = document.createElement('input');
+                    bookingInput.type = "hidden";
+                    bookingInput.name = "bookingNumber";
+                    bookingInput.value = bookingNumber;
+                    form.appendChild(bookingInput);
+
+                    let bookingStatusInput = document.createElement('input');
+                    bookingStatusInput.type = "hidden";
+                    bookingStatusInput.name = "status";
+                    bookingStatusInput.value = "CANCELLED";
+                    form.appendChild(bookingStatusInput);
+
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+
     </script>
 </head>
 <body>
@@ -148,6 +208,7 @@
                 <th scope="col">Vehicle Details</th>
                 <th scope="col">Created Date</th>
                 <th scope="col">Last Updated Date</th>
+                <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -168,6 +229,14 @@
                     </td>
                     <td>${booking.formattedCreatedDate}</td>
                     <td>${booking.formattedUpdatedDate}</td>
+                    <td>
+                        <c:if test="${booking.status == 'PENDING' || booking.status == 'CONFIRMED'}">
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    onclick="confirmCancelBooking('${booking.bookingNumber}')">
+                                Cancel
+                            </button>
+                        </c:if>
+                    </td>
                 </tr>
             </c:forEach>
             <c:if test="${empty bookingList}">

@@ -3,14 +3,8 @@ package com.megacitycabservice.business.service.impl;
 import com.megacitycabservice.business.service.BookingService;
 import com.megacitycabservice.model.Booking;
 import com.megacitycabservice.model.Vehicle;
-import com.megacitycabservice.persistence.dao.BookingDAO;
-import com.megacitycabservice.persistence.dao.BookingVehicleDAO;
-import com.megacitycabservice.persistence.dao.UserDAO;
-import com.megacitycabservice.persistence.dao.VehicleDAO;
-import com.megacitycabservice.persistence.dao.impl.BookingDAOImpl;
-import com.megacitycabservice.persistence.dao.impl.BookingVehicleDAOImpl;
-import com.megacitycabservice.persistence.dao.impl.UserDAOImpl;
-import com.megacitycabservice.persistence.dao.impl.VehicleDAOImpl;
+import com.megacitycabservice.persistence.dao.*;
+import com.megacitycabservice.util.Validation.BookingValidation;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -23,15 +17,27 @@ public class BookingServiceImpl implements BookingService {
     private final UserDAO userDAO;
 
     public BookingServiceImpl() throws SQLException, ClassNotFoundException {
-        this.bookingDAO = new BookingDAOImpl();
-        this.bookingVehicleDAO = new BookingVehicleDAOImpl();
-        this.vehicleDAO = new VehicleDAOImpl();
-        this.userDAO = new UserDAOImpl();
+        this.bookingDAO = (BookingDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.BOOKING);
+        this.bookingVehicleDAO = (BookingVehicleDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.BOOKING_VEHICLE);
+        this.vehicleDAO = (VehicleDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.VEHICLE);
+        this.userDAO = (UserDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.USER);
     }
 
 
     @Override
     public String addBooking(Booking booking, String[] vehicles, String username) {
+
+        String validationMessage = BookingValidation.validateBooking(
+                booking.getPickupLocation(),
+                booking.getDropLocation(),
+                booking.getDistanceKm(),
+                booking.getFee()
+        );
+
+        if (validationMessage != null) {
+            return validationMessage;
+        }
+
         return bookingDAO.addBooking(booking, vehicles, username);
     }
 
@@ -43,7 +49,23 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public String updateBooking(Booking booking) {
+
+        System.out.println(booking.getBookingNumber());
+        System.out.println(booking.getId());
+
         int bookingId = booking.getId();
+
+        if (bookingId == 0 && booking.getBookingNumber() != null) {
+            bookingId = bookingDAO.getBookingIdByBookingNumber(booking.getBookingNumber());
+            System.out.println(booking.getBookingNumber());
+            System.out.println(bookingId);
+            if (bookingId == 0) {
+
+                return "Error: Booking not found.";
+            }
+            booking.setId(bookingId);
+        }
+
 
         if (!bookingDAO.doesBookingExist(bookingId)) {
             return "Error: Booking not found.";
@@ -52,7 +74,7 @@ public class BookingServiceImpl implements BookingService {
 
         String currentBookingStatus = bookingDAO.getBookingStatus(bookingId);
 
-
+        System.out.println(currentBookingStatus);
         if ("CANCELLED".equals(currentBookingStatus)) {
             return "Error: This booking has already been cancelled and cannot be changed.";
         }
@@ -118,5 +140,12 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> getBookingsByStatus(String status) {
         return bookingDAO.getBookingsByStatus(status);
     }
+
+    @Override
+    public Integer getBookingsCountByStatus(String status) {
+        return bookingDAO.getBookingsCountByStatus(status);
+    }
+
+
 
 }

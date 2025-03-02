@@ -253,7 +253,7 @@
 
 
             $.ajax({
-                url: 'http://localhost:8080/MegaCityCabService_war_exploded/bookings',
+                url: 'http://localhost:8080/MegaCityCabService_war_exploded/bookings?action=add',
                 type: 'POST',
                 data: formData,
                 processData: false,
