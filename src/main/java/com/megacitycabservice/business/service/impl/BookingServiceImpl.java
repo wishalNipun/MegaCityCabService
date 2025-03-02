@@ -4,6 +4,7 @@ import com.megacitycabservice.business.service.BookingService;
 import com.megacitycabservice.model.Booking;
 import com.megacitycabservice.model.Vehicle;
 import com.megacitycabservice.persistence.dao.*;
+import com.megacitycabservice.util.Validation.BookingValidation;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -25,6 +26,18 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public String addBooking(Booking booking, String[] vehicles, String username) {
+
+        String validationMessage = BookingValidation.validateBooking(
+                booking.getPickupLocation(),
+                booking.getDropLocation(),
+                booking.getDistanceKm(),
+                booking.getFee()
+        );
+
+        if (validationMessage != null) {
+            return validationMessage;
+        }
+
         return bookingDAO.addBooking(booking, vehicles, username);
     }
 
