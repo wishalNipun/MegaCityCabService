@@ -6,6 +6,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String alertType = (String) session.getAttribute("alert");
+    String message = (String) session.getAttribute("message");
+
+    if (alertType != null && message != null) {
+        session.removeAttribute("alert");
+        session.removeAttribute("message");
+    }
+%>
 <html>
 <head>
     <title>Login Page</title>
@@ -15,6 +24,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            <% if (alertType != null && message != null) { %>
+            Swal.fire({
+                icon: '<%= alertType.equals("success") ? "success" : "error" %>',
+                title: '<%= alertType.equals("success") ? "Success!" : "Error!" %>',
+                text: '<%= message %>',
+                showConfirmButton: true
+            });
+            <% } %>
+
+        });
+    </script>
 </head>
 <body>
 <main id="UserLoginAccount" class="container-fluid">
