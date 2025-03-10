@@ -4,6 +4,7 @@ import com.megacitycabservice.business.service.BOFactory;
 import com.megacitycabservice.model.User;
 import com.megacitycabservice.business.service.UserService;
 import com.megacitycabservice.business.service.impl.UserServiceImpl;
+import com.megacitycabservice.util.ResponseUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -34,6 +35,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             User user = userService.validateUser(username, password);
+
             if (user != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
@@ -44,7 +46,7 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("pages/customerDashboard.jsp");
                 }
             } else {
-                request.setAttribute("error", "Invalid credentials!");
+                ResponseUtil.setResponseMessage(request, "error", "ERROR: Invalid Username OR Password!");
                 request.getRequestDispatcher("pages/login.jsp").forward(request, response);
             }
         } catch (SQLException e) {
