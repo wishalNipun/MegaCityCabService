@@ -1,5 +1,6 @@
 package com.megacitycabservice.business.service.impl;
 
+import com.megacitycabservice.business.service.UserService;
 import com.megacitycabservice.model.User;
 import org.junit.jupiter.api.*;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserServiceTest {
-    private static UserServiceImpl userService;
+    private static UserService userService;
 
     @BeforeAll
     public static void setUp() throws SQLException, ClassNotFoundException {
