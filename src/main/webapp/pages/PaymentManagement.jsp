@@ -168,7 +168,7 @@
     </section>
     <section>
         <div>
-            <h1>Reserve Bookings Management</h1>
+            <h1>Payments Management</h1>
         </div>
         <div>
             <form action="${pageContext.request.contextPath}/bills?action=payBook" method="post">

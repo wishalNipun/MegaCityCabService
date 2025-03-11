@@ -69,7 +69,7 @@
     </section>
     <section >
         <div>
-            <h1>Summery</h1>
+            <h1>Summary</h1>
         </div>
         <div>
             <div>
