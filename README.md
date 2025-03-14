@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/2710919f-3a2d-4121-856b-7f23054b5621)![image](https://github.com/user-attachments/assets/0e4ffb46-8295-4cad-a402-2a0e1b3cad0d)Mega City Cab Service Application is a Java EE Servlet Jsp Web Based application. Bootsrap used for make user friendly interfaces. There are two roles for design this application. Each Role has access to different interfaces. Implemented Server side validation for to restrict invalid entries.
+Mega City Cab Service Application is a Java EE Servlet Jsp Web Based application. Bootsrap used for make user friendly interfaces. There are two roles for design this application. Each Role has access to different interfaces. Implemented Server side validation for to restrict invalid entries.
 Customer – Can view vehicles details, make bookings, cancel bookings, and view booking details, view driver details
 Admin – Manage customers, users, drivers, vehicles, reservations and make payments also Can view ongoing status summary 
 Customer Website View
@@ -49,30 +49,40 @@ This page following admin can manage customers.
 4.	Vehicle Management Page
 This page following admin can manage vehicles.
  ![image](https://github.com/user-attachments/assets/028a9b6e-1c56-49dd-afe5-2e0033789d0e)</br>
-![image](https://github.com/user-attachments/assets/b8e0c8fb-5f46-440c-b787-7e197925be15)
+![image](https://github.com/user-attachments/assets/b8e0c8fb-5f46-440c-b787-7e197925be15)</br>
 
 ![image](https://github.com/user-attachments/assets/80a2c015-2aa0-4296-9ba7-057f8dfd7ab7)
 
  
  
-6.	Driver Management Page
+5.	Driver Management Page
 This page following admin can manage drivers.
+ ![image](https://github.com/user-attachments/assets/f1d7c8a5-112c-44a9-b407-a7afd3598ca5)</br>
+![image](https://github.com/user-attachments/assets/7f12fbe8-570a-495a-ae6e-de1c2c18c2ce)
+
  
- 
-7.	Reserve Bookings Management Page
+6.	Reserve Bookings Management Page
 This page following admin can manage reserve bookings.
+ ![image](https://github.com/user-attachments/assets/35d1d8b0-0319-4c3d-b19c-c5d1917bc8a1)</br>
+![image](https://github.com/user-attachments/assets/25d513f9-63d3-4f88-afa5-46ed7afdbf80)</br>
+![image](https://github.com/user-attachments/assets/bab06981-f4ea-4b89-969e-50194c85742b)
+
  
  
- 
-8.	Payments Management Page
+7.	Payments Management Page
 This page following booking for can make a payment.
+ ![image](https://github.com/user-attachments/assets/e2a7bd45-d385-4f31-82f1-c646d09925e4)
+
  
- 
-9.	Bill Details Page
+8.	Bill Details Page
 This page following admin can identify billing details. Each bill for include customer detail and vehicles details.
+ ![image](https://github.com/user-attachments/assets/5e2bcfe5-3ddb-4510-8f34-5a6d6a0eba78)</br>
+![image](https://github.com/user-attachments/assets/715175a4-b895-4441-800a-f33200efdd49)
+
  
  
- 
-10.	User Management Page
+9.	User Management Page
 This page following admin can manage users.
- 
+ ![image](https://github.com/user-attachments/assets/00e86fcd-9029-43da-ae36-492ca50d34ba)</br>
+![image](https://github.com/user-attachments/assets/c97e85b9-856d-465e-a0c0-ed82f6fd7f81)
+
