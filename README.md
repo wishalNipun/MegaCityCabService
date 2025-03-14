@@ -21,13 +21,13 @@ This is dashboard page when customer log show first this page.
 This page following customer can be make booking. Also can check available vehicles.
 ![image](https://github.com/user-attachments/assets/dacfcb21-8fa5-469a-8603-cceadc9ca1dc)
 </br>
-![image](https://github.com/user-attachments/assets/903a98c3-144c-4acc-9803-6d5d1352ecc7)
-
+![image](https://github.com/user-attachments/assets/1c12b51c-f450-4630-8d5c-500bed6509cf)
 
  
 5.	Booking Detail Page
 This page following customer can identify booking details. Also customer can cancel bookings.
- ![image](https://github.com/user-attachments/assets/bac67cf9-b524-4778-bfcb-2da2bd76e83e)</br>
+![image](https://github.com/user-attachments/assets/983ce366-8737-42b2-b2b7-61cdf471e095)
+</br>
 ![image](https://github.com/user-attachments/assets/34d579fe-2474-4f2d-a25f-8a01bd0d14f0)</br>
 ![image](https://github.com/user-attachments/assets/9d925883-04e5-4b40-b5cd-6855a7c91b6d)
 
