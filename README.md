@@ -19,7 +19,8 @@ This is dashboard page when customer log show first this page.
 
 4.	Booking Page
 This page following customer can be make booking. Also can check available vehicles.
-![image](https://github.com/user-attachments/assets/ae33eb0b-9644-46d4-94be-bb8141916fe9)</br>
+![image](https://github.com/user-attachments/assets/dacfcb21-8fa5-469a-8603-cceadc9ca1dc)
+</br>
 ![image](https://github.com/user-attachments/assets/903a98c3-144c-4acc-9803-6d5d1352ecc7)
 
 
