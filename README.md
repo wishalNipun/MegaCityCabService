@@ -35,7 +35,7 @@ This page following customer can identify booking details. Also customer can can
 Customer Website View
 1.	Login Page
 This page following admin can log admin website.
- ![image](https://github.com/user-attachments/assets/19087ad5-0005-49d4-b048-066779308378)
+![image](https://github.com/user-attachments/assets/5a7c5fb2-41ad-4045-a723-e81b6bdd1577)
 
 2.	Admin Dashboard
 This page following admin can identify summary.
@@ -43,16 +43,18 @@ This page following admin can identify summary.
 
 3.	Customer Management Page
 This page following admin can manage customers.
- ![image](https://github.com/user-attachments/assets/027b2eb4-a181-4dee-a94d-8a22b2245ec4)
+![image](https://github.com/user-attachments/assets/6a3d1037-3182-4193-8129-e15c1c6c9b8b)
+
 ![image](https://github.com/user-attachments/assets/2201ab04-2046-4ad3-ac92-741bcbcc99a9)
 
  
 4.	Vehicle Management Page
 This page following admin can manage vehicles.
- ![image](https://github.com/user-attachments/assets/028a9b6e-1c56-49dd-afe5-2e0033789d0e)</br>
-![image](https://github.com/user-attachments/assets/b8e0c8fb-5f46-440c-b787-7e197925be15)</br>
+![image](https://github.com/user-attachments/assets/c698ab10-cbd6-43af-b93c-87ed80e70987)
 
-![image](https://github.com/user-attachments/assets/80a2c015-2aa0-4296-9ba7-057f8dfd7ab7)
+![image](https://github.com/user-attachments/assets/20463b60-e907-4e4f-acdb-85d1e5d02f82)
+
+![Uploading image.png…]()
 
  
  
