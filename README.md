@@ -1,6 +1,7 @@
 Mega City Cab Service Application is a Java EE Servlet Jsp Web Based application. Bootsrap used for make user friendly interfaces. There are two roles for design this application. Each Role has access to different interfaces. Implemented Server side validation for to restrict invalid entries.
 Customer – Can view vehicles details, make bookings, cancel bookings, and view booking details, view driver details
-Admin – Manage customers, users, drivers, vehicles, reservations and make payments also Can view ongoing status summary 
+Admin – Manage customers, users, drivers, vehicles, reservations and make payments also Can view ongoing status summary
+<br>
 Customer Website View
 1.	Customer for create account page
 Following this page customer can register for Megacity Cab Service. If Customer already have account following bottom link can be navigate logging page.
@@ -32,7 +33,7 @@ This page following customer can identify booking details. Also customer can can
 
  
  
-Customer Website View
+Admin Website View
 1.	Login Page
 This page following admin can log admin website.
 ![image](https://github.com/user-attachments/assets/5a7c5fb2-41ad-4045-a723-e81b6bdd1577)
