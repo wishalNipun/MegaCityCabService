@@ -8,7 +8,8 @@ Following this page customer can register for Megacity Cab Service. If Customer 
 
 2.	Login Page
 Following this customer can be log to customer website. New Customer for can be sign up following blue button.
- ![image](https://github.com/user-attachments/assets/47c2c8d1-b9bc-4f70-911e-ab6943cb6735)
+![image](https://github.com/user-attachments/assets/07cd0d10-6b2d-467d-b42b-bc5e9dbe5a79)
+
 
 3.	Customer Dashboard
 This is dashboard page when customer log show first this page.
