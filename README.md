@@ -53,8 +53,8 @@ This page following admin can manage vehicles.
 ![image](https://github.com/user-attachments/assets/c698ab10-cbd6-43af-b93c-87ed80e70987)
 
 ![image](https://github.com/user-attachments/assets/20463b60-e907-4e4f-acdb-85d1e5d02f82)
+![image](https://github.com/user-attachments/assets/aa0ba6ef-7595-4630-86ea-5c3fe741c661)
 
-![Uploading image.png…]()
 
  
  
@@ -68,23 +68,26 @@ This page following admin can manage drivers.
 This page following admin can manage reserve bookings.
  ![image](https://github.com/user-attachments/assets/35d1d8b0-0319-4c3d-b19c-c5d1917bc8a1)
 ![image](https://github.com/user-attachments/assets/25d513f9-63d3-4f88-afa5-46ed7afdbf80)
-![image](https://github.com/user-attachments/assets/bab06981-f4ea-4b89-969e-50194c85742b)
+ ![image](https://github.com/user-attachments/assets/7d87f34b-dd14-4dc0-868b-37f33fbfe5be)
 
- 
  
 7.	Payments Management Page
 This page following booking for can make a payment.
- ![image](https://github.com/user-attachments/assets/e2a7bd45-d385-4f31-82f1-c646d09925e4)
+![image](https://github.com/user-attachments/assets/df367267-46d2-4d29-8431-43ac0f965160)
+![image](https://github.com/user-attachments/assets/a72c5a87-60fb-48b5-ab2d-6fe2b00bc80a)
+
 
  
-8.	Bill Details Page
+9.	Bill Details Page
 This page following admin can identify billing details. Each bill for include customer detail and vehicles details.
+![image](https://github.com/user-attachments/assets/63dc9daf-0a0d-4f33-ad78-fb228e21d6b1)
+
  ![image](https://github.com/user-attachments/assets/5e2bcfe5-3ddb-4510-8f34-5a6d6a0eba78)</br>
 ![image](https://github.com/user-attachments/assets/715175a4-b895-4441-800a-f33200efdd49)
 
  
  
-9.	User Management Page
+11.	User Management Page
 This page following admin can manage users.
  ![image](https://github.com/user-attachments/assets/00e86fcd-9029-43da-ae36-492ca50d34ba)</br>
 ![image](https://github.com/user-attachments/assets/c97e85b9-856d-465e-a0c0-ed82f6fd7f81)
