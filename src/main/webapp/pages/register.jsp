@@ -68,7 +68,7 @@
         </form>
     </div>
     <div>
-        <p>Already have an account sign in <a href="login.jsp">here</a></p>
+        <p>Already have an account sign in <a href="<%= request.getContextPath() %>/pages/login.jsp">here</a></p>
     </div>
 </main>
 </body>
